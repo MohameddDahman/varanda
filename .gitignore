@@ -46,3 +46,7 @@ next-env.d.ts
 
 # convex
 .convex/
+
+# UI test output
+/tests/ui/report/
+/tests/ui/results/

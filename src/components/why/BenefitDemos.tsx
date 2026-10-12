@@ -184,7 +184,7 @@ export function SecurityDemo() {
       const tl = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 1.4, defaults: { ease: "power3.inOut" } });
       tl.to(q("[data-handle]"), { rotate: 90, duration: 0.6 })
         .to(q("[data-cam]"), { y: (i: number) => (i % 2 ? 8 : -8), duration: 0.45, stagger: 0.08 }, "-=0.1")
-        .to(q("[data-keeper]"), { backgroundColor: "#e11b22", duration: 0.25, stagger: 0.08 }, "<0.2")
+        .to(q("[data-keeper]"), { backgroundColor: "#d71920", duration: 0.25, stagger: 0.08 }, "<0.2")
         .to({}, { duration: 1.2 })
         .to(q("[data-keeper]"), { backgroundColor: "#9aa4b1", duration: 0.25 })
         .to(q("[data-cam]"), { y: 0, duration: 0.45, stagger: 0.05 }, "<")

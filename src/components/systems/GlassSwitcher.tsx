@@ -41,7 +41,8 @@ export function GlassSwitcher() {
       const q = gsap.utils.selector(root);
       const d = reducedMotion() ? 0 : 0.9;
       gsap.to(q("[data-layer]"), { autoAlpha: 0, duration: d, ease: "power2.inOut" });
-      gsap.to(q(`[data-layer=${active}]`), { autoAlpha: 1, duration: d, ease: "power2.inOut" });
+      // Clear glass has no overlay layer: the plain view is the effect.
+      if (active !== "clear") gsap.to(q(`[data-layer=${active}]`), { autoAlpha: 1, duration: d, ease: "power2.inOut" });
       gsap.to(q("[data-scene]"), {
         filter:
           active === "reflective"

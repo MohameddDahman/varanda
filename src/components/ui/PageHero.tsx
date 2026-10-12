@@ -14,7 +14,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-/** Opening block of an inner page: the title rises and widens as the doors part. */
+/** Opening block of an inner page: the title rises into place as the doors part. */
 export function PageHero({ eyebrow, title, intro, count, theme = "light", size = "hero", children }: Props) {
   return (
     <section
@@ -29,7 +29,7 @@ export function PageHero({ eyebrow, title, intro, count, theme = "light", size =
           <Eyebrow>{eyebrow}</Eyebrow>
         </Reveal>
         <div className="mt-8 flex items-start gap-3 md:gap-5">
-          <SplitReveal as="h1" trigger="enter" widen className={size === "hero" ? "t-hero" : "t-display"}>
+          <SplitReveal as="h1" trigger="enter" className={size === "hero" ? "t-hero" : "t-display"}>
             {title}
           </SplitReveal>
           {count !== undefined && (

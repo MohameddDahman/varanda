@@ -59,7 +59,7 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
                 {t(ui.allSystems)}
               </TLink>
             </Reveal>
-            <SplitReveal as="h1" trigger="enter" widen className="t-display mt-10">
+            <SplitReveal as="h1" trigger="enter" className="t-display mt-10">
               {t(system.name)}
             </SplitReveal>
             {system.tagline && (

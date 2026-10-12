@@ -3,7 +3,7 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import type { L } from "@/i18n/config";
-import { VMark, Wordmark } from "@/components/brand/Logo";
+import { LogoLockup, VMark } from "@/components/brand/Logo";
 
 export type DoorsHandle = {
   /** Slide both panels shut, showing the destination name on the glass. */
@@ -16,7 +16,6 @@ export type DoorsHandle = {
   hide: () => void;
 };
 
-const TAGLINE = "MADE FOR LIFE";
 
 /** Resolve once a timeline has finished. */
 const finished = (tl: gsap.core.Timeline) => new Promise<void>((resolve) => void tl.then(() => resolve()));
@@ -95,21 +94,14 @@ export const Doors = forwardRef<DoorsHandle>(function Doors(_, ref) {
             { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.inOut" },
             0.6,
           )
-          .fromTo(q("[data-vm=fold]"), { autoAlpha: 0 }, { autoAlpha: 0.55, duration: 0.3 }, 1)
           .fromTo(q("[data-wm]"), { yPercent: 120 }, { yPercent: 0, duration: 0.85, stagger: 0.055, ease: "lift" }, 0.75)
           .fromTo(
             q("[data-c]"),
-            { autoAlpha: 0, y: 10 },
-            { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.03, ease: "soft" },
+            { autoAlpha: 0, y: 24 },
+            { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.025, ease: "soft" },
             1.15,
           )
-          .fromTo(
-            q("[data-tagline-dot]"),
-            { autoAlpha: 0, y: -20 },
-            { autoAlpha: 1, y: 0, duration: 0.55, ease: "bounce.out" },
-            1.55,
-          )
-          .to({}, { duration: 0.5 });
+          .to({}, { duration: 0.6 });
         return finished(tl);
       },
 
@@ -146,20 +138,7 @@ export const Doors = forwardRef<DoorsHandle>(function Doors(_, ref) {
       </div>
 
       <div ref={brand} className="door-brand" dir="ltr">
-        <VMark className="door-brand-mark" />
-        <span className="door-brand-word-wrap">
-          <Wordmark className="door-brand-word" />
-        </span>
-        <span className="door-brand-tagline t-label" aria-hidden="true">
-          {TAGLINE.split("").map((c, i) => (
-            <span key={i} data-c>
-              {c === " " ? " " : c}
-            </span>
-          ))}
-          <span data-tagline-dot className="dot">
-            .
-          </span>
-        </span>
+        <LogoLockup className="door-brand-logo" />
       </div>
     </div>
   );

@@ -1,12 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Alexandria, Fragment_Mono, Mona_Sans } from "next/font/google";
+import { Montserrat, Tajawal } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
 
 import { dirOf, isLang, locales } from "@/i18n/config";
 import { site, ui } from "@/content/site";
 import { cn } from "@/lib/cn";
-import { BrandDefs } from "@/components/brand/Logo";
 import { LangProvider } from "@/components/providers/LangProvider";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { TransitionProvider } from "@/components/transition/TransitionProvider";
@@ -14,23 +13,18 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Cursor } from "@/components/layout/Cursor";
 
-const mona = Mona_Sans({
+// The company profile's typefaces: Montserrat for English (headings, text and the
+// letter-spaced labels), Tajawal for Arabic.
+const montserrat = Montserrat({
   subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-mona",
+  variable: "--font-montserrat",
   display: "swap",
 });
 
-const fragment = Fragment_Mono({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-fragment",
-  display: "swap",
-});
-
-const alexandria = Alexandria({
+const tajawal = Tajawal({
   subsets: ["arabic", "latin"],
-  variable: "--font-alexandria",
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-tajawal",
   display: "swap",
   preload: false,
 });
@@ -73,12 +67,11 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   if (!isLang(lang)) notFound();
 
   return (
-    <html lang={lang} dir={dirOf(lang)} className={cn(mona.variable, fragment.variable, alexandria.variable)}>
+    <html lang={lang} dir={dirOf(lang)} className={cn(montserrat.variable, tajawal.variable)}>
       <body>
         <noscript>
           <style>{`[data-doors],[data-slat]{display:none!important}`}</style>
         </noscript>
-        <BrandDefs />
         <LangProvider lang={lang}>
           <SmoothScroll />
           <TransitionProvider>

@@ -12,8 +12,6 @@ type Props = {
   /** "scroll": when it enters the viewport. "enter": when the page is revealed. */
   trigger?: "scroll" | "enter";
   delay?: number;
-  /** Also "open" the letterforms along the width axis (Latin only). */
-  widen?: boolean;
   id?: string;
 };
 
@@ -22,7 +20,7 @@ type Props = {
  * after fonts load or the layout changes (SplitText autoSplit); once the
  * reveal has played it never replays.
  */
-export function SplitReveal({ as: Tag = "p", children, className, trigger = "scroll", delay = 0, widen = false, id }: Props) {
+export function SplitReveal({ as: Tag = "p", children, className, trigger = "scroll", delay = 0, id }: Props) {
   const ref = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -43,10 +41,6 @@ export function SplitReveal({ as: Tag = "p", children, className, trigger = "scr
         onSplit(self) {
           tl = gsap.timeline({ paused: true, delay });
           tl.from(self.lines, { yPercent: arabic ? 120 : 110, duration: 1.15, stagger: 0.085, ease: "lift" });
-          if (widen && !arabic) {
-            const target = getComputedStyle(el).fontStretch || "100%";
-            tl.fromTo(el, { fontStretch: "80%" }, { fontStretch: target, duration: 1.7, ease: "soft" }, 0);
-          }
           if (played) tl.progress(1);
           return tl;
         },

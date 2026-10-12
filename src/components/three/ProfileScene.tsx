@@ -243,7 +243,7 @@ export default function ProfileScene({ stateRef, active }: { stateRef: React.Ref
       <Environment resolution={256}>
         <Lightformer form="rect" intensity={2.2} position={[0, 3, 2]} scale={[6, 2, 1]} />
         <Lightformer form="rect" intensity={1.2} position={[-4, 0.5, 1]} rotation-y={Math.PI / 2} scale={[4, 3, 1]} />
-        <Lightformer form="rect" intensity={0.8} color="#e11b22" position={[4, -1, -2]} rotation-y={-Math.PI / 2} scale={[3, 2, 1]} />
+        <Lightformer form="rect" intensity={0.8} color="#d71920" position={[4, -1, -2]} rotation-y={-Math.PI / 2} scale={[3, 2, 1]} />
       </Environment>
     </Canvas>
   );

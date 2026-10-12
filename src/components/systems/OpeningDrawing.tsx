@@ -1,9 +1,13 @@
 "use client";
 
 import { forwardRef, useId, useImperativeHandle, useRef } from "react";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { gsap, ScrollTrigger, useGSAP, reducedMotion } from "@/lib/gsap";
 import type { OpeningKind } from "@/content/systems";
 import { cn } from "@/lib/cn";
+
+// The opening symbols are drawn on with DrawSVG; registered here, where it's used.
+if (typeof window !== "undefined") gsap.registerPlugin(DrawSVGPlugin);
 
 export type OpeningHandle = { timeline: () => gsap.core.Timeline | null };
 

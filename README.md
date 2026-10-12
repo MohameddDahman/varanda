@@ -11,7 +11,18 @@ npm install
 npm run dev        # http://localhost:3000 → redirects to /en or /ar
 npm run build      # production build (all pages are pre-rendered)
 npm run lint
+npm run test:ui    # UI tests (see below)
 ```
+
+## UI tests
+
+`npm run test:ui` builds the site, starts it on port 3100 and runs the Playwright suite in `tests/ui/` on a desktop and a phone viewport. On Windows it uses the installed Microsoft Edge; elsewhere run `npx playwright install chromium` once.
+
+- `pages.spec.ts` — every page in both languages: status code, `lang`/`dir`, the profile fonts actually loaded, no sideways overflow, no broken images, one `h1`, no console errors or animation warnings, and an axe accessibility scan (WCAG 2.2 AA) with zero violations.
+- `layout.spec.ts` — regressions found during the build: the header blur surviving the CSS minifier, hero labels staying on their door panel, the logo not mirroring in Arabic, paragraph tracking (open in English, word-spaced in Arabic), no doubled gaps between same-colour sections, sample contact details never linked, split text readable to screen readers.
+- `interactions.spec.ts` — the door transition, the phone menu, the language switch, the projects filter, the wind-sound demo and the request form.
+
+Test the live site instead with `BASE_URL=https://varanda-kappa.vercel.app npm run test:ui` (PowerShell: `$env:BASE_URL="https://varanda-kappa.vercel.app"; npm run test:ui`). `npm run test:ui:report` opens the last report; failures keep a screenshot and a trace.
 
 `/` redirects to `/en` or `/ar` from the visitor's browser language; switching language is remembered in a `lang` cookie.
 
@@ -61,7 +72,6 @@ At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-dom
 ## Before launch — needed from the client
 
 - Phone / WhatsApp, email, address, opening hours and Google Maps link → `src/content/site.ts`, replacing the sample values, then set `contact.sample` to `false`. (Neither the company profile nor the Drive folder contains any contact details.)
-- The logo as vector files (SVG/AI/PDF). The current mark and wordmark are a careful redraw from the company profile (`src/components/brand/Logo.tsx`).
 - Confirm project names, areas and systems used in `src/content/projects.ts` (grouped from the Drive photos by date).
 - Confirm the garden-fencing work belongs on the site (it's in the Drive but not in the profile).
 - Higher-resolution photos of the four projects shown in the profile (Fifth Settlement, Sheikh Zayed, October) — the profile only contains low-resolution copies. A professional shoot of 2–3 finished projects would lift the site the most.
@@ -71,5 +81,7 @@ At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-dom
 
 - Next 16: `cacheComponents` is intentionally **off** — every page is static, and keeping hidden routes mounted would interfere with the scroll scenes and the door transition.
 - Styles: `src/app/globals.css`. Brand tokens are in `@theme`; component styles sit in `@layer components` so Tailwind utilities can override them.
+- Type: the company profile's fonts — **Montserrat** (English: display, text and letter-spaced labels) and **Tajawal** (Arabic), loaded with `next/font`. The profile itself is flattened images, so they were matched by eye against its lettering. Arabic text is never letter-spaced (it can break the joins between letters); it is opened up with word spacing instead.
+- Logo: `src/components/brand/logo-paths.ts` holds the exact vector paths from the client's `Varanda_Logo.pdf`; `Logo.tsx` builds the mark, the wordmark and the full stacked lock-up (used in the intro and share image) from them. Brand red is the logo's `#D71920`.
 - Motion respects `prefers-reduced-motion`: no smooth scrolling, pins or door transitions, and every animated section has a readable static state.
 - `?pin=transform` (dev only) switches ScrollTrigger pins to transforms for screenshot tools.

@@ -32,6 +32,9 @@ export const serviceAreas: { id: string; name: L; short: L; lat: number; lon: nu
 export const site = {
   name: "Varanda",
   wordmark: "VARANDA",
+  // True once the real domain is configured. Until then the site asks search engines not to
+  // index it, so previews with sample details don't end up in search results.
+  launched: Boolean(process.env.NEXT_PUBLIC_SITE_URL),
   // Canonical origin for metadata/sitemap. Falls back to Vercel's production URL, then localhost.
   url:
     process.env.NEXT_PUBLIC_SITE_URL ??

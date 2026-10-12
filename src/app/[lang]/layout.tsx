@@ -48,6 +48,8 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
     title: { default: title, template: "%s — VARANDA" },
     description: site.description[lang],
     applicationName: "VARANDA",
+    // Previews (no real domain yet) stay out of search results.
+    robots: site.launched ? undefined : { index: false, follow: false },
     alternates: { canonical: `/${lang}`, languages: { en: "/en", ar: "/ar", "x-default": "/en" } },
     openGraph: {
       type: "website",

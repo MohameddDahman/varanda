@@ -54,7 +54,9 @@ There is intentionally no public query: submitted contact details can only be re
 
 ## Deploying
 
-Designed for Vercel. Set `NEXT_PUBLIC_SITE_URL` (e.g. `https://varanda-eg.com`) so canonical links, the sitemap and share images use the real domain, plus `NEXT_PUBLIC_CONVEX_URL`.
+Deployed on Vercel as the `varanda` project, connected to this GitHub repo: every push to `main` deploys to production (currently https://varanda-kappa.vercel.app).
+
+At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-domain.com`) so canonical links, the sitemap and share images use it. Until it is set the site tells search engines not to index it (a `noindex` tag and no sitemap in `robots.txt`), so the preview with sample details stays out of search results. Add `NEXT_PUBLIC_CONVEX_URL` once Convex is connected.
 
 ## Before launch — needed from the client
 

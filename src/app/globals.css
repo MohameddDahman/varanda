@@ -375,19 +375,6 @@ svg {
   cursor: pointer;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  html.has-cursor,
-  html.has-cursor * {
-    cursor: none !important;
-  }
-
-  /* Keep the text caret where people type. */
-  html.has-cursor input:not([type="radio"]):not([type="checkbox"]),
-  html.has-cursor textarea {
-    cursor: text !important;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -739,80 +726,6 @@ svg {
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-/* ───────────────────────── Cursor ───────────────────────── */
-
-.cursor {
-  position: fixed;
-  inset: 0;
-  z-index: 110;
-  pointer-events: none;
-}
-
-.cursor-dot,
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  visibility: hidden;
-  opacity: 0;
-}
-
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
-  border-radius: 50%;
-  background: var(--color-white);
-  mix-blend-mode: difference;
-}
-
-.cursor-ring {
-  display: grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  margin: -1.25rem 0 0 -1.25rem;
-  border-radius: 50%;
-  border: 1px solid rgb(255 255 255 / 0.9);
-  mix-blend-mode: difference;
-  transition:
-    width 0.45s var(--ease-out),
-    height 0.45s var(--ease-out),
-    margin 0.45s var(--ease-out),
-    background-color 0.35s ease,
-    border-color 0.35s ease;
-}
-
-.cursor-ring.is-hover {
-  width: 3.75rem;
-  height: 3.75rem;
-  margin: -1.875rem 0 0 -1.875rem;
-  background: rgb(255 255 255 / 0.9);
-}
-
-.cursor-ring.is-label {
-  width: 6.25rem;
-  height: 6.25rem;
-  margin: -3.125rem 0 0 -3.125rem;
-  background: var(--color-red);
-  border-color: var(--color-red);
-  mix-blend-mode: normal;
-}
-
-.cursor-label {
-  font-family: var(--font-label);
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-white);
-}
-
-:lang(ar) .cursor-label {
-  font-family: var(--font-arabic);
-  font-size: 0.8125rem;
-  letter-spacing: 0;
 }
 
 /* ───────────────────────── Footer ───────────────────────── */

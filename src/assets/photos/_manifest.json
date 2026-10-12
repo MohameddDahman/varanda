@@ -1,0 +1,205 @@
+{
+  "hero-river-sliding": {
+    "source": "20260518_120429.jpg",
+    "size": [
+      2600,
+      1833
+    ]
+  },
+  "apartment-living": {
+    "source": "20260518_120347.jpg",
+    "size": [
+      2400,
+      1728
+    ]
+  },
+  "apartment-bedroom": {
+    "source": "20260518_121330.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  },
+  "apartment-kitchen": {
+    "source": "20260520_120208.jpg",
+    "size": [
+      2000,
+      1500
+    ]
+  },
+  "apartment-window": {
+    "source": "20260520_122234.jpg",
+    "size": [
+      2000,
+      1500
+    ]
+  },
+  "office-night-1": {
+    "source": "20260716_002437.jpg",
+    "size": [
+      2400,
+      1476
+    ]
+  },
+  "office-night-2": {
+    "source": "20260716_002421-a.jpg",
+    "size": [
+      2400,
+      1512
+    ]
+  },
+  "office-night-3": {
+    "source": "20260716_002429.jpg",
+    "size": [
+      2400,
+      1404
+    ]
+  },
+  "villa-shutter": {
+    "source": "20260906_180112-a.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  },
+  "villa-shutters-facade": {
+    "source": "20260906_180115-a.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  },
+  "entrance-door": {
+    "source": "20260916_160511.jpg",
+    "size": [
+      1500,
+      2000
+    ]
+  },
+  "door-lock": {
+    "source": "20260916_160648.jpg",
+    "size": [
+      1500,
+      2000
+    ]
+  },
+  "arched-shutter": {
+    "source": "IMG-20241013-WA0006.jpg",
+    "size": [
+      960,
+      1280
+    ]
+  },
+  "building-progress": {
+    "source": "IMG-20250828-WA0009.jpg",
+    "size": [
+      1786,
+      2000
+    ]
+  },
+  "fence-1": {
+    "source": "IMG-20251227-WA0020.jpg",
+    "size": [
+      1280,
+      960
+    ]
+  },
+  "fence-2": {
+    "source": "IMG-20251227-WA0021.jpg",
+    "size": [
+      1280,
+      960
+    ]
+  },
+  "fence-3": {
+    "source": "IMG-20251227-WA0022.jpg",
+    "size": [
+      1280,
+      960
+    ]
+  },
+  "fence-4": {
+    "source": "IMG-20251227-WA0031.jpg",
+    "size": [
+      1152,
+      864
+    ]
+  },
+  "fence-5": {
+    "source": "IMG-20251227-WA0033.jpg",
+    "size": [
+      1280,
+      960
+    ]
+  },
+  "fence-6": {
+    "source": "IMG-20251227-WA0034.jpg",
+    "size": [
+      1280,
+      960
+    ]
+  },
+  "woodgrain": {
+    "source": "IMG-20260408-WA0008.jpg",
+    "size": [
+      480,
+      1203
+    ]
+  },
+  "tilt-turn": {
+    "source": "IMG-20260810-WA0005.jpg",
+    "size": [
+      1243,
+      1042
+    ]
+  },
+  "classic-window": {
+    "source": "IMG_20200625_165928.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  },
+  "classic-tilt": {
+    "source": "IMG_20200625_170026.jpg",
+    "size": [
+      1500,
+      2000
+    ]
+  },
+  "classic-french-door": {
+    "source": "IMG_20200625_170128.jpg",
+    "size": [
+      1500,
+      2000
+    ]
+  },
+  "sliding-door-2020": {
+    "source": "IMG_20201115_142455.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  },
+  "home-window-1": {
+    "source": "IMG_20210104_193004.jpg",
+    "size": [
+      1500,
+      2000
+    ]
+  },
+  "home-window-2": {
+    "source": "IMG_20210104_193050.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  },
+  "home-window-3": {
+    "source": "IMG_20210104_193105.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  }
+}

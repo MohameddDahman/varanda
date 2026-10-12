@@ -413,7 +413,9 @@ svg {
   --h-fg: var(--color-white);
   --h-fg-2: rgb(255 255 255 / 0.72);
   --h-line: rgb(255 255 255 / 0.28);
-  --h-bg: rgb(4 12 23 / 0.72);
+  /* Mostly opaque, so headings scrolling underneath stay quiet even where the blur
+     isn't rendered. */
+  --h-bg: rgb(4 12 23 / 0.84);
   position: fixed;
   inset-inline: 0;
   top: 0;
@@ -429,7 +431,7 @@ svg {
   --h-fg: var(--color-ink);
   --h-fg-2: rgb(8 26 47 / 0.66);
   --h-line: rgb(8 26 47 / 0.22);
-  --h-bg: rgb(242 243 245 / 0.82);
+  --h-bg: rgb(242 243 245 / 0.88);
 }
 
 .site-header::before {
@@ -438,8 +440,10 @@ svg {
   inset: 0;
   z-index: -1;
   background: var(--h-bg);
-  backdrop-filter: blur(16px) saturate(1.2);
+  /* Prefixed first: the CSS minifier keeps the last of the pair, and Chrome only reads
+     the unprefixed property. */
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
   border-bottom: 1px solid var(--h-line);
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -1079,8 +1083,8 @@ svg {
   padding: 0.85rem 1.1rem;
   color: var(--color-white);
   background: rgb(4 12 23 / 0.6);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .hero-static {
@@ -2497,6 +2501,42 @@ button:hover > .finish-swatch {
   }
   to {
     transform: scaleY(var(--amp));
+  }
+}
+
+/* With the sound on, the script sets --amp every frame from the live signal. */
+.demo-acoustic.is-live .wave-bars {
+  transition: none;
+}
+
+/* Reduced motion: the bars hold still at their resting heights, still scaled by --amp,
+   so open and closed keep looking different. */
+@media (prefers-reduced-motion: reduce) {
+  .wave-bars span {
+    animation: none;
+    transform: scaleY(calc(var(--amp) * var(--h, 0.6)));
+  }
+}
+
+.sound-icon .sound-wave {
+  opacity: 0.35;
+}
+
+.sound-icon.is-playing .sound-wave {
+  opacity: 1;
+  animation: sound-wave 0.9s ease-in-out infinite alternate;
+}
+
+.sound-icon.is-playing .sound-wave + .sound-wave {
+  animation-delay: 0.3s;
+}
+
+@keyframes sound-wave {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 1;
   }
 }
 

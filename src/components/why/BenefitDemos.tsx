@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP, reducedMotion } from "@/lib/gsap";
 import { useLang } from "@/components/providers/LangProvider";
 import { cn } from "@/lib/cn";
+import { startWind, type Wind } from "./wind";
 
 /** Heat drifts in from the street and fades out at the frame. */
 export function ThermalDemo() {
@@ -31,39 +32,146 @@ export function ThermalDemo() {
   );
 }
 
-/** Street noise on one side; toggle the window to hear what reaches the room. */
+// Resting heights for the bars when motion is reduced (they don't bounce then).
+const BAR_HEIGHTS = [0.45, 0.8, 0.55, 1, 0.65, 0.35, 0.9, 0.5, 0.7];
+const barStyle = (i: number) =>
+  ({ animationDelay: `${(i % 6) * 0.13}s`, "--h": BAR_HEIGHTS[i % BAR_HEIGHTS.length] }) as React.CSSProperties;
+
+/**
+ * Street noise on one side; toggle the window to see what reaches the room. With the
+ * sound on, a generated wind plays and the bars follow it: open, it comes straight in;
+ * closed, it turns into a soft, dull hush.
+ */
 export function AcousticDemo() {
   const { lang } = useLang();
+  const ar = lang === "ar";
   const [closed, setClosed] = useState(true);
+  const [sound, setSound] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const outsideRow = useRef<HTMLDivElement>(null);
+  const insideRow = useRef<HTMLDivElement>(null);
+  const wind = useRef<Wind | null>(null);
   const bars = Array.from({ length: 18 }, (_, i) => i);
+
+  const stopSound = useCallback(() => {
+    wind.current?.stop();
+    wind.current = null;
+    setSound(false);
+  }, []);
+
+  // Started straight from the tap: browsers only allow sound that begins with a gesture.
+  const toggleSound = () => {
+    if (wind.current) {
+      stopSound();
+      return;
+    }
+    const started = startWind(!closed);
+    if (!started) return;
+    wind.current = started;
+    setSound(true);
+  };
+
+  const toggleWindow = () => {
+    const next = !closed;
+    setClosed(next);
+    wind.current?.setOpen(!next);
+  };
+
+  // While the sound plays the bars follow the live signal, and the sound stops when the
+  // demo scrolls away, the tab is hidden or the page changes.
+  useEffect(() => {
+    if (!sound) return;
+    const playing = wind.current;
+    const rows = [outsideRow.current, insideRow.current];
+    const amps = rows.map((row) => (row ? parseFloat(getComputedStyle(row).getPropertyValue("--amp")) || 1 : 1));
+    let peak = 1e-4;
+    let frame = 0;
+    const draw = () => {
+      if (playing) {
+        const { outside, inside } = playing.read();
+        // Scale to the loudest recent gust so the bars use their height on any device.
+        peak = Math.max(peak * 0.995, outside);
+        const targets = [Math.min(1, Math.max(0.2, outside / peak)), Math.min(1, Math.max(0.04, inside / peak))];
+        rows.forEach((row, i) => {
+          amps[i] += (targets[i] - amps[i]) * 0.2;
+          row?.style.setProperty("--amp", amps[i].toFixed(3));
+        });
+      }
+      frame = requestAnimationFrame(draw);
+    };
+    if (!reducedMotion()) frame = requestAnimationFrame(draw);
+
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) stopSound();
+    });
+    if (root.current) io.observe(root.current);
+    const onVisibility = () => {
+      if (document.hidden) stopSound();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      rows.forEach((row) => row?.style.removeProperty("--amp"));
+      playing?.stop();
+    };
+  }, [sound, stopSound]);
+
   return (
-    <div className="demo demo-acoustic">
+    <div ref={root} className={cn("demo demo-acoustic", sound && "is-live")}>
       <div className="demo-wave">
-        <span className="t-label text-[var(--fg-2)]">{lang === "ar" ? "ضوضاء الشارع" : "Street noise"}</span>
-        <div className="wave-bars" aria-hidden="true">
+        <span className="t-label text-[var(--fg-2)]">{ar ? "ضوضاء الشارع" : "Street noise"}</span>
+        <div ref={outsideRow} className="wave-bars" aria-hidden="true">
           {bars.map((i) => (
-            <span key={i} style={{ animationDelay: `${(i % 6) * 0.13}s` }} />
+            <span key={i} style={barStyle(i)} />
           ))}
         </div>
       </div>
       <div className="demo-wave">
-        <span className="t-label text-[var(--fg-2)]">{lang === "ar" ? "داخل الغرفة" : "In the room"}</span>
-        <div className={cn("wave-bars is-inside", closed && "is-closed")} aria-hidden="true">
+        <span className="t-label text-[var(--fg-2)]">{ar ? "داخل الغرفة" : "In the room"}</span>
+        <div ref={insideRow} className={cn("wave-bars is-inside", closed && "is-closed")} aria-hidden="true">
           {bars.map((i) => (
-            <span key={i} style={{ animationDelay: `${(i % 6) * 0.13}s` }} />
+            <span key={i} style={barStyle(i)} />
           ))}
         </div>
       </div>
-      <button type="button" className="chip mt-6" aria-pressed={closed} onClick={() => setClosed((c) => !c)}>
-        {closed
-          ? lang === "ar"
-            ? "الشباك مغلق — افتحه"
-            : "Window closed — open it"
-          : lang === "ar"
-            ? "الشباك مفتوح — أغلقه"
-            : "Window open — close it"}
-      </button>
+      <div className="mt-6 flex flex-wrap gap-2">
+        <button type="button" className="chip" aria-pressed={closed} onClick={toggleWindow}>
+          {closed
+            ? ar
+              ? "الشباك مغلق — افتحه"
+              : "Window closed — open it"
+            : ar
+              ? "الشباك مفتوح — أغلقه"
+              : "Window open — close it"}
+        </button>
+        <button type="button" className={cn("chip", sound && "is-active")} aria-pressed={sound} onClick={toggleSound}>
+          <SoundIcon playing={sound} />
+          {ar ? "اسمع الفرق" : "Hear the difference"}
+        </button>
+      </div>
     </div>
+  );
+}
+
+function SoundIcon({ playing }: { playing: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn("sound-icon h-4 w-4 shrink-0", playing && "is-playing")}
+      aria-hidden="true"
+    >
+      <path d="M4 9.5h3l4-3.5v12l-4-3.5H4Z" />
+      <path className="sound-wave" d="M15 9a4 4 0 0 1 0 6" />
+      <path className="sound-wave" d="M17.5 6.5a7.5 7.5 0 0 1 0 11" />
+    </svg>
   );
 }
 

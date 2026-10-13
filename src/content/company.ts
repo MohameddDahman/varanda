@@ -223,6 +223,14 @@ export const anatomy = {
         "لوحان من الزجاج وفراغ محكم بينهما لعزل حراري وصوتي أفضل.",
       ),
     },
+    {
+      id: "lock",
+      title: t("Multi-point locking", "غلق متعدد النقاط"),
+      text: t(
+        "An espagnolette in the sash groove drives locking cams into keepers on the frame, holding the sash shut at several points.",
+        "سبليونة داخل مجرى الضلفة تُدخل نقاط الغلق في المقابلات المثبتة على الإطار، فتُحكم غلق الضلفة من أكثر من نقطة.",
+      ),
+    },
   ],
 };
 

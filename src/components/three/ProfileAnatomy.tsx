@@ -76,7 +76,7 @@ export function ProfileAnatomy() {
       ScrollTrigger.create({
         trigger: root.current,
         start: "top top",
-        end: "+=420%",
+        end: "+=520%",
         pin: true,
         anticipatePin: 1,
         onUpdate(self) {
@@ -114,7 +114,9 @@ export function ProfileAnatomy() {
                   </span>
                   <span className="min-w-0">
                     <span className="t-h3 block">{t(p.title)}</span>
-                    <span className="anatomy-part-text t-small block text-mist">{t(p.text)}</span>
+                    <span className="anatomy-part-text t-small text-mist">
+                      <span className="min-h-0">{t(p.text)}</span>
+                    </span>
                   </span>
                 </button>
               </li>

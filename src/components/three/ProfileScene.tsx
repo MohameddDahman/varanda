@@ -174,6 +174,8 @@ function useShapes() {
       frame,
       sash,
       bead,
+      // Espagnolette drive rod running inside the sash's hardware groove.
+      rod: rectShape([56.4, 60.4, 57.8, 74.6]),
       steelFrame: channel([22.6, 4.1, 47.4, 43.9]),
       steelSash: channel([35.4, 54, 52.6, 88]),
       paneOut: rectShape([18.4, 94, 22.6, 172]),
@@ -204,6 +206,39 @@ const BLACK = new THREE.Color("#121316");
 const GLASS = new THREE.Color("#cfe6df");
 const RED = new THREE.Color("#d71920");
 const DEEP_RED = new THREE.Color("#5a0408");
+const METAL = new THREE.Color("#b9c0c8");
+
+// Locking points along the slice (world z), and screws fixing the steel.
+const CAMS = [-0.32, 0.22];
+const SCREWS = [-0.42, 0, 0.42];
+
+/** Espagnolette cams on the sash and their keepers on the frame. */
+function LockHardware({ material, cams }: { material: THREE.Material; cams: React.Ref<THREE.Group> }) {
+  const camGeo = useMemo(() => new THREE.CylinderGeometry(1.4 * S, 1.4 * S, 5.8 * S, 20).rotateZ(Math.PI / 2), []);
+  const headGeo = useMemo(() => new THREE.CylinderGeometry(2.1 * S, 2.1 * S, 1.2 * S, 24).rotateZ(Math.PI / 2), []);
+  const keeperGeo = useMemo(() => new THREE.BoxGeometry(1.6 * S, 14 * S, 0.11), []);
+  return (
+    <>
+      <group ref={cams}>
+        {CAMS.map((z) => (
+          <group key={z} position={[0, Y(67.5), z]}>
+            <mesh geometry={camGeo} material={material} position={[X(59.7), 0, 0]} castShadow />
+            <mesh geometry={headGeo} material={material} position={[X(62.4), 0, 0]} castShadow />
+          </group>
+        ))}
+      </group>
+      {CAMS.map((z) => (
+        <mesh key={z} geometry={keeperGeo} material={material} position={[X(63.6), Y(63), z + 0.075]} castShadow receiveShadow />
+      ))}
+    </>
+  );
+}
+
+/** Screws fixing the steel reinforcement through the frame wall. */
+function Screws({ material }: { material: THREE.Material }) {
+  const geo = useMemo(() => new THREE.CylinderGeometry(0.9 * S, 0.9 * S, 7 * S, 12), []);
+  return SCREWS.map((z) => <mesh key={z} geometry={geo} material={material} position={[X(35), Y(46), z]} />);
+}
 
 function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
   const group = useRef<THREE.Group>(null);
@@ -212,6 +247,7 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
   const unitOut = useRef<THREE.Group>(null);
   const unitIn = useRef<THREE.Group>(null);
   const gaskets = useRef<THREE.Group>(null);
+  const cams = useRef<THREE.Group>(null);
   const shapes = useShapes();
 
   const mats = useMemo(
@@ -232,26 +268,30 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
       desiccant: new THREE.MeshStandardMaterial({ color: "#d8cdb4", roughness: 0.95 }),
       seal: new THREE.MeshStandardMaterial({ color: "#26292e", roughness: 0.7 }),
       block: new THREE.MeshStandardMaterial({ color: "#3b4250", roughness: 0.8 }),
+      hardware: new THREE.MeshStandardMaterial({ color: "#b9c0c8", metalness: 0.85, roughness: 0.28 }),
+      screw: new THREE.MeshStandardMaterial({ color: "#6c7480", metalness: 0.9, roughness: 0.35 }),
     }),
     [],
   );
 
-  const v = useRef({ rotY: -0.95, rotX: 0.32, steel: 0, ghost: 1, gasket: 0, explode: 0, hlProfile: 0, hlGlass: 0 }).current;
+  const v = useRef({ rotY: -0.95, rotX: 0.32, steel: 0, ghost: 1, gasket: 0, explode: 0, hlProfile: 0, hlGlass: 0, lock: 0 }).current;
 
   useFrame((frame, delta) => {
     const step = stateRef.current.step;
     const k = 1 - Math.pow(0.0015, delta); // frame-rate independent easing
     // Each step turns the cut face toward the camera at its own angle.
     const target = {
-      rotY: [-0.62, -0.2, -0.95, -0.3, -0.45][step] ?? -0.5,
-      rotX: [0.26, 0.08, 0.3, 0.1, 0.18][step] ?? 0.2,
+      rotY: [-0.62, -0.2, -0.95, -0.3, -0.45, -1.15][step] ?? -0.5,
+      rotX: [0.26, 0.08, 0.3, 0.1, 0.18, 0.14][step] ?? 0.2,
       steel: step === 2 ? 1 : 0,
-      ghost: step === 2 || step === 3 ? 0.35 : 1,
+      ghost: step === 2 || step === 3 ? 0.35 : step === 5 ? 0.6 : 1,
       gasket: step === 3 ? 1 : 0,
       explode: step === 4 ? 1 : 0,
       // Red marks the part being explained: profile, steel core, gaskets, glass.
       hlProfile: step === 1 ? 1 : 0,
       hlGlass: step === 4 ? 1 : 0,
+      // Locking: the hardware turns red and the cams slide into their keepers.
+      lock: step === 5 ? 1 : 0,
     };
     for (const key of Object.keys(target) as (keyof typeof target)[]) v[key] += (target[key] - v[key]) * k;
 
@@ -266,7 +306,7 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
     if (steelB.current) steelB.current.position.z = v.steel * 0.42;
     mats.upvc.opacity = v.ghost;
     mats.upvc.depthWrite = v.ghost > 0.95;
-    mats.upvc.color.lerpColors(WHITE, RED, v.hlProfile * 0.8);
+    mats.upvc.color.lerpColors(WHITE, RED, v.hlProfile);
     mats.steel.color.lerpColors(STEEL, RED, v.steel);
     mats.steel.emissive.lerpColors(BLACK, DEEP_RED, v.steel);
     mats.gasket.color.lerpColors(BLACK, RED, v.gasket);
@@ -274,6 +314,9 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
     mats.glass.color.lerpColors(GLASS, RED, v.hlGlass * 0.7);
     mats.glass.opacity = 0.32 + v.hlGlass * 0.28;
     if (gaskets.current) gaskets.current.scale.setScalar(1 + v.gasket * 0.06);
+    mats.hardware.color.lerpColors(METAL, RED, v.lock);
+    mats.hardware.emissive.lerpColors(BLACK, DEEP_RED, v.lock);
+    if (cams.current) cams.current.position.z = v.lock * 0.075;
     // The glass unit opens up: panes move apart, the spacer and seals stay between them.
     if (unitOut.current) unitOut.current.position.x = -v.explode * 0.16;
     if (unitIn.current) unitIn.current.position.x = v.explode * 0.16;
@@ -298,6 +341,9 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
       <Part shape={shapes.desiccant} material={mats.desiccant} bevel={false} />
       <Part shape={shapes.edgeSeal} material={mats.seal} bevel={false} />
       <Part shape={shapes.settingBlock} material={mats.block} bevel={false} />
+      <Part shape={shapes.rod} material={mats.hardware} depth={LENGTH * 0.98} bevel={false} />
+      <LockHardware material={mats.hardware} cams={cams} />
+      <Screws material={mats.screw} />
       <group ref={gaskets}>
         {shapes.gaskets.map((s, i) => (
           <Part key={i} shape={s} material={mats.gasket} bevel={false} />

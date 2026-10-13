@@ -7,8 +7,8 @@ export const about = {
   motto: t("Experienced hands. A new vision. Made for life.", "خبرة راسخة. رؤية جديدة. صُنعت لتدوم."),
   body: [
     t(
-      "VARANDA is a specialised uPVC windows and doors company, built by a team with 15–20 years of hands-on industry experience.",
-      "VARANDA شركة متخصصة في أنظمة الأبواب والشبابيك uPVC، أسسها فريق يمتلك خبرة عملية تتراوح بين 15 و20 عامًا في هذا المجال.",
+      "VARANDA is a specialised uPVC windows and doors company, built by a team with more than 20 years of hands-on experience in the trade.",
+      "VARANDA شركة متخصصة في أنظمة الأبواب والشبابيك uPVC، أسسها فريق يمتلك خبرة عملية تزيد على 20 عامًا في هذا المجال.",
     ),
     t(
       "That experience covers every stage of the work — from technical consultation and site measurement to manufacturing, installation and after-sales support.",
@@ -20,30 +20,30 @@ export const about = {
     ),
   ],
   stat: {
-    value: "15–20",
+    value: "20+",
     unit: t("years", "عامًا"),
-    label: t("Combined team experience in uPVC", "خبرة مجمّعة لفريق العمل في uPVC"),
+    label: t("Of hands-on experience in uPVC", "من الخبرة العملية في مجال uPVC"),
   },
   pillars: [
     {
       id: "comfort",
       title: t("Thermal & acoustic comfort", "راحة حرارية وصوتية"),
-      text: t("Rooms that stay cooler and quieter.", "غرف أبرد وأكثر هدوءًا."),
+      text: t("Rooms that stay cooler and quieter.", "غرف أكثر اعتدالًا وهدوءًا."),
     },
     {
       id: "durable",
       title: t("Durable uPVC systems", "أنظمة uPVC متينة"),
-      text: t("Profiles and hardware built to last.", "قطاعات وإكسسوارات مصممة لتدوم."),
+      text: t("Profiles and hardware built to last.", "قطاعات وإكسسوارات مصممة لتدوم طويلًا."),
     },
     {
       id: "tailored",
-      title: t("Tailored solutions", "حلول حسب الطلب"),
-      text: t("Every opening measured and made to fit.", "كل فتحة تُقاس وتُصنّع بمقاسها."),
+      title: t("Tailored solutions", "حلول مصممة حسب الطلب"),
+      text: t("Every opening measured and made to fit.", "كل فتحة تُقاس وتُصنَّع بمقاسها الدقيق."),
     },
     {
       id: "install",
       title: t("Professional installation", "تركيب احترافي"),
-      text: t("A specialised team and a clean finish.", "فريق متخصص وتشطيب نظيف."),
+      text: t("A specialised team and a clean finish.", "فريق متخصص وتشطيب متقن."),
     },
   ],
 };
@@ -225,3 +225,15 @@ export const anatomy = {
     },
   ],
 };
+
+/**
+ * Counters on the home page (the 20+ years sits just above them, in the intro). `clients` and `projects` stay null (hidden) until the client
+ * confirms the numbers; a site-visits counter needs the Convex backend first.
+ */
+export const counters: { value: string | null; label: L }[] = [
+  { value: null, label: t("Clients who trusted our work", "عميل وثقوا في عملنا") },
+  { value: null, label: t("Projects delivered", "مشروعًا تم تسليمه") },
+  { value: "6", label: t("Opening systems", "أنظمة فتح") },
+  { value: "10", label: t("Years of warranty on shutters", "سنوات ضمان على الشاتر") },
+  { value: "5", label: t("Years of warranty on accessories", "سنوات ضمان على الإكسسوارات") },
+];

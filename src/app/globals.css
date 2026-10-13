@@ -708,19 +708,93 @@ svg {
   --btn-fill-fg: var(--color-white);
 }
 
-.btn-header {
-  --btn-fg: var(--h-fg);
-  --btn-bg: transparent;
-  --btn-border: var(--h-line);
-  --btn-fill: var(--color-red);
+/* "Book a site visit" — the one action every page leads to: solid red, larger, with a
+   light sweeping across it and a soft pulse every few seconds. */
+.btn-header,
+.cta-float {
+  --btn-fg: var(--color-white);
+  --btn-bg: var(--color-red);
+  --btn-border: var(--color-red);
+  --btn-fill: var(--color-red-deep);
   --btn-fill-fg: var(--color-white);
-  height: 2.5rem;
-  padding-inline: 1.1rem;
-  font-size: 0.875rem;
+  font-weight: 600;
+  animation: cta-pulse 3.6s ease-out infinite;
+}
+
+.btn-header {
+  height: 2.875rem;
+  padding-inline: 1.4rem;
+  font-size: 0.9375rem;
+}
+
+.btn-header::after,
+.cta-float::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.42) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: cta-shine 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes cta-shine {
+  0%,
+  55% {
+    transform: translateX(-120%);
+  }
+  85%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes cta-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(215 25 32 / 0.5);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 14px rgb(215 25 32 / 0);
+  }
 }
 
 .btn-header .btn-arrow {
   display: none;
+}
+
+/* Phones: the header has no room for the button, so it floats at the bottom once the
+   visitor has scrolled past the first screen. */
+.cta-float {
+  position: fixed;
+  inset-inline: 1rem;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 55;
+  justify-content: center;
+  height: 3.25rem;
+  transition: transform 0.5s var(--ease-out), opacity 0.4s ease;
+}
+
+.cta-float[data-hidden="true"] {
+  transform: translateY(160%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 40rem) {
+  .cta-float {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-header,
+  .cta-float,
+  .btn-header::after,
+  .cta-float::after {
+    animation: none;
+  }
 }
 
 .btn:disabled {
@@ -2032,174 +2106,58 @@ button:hover > .finish-swatch {
   background: var(--color-red);
 }
 
-/* Where we work: the area list and the schematic map highlight each other. */
-.area-list {
+/* Home counters */
+.counters {
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+
+.counters-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.5rem 1.5rem;
+}
+
+@media (min-width: 64rem) {
+  .counters-grid {
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+}
+
+.counter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1.25rem;
   border-top: 1px solid var(--line);
 }
 
-.area-item {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  padding-block: 1rem;
-  border-bottom: 1px solid var(--line);
-  color: var(--fg-2);
-  transition: color 0.3s ease;
-}
-
-.area-item.is-active {
-  color: var(--fg);
-}
-
-.area-item-mark {
-  width: 0.5rem;
-  height: 0.5rem;
-  flex-shrink: 0;
-  background: var(--color-red);
-  transition: scale 0.3s var(--ease-out);
-}
-
-.area-item.is-active .area-item-mark {
-  scale: 1.6;
-}
-
-.area-map {
-  position: relative;
-  aspect-ratio: 1000 / 512;
-  overflow: hidden;
-  border: 1px solid var(--line);
-}
-
-.area-map-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.area-map-svg pattern {
-  color: rgb(255 255 255 / 0.07);
-}
-
-.area-map-river {
-  fill: none;
-  stroke: var(--color-mist);
-  stroke-opacity: 0.16;
-  stroke-width: 16;
-  stroke-linecap: round;
-}
-
-.area-map-river-core {
-  fill: none;
-  stroke: var(--color-mist);
-  stroke-opacity: 0.7;
-  stroke-width: 1.25;
-  vector-effect: non-scaling-stroke;
-}
-
-.area-map-ref {
-  fill: none;
-  stroke: var(--color-mist);
-  stroke-width: 1.25;
-}
-
-.area-map-ref :is(path, circle) {
-  vector-effect: non-scaling-stroke;
-}
-
-.area-map-ref .area-map-ref-fill,
-.area-map-north {
-  fill: var(--color-mist);
-  stroke: none;
-}
-
-.area-map-north {
-  font-family: var(--font-label);
-  font-size: 22px;
-}
-
-.area-map-zone {
-  fill: var(--color-red);
-  fill-opacity: 0.07;
-  stroke: var(--color-red);
-  stroke-opacity: 0.55;
-  stroke-dasharray: 4 5;
-  vector-effect: non-scaling-stroke;
-  transition: fill-opacity 0.4s ease, stroke-opacity 0.4s ease;
-}
-
-.area-map-point.is-active .area-map-zone {
-  fill-opacity: 0.18;
-  stroke-opacity: 1;
-}
-
-.area-map-dot {
-  fill: var(--color-red);
-}
-
-.area-map-pulse {
-  fill: none;
-  stroke: var(--color-red-bright);
-  stroke-width: 1.5;
-  vector-effect: non-scaling-stroke;
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: map-pulse 2.8s var(--ease-out) infinite;
-}
-
-@keyframes map-pulse {
-  0% {
-    transform: scale(0.5);
-    opacity: 0.85;
-  }
-  100% {
-    transform: scale(2.6);
-    opacity: 0;
-  }
-}
-
-.area-map-label {
-  position: absolute;
-  font-family: var(--font-label);
-  font-size: 0.75rem;
+.counter-value {
+  font-size: clamp(2.6rem, 5.5vw, 4.75rem);
+  font-weight: 300;
   line-height: 1;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
+  letter-spacing: -0.03em;
   color: var(--color-white);
-  pointer-events: none;
-  transition: color 0.3s ease;
 }
 
-:lang(ar) .area-map-label {
-  font-family: var(--font-arabic);
-  font-size: 0.875rem;
-  letter-spacing: 0;
+:lang(ar) .counter-value {
+  text-align: right;
 }
 
-.area-map-label.is-ref,
-.area-map-label.is-scale {
-  font-size: 0.6875rem;
+.counter-label {
   color: var(--color-mist);
 }
 
-.area-map-label.is-active {
-  color: var(--color-red-bright);
+/* The branch on Google Maps. */
+.branch-map {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--line);
+  filter: grayscale(0.25) contrast(1.05);
 }
 
-/* On a phone the map is small: keep the areas and the scale, drop the reference labels. */
-@media (max-width: 39.99rem) {
-  .area-map-label.is-ref {
-    display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .area-map-pulse {
-    animation: none;
-  }
-}
 
 /* ───────────────────────── Why uPVC ───────────────────────── */
 
@@ -2567,6 +2525,18 @@ button:hover > .finish-swatch {
   transform-origin: 0% 50%;
 }
 
+.od-origin-right {
+  transform-origin: 100% 50%;
+}
+
+.od-half-left {
+  inset: 0 50% 0 0;
+}
+
+.od-half-right {
+  inset: 0 0 0 50%;
+}
+
 .od-origin-bottom {
   transform-origin: 50% 100%;
 }
@@ -2809,4 +2779,15 @@ button:hover > .finish-swatch {
   width: min(74vw, 34rem);
   height: auto;
 }
+}.glass-photo {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-out);
 }
+
+.glass-photo.is-active {
+  opacity: 1;
+}
+
+

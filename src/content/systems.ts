@@ -1,7 +1,7 @@
 import type { L } from "@/i18n/config";
 import type { PhotoKey } from "./photos";
 
-export type OpeningKind = "sliding" | "hinged" | "tilt-turn" | "fixed" | "tilt" | "folding";
+export type OpeningKind = "sliding" | "hinged" | "hinged-double" | "tilt-turn" | "fixed" | "tilt" | "folding";
 export type GlassKind = "clear" | "reflective" | "fume" | "double";
 export type ScreenKind = "fixed" | "sliding" | "pleated";
 export type SlatKind = "perforated" | "ngs" | "bk";
@@ -12,6 +12,8 @@ export type SystemItem = {
   text: L;
   tags?: L[];
   points?: L[];
+  /** Product photo for the item. */
+  image?: PhotoKey;
 };
 
 export type SystemSlug = "windows-doors" | "glass" | "roller-shutters" | "fly-screens" | "hardware";
@@ -84,13 +86,13 @@ export const systems: SystemCategory[] = [
         tags: [tag("Flexible use", "استخدام مرن"), tag("Tight seal", "إحكام عالٍ"), tag("Safe ventilation", "تهوية آمنة")],
       },
       {
-        id: "fixed",
-        name: { en: "Fixed", ar: "النظام الثابت" },
+        id: "hinged-double",
+        name: { en: "Double casement", ar: "المفصلي ضلفتين" },
         text: {
-          en: "For large openings: the most natural light and an uninterrupted view, with a clean modern look.",
-          ar: "مناسب للمساحات الكبيرة ويوفر إضاءة طبيعية مثالية بتصميم عصري.",
+          en: "Two hinged sashes that open from the middle for a full, wide opening — the most common choice in homes.",
+          ar: "ضلفتان مفصليتان تُفتحان من المنتصف لفتحة كاملة وواسعة، وهو الاختيار الأكثر استخدامًا في المنازل.",
         },
-        tags: [tag("Open views", "إطلالات مفتوحة"), tag("Modern design", "تصميم عصري"), tag("Natural light", "إضاءة طبيعية")],
+        tags: [tag("Full opening", "فتحة كاملة"), tag("Most used", "الأكثر استخدامًا"), tag("Tight seal", "إحكام عالٍ")],
       },
       {
         id: "tilt",
@@ -131,7 +133,7 @@ export const systems: SystemCategory[] = [
     name: { en: "Glass", ar: "الزجاج" },
     short: {
       en: "Clear, reflective, fumé or double glazed — chosen for light, heat and privacy.",
-      ar: "شفاف أو عاكس أو فوميه أو مزدوج — حسب الإضاءة والحرارة والخصوصية.",
+      ar: "شفاف أو عاكس أو فاميه أو مزدوج — حسب الإضاءة والحرارة والخصوصية.",
     },
     intro: {
       en: "A range of glass to suit different needs, adding thermal and acoustic insulation with a high degree of clarity and privacy.",
@@ -143,21 +145,25 @@ export const systems: SystemCategory[] = [
     items: [
       {
         id: "clear",
+        image: "glassClear",
         name: { en: "Clear", ar: "شفاف" },
         text: { en: "The most clarity and natural light.", ar: "أقصى درجات الوضوح ودخول الإضاءة الطبيعية." },
       },
       {
         id: "reflective",
+        image: "glassReflective",
         name: { en: "Reflective", ar: "عاكس" },
         text: { en: "Reduces heat gain and gives more privacy.", ar: "يقلل من الحرارة ويوفر خصوصية أعلى." },
       },
       {
         id: "fume",
-        name: { en: "Fumé", ar: "فوميه" },
+        image: "glassFume",
+        name: { en: "Fumé", ar: "فاميه" },
         text: { en: "A modern tinted look with ideal privacy.", ar: "مظهر عصري مع خصوصية مثالية." },
       },
       {
         id: "double",
+        image: "glassDouble",
         name: { en: "Double glazing", ar: "زجاج مزدوج" },
         text: {
           en: "Better thermal and acoustic insulation, with lower energy use.",
@@ -202,6 +208,7 @@ export const systems: SystemCategory[] = [
     items: [
       {
         id: "perforated",
+        image: "slatPerforated",
         name: { en: "Perforated slat", ar: "شريحة مثقّبة (بفراغات)" },
         text: {
           en: "Lets light and air through while keeping your privacy.",
@@ -210,6 +217,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "ngs",
+        image: "slatNgs",
         name: { en: "NGS slat", ar: "شريحة NGS" },
         text: {
           en: "Higher thermal insulation and greater strength, with a modern design.",
@@ -218,6 +226,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "bk",
+        image: "slatBk",
         name: { en: "BK slat", ar: "شريحة BK" },
         text: { en: "The economical, widely used option.", ar: "الخيار الاقتصادي والشائع الاستخدام." },
       },
@@ -329,19 +338,21 @@ export const systems: SystemCategory[] = [
       ar: "مجموعة متكاملة من الإكسسوارات عالية الجودة لضمان سهولة التشغيل والإحكام والمتانة والاستخدام طويل الأمد.",
     },
     count: { en: "7 component groups", ar: "7 مجموعات" },
-    cover: "doorLock",
+    cover: "accHandles",
     gallery: ["entranceDoor", "tiltTurn"],
     items: [
       {
         id: "handles",
+        image: "accHandles",
         name: { en: "Handles", ar: "المقابض" },
         text: {
-          en: "For doors and windows, in white, beige, grey, black and wood.",
-          ar: "للأبواب والشبابيك، بألوان الأبيض والبيج والرمادي والأسود والخشبي.",
+          en: "For doors and windows, in white, beige, grey, black, wood, gold and silver.",
+          ar: "للأبواب والشبابيك، بألوان الأبيض والبيج والرمادي والأسود والخشبي والذهبي والفضي.",
         },
       },
       {
         id: "hinges",
+        image: "accHinges",
         name: { en: "Hinges", ar: "المفصلات" },
         text: {
           en: "Sizes for every use: 7.5 cm standard, 10 cm heavy-duty and adjustable 3D hinges.",
@@ -350,6 +361,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "rollers",
+        image: "accSlidingRollers",
         name: { en: "Sliding rollers", ar: "عجل السلايد" },
         text: {
           en: "Roller carriages with twin Teflon wheels for smooth, quiet movement.",
@@ -358,6 +370,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "concealed",
+        image: "accConcealedRollers",
         name: { en: "Concealed heavy rollers", ar: "عجل دفن كبير" },
         text: {
           en: "Large concealed rollers used in some heavy systems.",
@@ -366,7 +379,8 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "espagnolette",
-        name: { en: "Espagnolette", ar: "السمايونة" },
+        image: "accEspagnolette",
+        name: { en: "Espagnolette", ar: "السبليونة" },
         text: {
           en: "A multi-point locking system for security and a tight seal.",
           ar: "نظام غلق متعدد النقاط للأمان والإحكام.",
@@ -374,6 +388,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "strikers",
+        image: "accStrikers",
         name: { en: "Strikers", ar: "المقابلات" },
         text: {
           en: "Strikers for sliding, hinged and door systems, for a secure close.",
@@ -382,6 +397,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "extras",
+        image: "accExtras",
         name: { en: "Extra accessories", ar: "إكسسوارات إضافية" },
         text: {
           en: "Dust brushes, opening restrictors and the small parts that keep everything working.",

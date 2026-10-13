@@ -30,6 +30,22 @@ import slidingDoor2020 from "@/assets/photos/sliding-door-2020.jpg";
 import homeWindow1 from "@/assets/photos/home-window-1.jpg";
 import homeWindow2 from "@/assets/photos/home-window-2.jpg";
 import homeWindow3 from "@/assets/photos/home-window-3.jpg";
+// Product images from the company profile.
+import accHandles from "@/assets/profile/acc-handles.jpg";
+import accHinges from "@/assets/profile/acc-hinges.jpg";
+import accSlidingRollers from "@/assets/profile/acc-sliding-rollers.jpg";
+import accConcealedRollers from "@/assets/profile/acc-concealed-rollers.jpg";
+import accEspagnolette from "@/assets/profile/acc-espagnolette.jpg";
+import accStrikers from "@/assets/profile/acc-strikers.jpg";
+import accExtras from "@/assets/profile/acc-extras.jpg";
+import glassClear from "@/assets/profile/glass-clear.jpg";
+import glassReflective from "@/assets/profile/glass-reflective.jpg";
+import glassFume from "@/assets/profile/glass-fume.jpg";
+import glassDouble from "@/assets/profile/glass-double.jpg";
+import slatPerforated from "@/assets/profile/slat-perforated.jpg";
+import slatNgs from "@/assets/profile/slat-ngs.jpg";
+import slatBk from "@/assets/profile/slat-bk.jpg";
+import installTeam from "@/assets/profile/install-team.jpg";
 
 export type Photo = { src: StaticImageData; alt: L };
 
@@ -133,6 +149,21 @@ export const photos = {
   homeWindow1: p(homeWindow1, "Open hinged uPVC window in a finished room", "شباك uPVC مفصلي مفتوح في غرفة مشطبة"),
   homeWindow2: p(homeWindow2, "Finished room with a two-panel uPVC window", "غرفة مشطبة بشباك uPVC من ضلفتين"),
   homeWindow3: p(homeWindow3, "uPVC window in a bedroom, finished and furnished", "شباك uPVC في غرفة نوم بعد التشطيب والفرش"),
+  accHandles: p(accHandles, "Window and door handles in white, beige, grey, black and wood", "مقابض للأبواب والشبابيك بالأبيض والبيج والرمادي والأسود والخشبي"),
+  accHinges: p(accHinges, "Standard, heavy-duty and 3D hinges on uPVC frames", "مفصلات قياسية وكبيرة التحمل و3D على قطاعات uPVC"),
+  accSlidingRollers: p(accSlidingRollers, "Sliding roller carriage with twin Teflon wheels", "عجل سلايد بعجلتين من التفلون"),
+  accConcealedRollers: p(accConcealedRollers, "Large concealed rollers for heavy sliding systems", "عجل دفن كبير للأنظمة الثقيلة"),
+  accEspagnolette: p(accEspagnolette, "Espagnolette multi-point lock fitted along a sash", "سبليونة غلق متعدد النقاط على الضلفة"),
+  accStrikers: p(accStrikers, "Strikers for sliding, hinged and door systems", "مقابلات للسلايد والمفصلي والأبواب"),
+  accExtras: p(accExtras, "Dust brush, connectors and an opening restrictor", "فرشة مانعة للأتربة وفوالع ومحدد فتح"),
+  glassClear: p(glassClear, "Clear glass with an open city view", "زجاج شفاف بإطلالة واضحة على المدينة"),
+  glassReflective: p(glassReflective, "Reflective glass catching the sunset", "زجاج عاكس يعكس ضوء الغروب"),
+  glassFume: p(glassFume, "Fumé tinted glass in a sliding window", "زجاج فاميه داكن في شباك سحاب"),
+  glassDouble: p(glassDouble, "Cross-section of a double-glazed unit", "مقطع في وحدة زجاج مزدوج"),
+  slatPerforated: p(slatPerforated, "Perforated roller-shutter slats that let light and air through", "شرائح شاتر مثقبة تسمح بمرور الضوء والهواء"),
+  slatNgs: p(slatNgs, "NGS roller-shutter slats with extra insulation", "شرائح شاتر NGS بعزل أعلى"),
+  slatBk: p(slatBk, "BK roller-shutter slats, the everyday economical choice", "شرائح شاتر BK الاقتصادية الشائعة"),
+  installTeam: p(installTeam, "A VARANDA installer fitting a uPVC sliding window", "فني من VARANDA يركّب شباك uPVC سحاب"),
 } satisfies Record<string, Photo>;
 
 export type PhotoKey = keyof typeof photos;

@@ -1,30 +1,5 @@
 import type { L } from "@/i18n/config";
 
-/** Areas named in the company profile, with approximate centres for the schematic map. */
-export const serviceAreas: { id: string; name: L; short: L; lat: number; lon: number }[] = [
-  {
-    id: "new-cairo",
-    name: { en: "New Cairo (Fifth Settlement)", ar: "التجمع الخامس" },
-    short: { en: "New Cairo", ar: "التجمع الخامس" },
-    lat: 30.02,
-    lon: 31.47,
-  },
-  {
-    id: "sheikh-zayed",
-    name: { en: "Sheikh Zayed City", ar: "مدينة الشيخ زايد" },
-    short: { en: "Sheikh Zayed", ar: "الشيخ زايد" },
-    lat: 30.04,
-    lon: 30.98,
-  },
-  {
-    id: "october",
-    name: { en: "6th of October", ar: "السادس من أكتوبر" },
-    short: { en: "6th of October", ar: "6 أكتوبر" },
-    lat: 29.94,
-    lon: 30.93,
-  },
-];
-
 /**
  * Brand + contact details. The contact details are samples until the client sends the
  * real ones (see `contact.sample`); anything set to null is hidden.
@@ -56,14 +31,11 @@ export const site = {
     whatsapp: "201000000000" as string | null, // international format without +
     email: "info@varanda.example" as string | null, // .example is reserved: it never delivers
     address: { en: "Office address — Cairo, Egypt", ar: "عنوان المكتب — القاهرة، مصر" } as L | null,
-    mapsUrl: null as string | null, // Google Maps link to the office
+    mapsUrl: null as string | null, // Google Maps link to the branch
+    mapQuery: "Cairo, Egypt" as string | null, // what the embedded map shows: the branch address or its Google Maps name
     hours: { en: "Saturday to Thursday, 10 am – 6 pm", ar: "السبت إلى الخميس، من 10 صباحًا إلى 6 مساءً" } as L | null,
   },
   social: [] as { label: string; href: string }[],
-  areas: {
-    en: serviceAreas.map((a) => a.name.en),
-    ar: serviceAreas.map((a) => a.name.ar),
-  },
 };
 
 export type NavKey = "systems" | "projects" | "why" | "about" | "contact";

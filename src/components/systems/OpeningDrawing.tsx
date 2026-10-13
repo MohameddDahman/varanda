@@ -66,15 +66,16 @@ function ViewScene() {
   );
 }
 
-/** Opening symbols as drawn on architectural elevations (apex = hinge side). */
+/** Opening symbols, drawn the way the client's shop drawings show them (apex = opening side). */
 function Symbol({ kind }: { kind: OpeningKind }) {
   const s = { fill: "none", stroke: "currentColor", strokeWidth: 0.55 };
   return (
     <svg viewBox="0 0 80 100" preserveAspectRatio="none" className="od-symbol" aria-hidden="true">
-      {(kind === "hinged" || kind === "tilt-turn") && <path data-sym d="M80 0 L0 50 L80 100" {...s} />}
+      {(kind === "hinged" || kind === "tilt-turn") && <path data-sym d="M0 0 L80 50 L0 100" {...s} />}
       {(kind === "tilt" || kind === "tilt-turn") && (
-        <path data-sym d="M0 0 L40 100 L80 0" {...s} strokeDasharray={kind === "tilt-turn" ? "2.5 2" : undefined} />
+        <path data-sym d="M0 100 L40 0 L80 100" {...s} strokeDasharray={kind === "tilt-turn" ? "2.5 2" : undefined} />
       )}
+      {kind === "hinged-double" && <path data-sym d="M0 0 L40 50 L0 100 M80 0 L40 50 L80 100" {...s} />}
       {kind === "sliding" && <path data-sym d="M48 50 H22 M28 44 L22 50 L28 56" {...s} strokeWidth={0.8} />}
       {kind === "folding" && <path data-sym d="M6 66 L23 34 L40 66 L57 34 L74 66" {...s} />}
     </svg>
@@ -111,6 +112,9 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
         // trapezoid inside its frame (toward the viewer it balloons past it).
         case "hinged":
           t.to(q("[data-swing]"), { rotateY: 60, duration: 2 }, 0.2);
+          break;
+        case "hinged-double":
+          t.to(q("[data-swing]"), { rotateY: (i: number) => (i === 0 ? 60 : -60), duration: 2 }, 0.2);
           break;
         case "tilt-turn": {
           // Tilt pivots on the bottom rail, turn on the hinge side: swap the
@@ -187,6 +191,18 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
               <Glass />
               <span className="od-handle" />
             </div>
+          )}
+          {kind === "hinged-double" && (
+            <>
+              <div data-swing className="od-sash od-half-left od-origin-left">
+                <Glass />
+                <span className="od-handle" />
+              </div>
+              <div data-swing className="od-sash od-half-right od-origin-right">
+                <Glass />
+                <span className="od-handle od-handle-start" />
+              </div>
+            </>
           )}
           {kind === "tilt" && (
             <div data-swing className="od-sash od-origin-bottom">

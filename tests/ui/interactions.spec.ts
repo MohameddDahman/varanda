@@ -106,3 +106,15 @@ test("the request form explains what's missing and what happens next", async ({ 
   // Without the inquiry store connected the form says so plainly; once connected it thanks the visitor.
   await expect(page.locator(".form-notice, .contact-done").first()).toBeVisible({ timeout: 15_000 });
 });
+
+test("phones get a floating 'Book a site visit' after the first screen", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "the header shows the button on larger screens");
+  await open(page, "/en/systems");
+  const cta = page.locator(".cta-float");
+  await expect(cta).toHaveAttribute("data-hidden", "true");
+  await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.5));
+  await expect(cta).toHaveAttribute("data-hidden", "false");
+  await expect(cta).toHaveAttribute("href", "/en/contact");
+  await open(page, "/en/contact");
+  await expect(page.locator(".cta-float")).toHaveCount(0);
+});

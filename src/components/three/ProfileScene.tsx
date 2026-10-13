@@ -154,7 +154,7 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
         clearcoatRoughness: 0.35,
         transparent: true,
       }),
-      steel: new THREE.MeshStandardMaterial({ color: "#d3161e", metalness: 0.35, roughness: 0.36, emissive: "#3a0003" }),
+      steel: new THREE.MeshStandardMaterial({ color: "#9aa3ad", metalness: 0.6, roughness: 0.34 }),
       gasket: new THREE.MeshStandardMaterial({ color: "#121316", roughness: 0.85, emissive: "#000000" }),
       glass: new THREE.MeshPhysicalMaterial({
         color: "#cfe6df",
@@ -170,7 +170,7 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
     [],
   );
 
-  const v = useRef({ rotY: -0.95, rotX: 0.32, steel: 0, ghost: 1, gasket: 0, explode: 0 }).current;
+  const v = useRef({ rotY: -0.95, rotX: 0.32, steel: 0, ghost: 1, gasket: 0, explode: 0, hlProfile: 0, hlGlass: 0 }).current;
 
   useFrame((frame, delta) => {
     const step = stateRef.current.step;
@@ -183,6 +183,9 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
       ghost: step === 2 || step === 3 ? 0.35 : 1,
       gasket: step === 3 ? 1 : 0,
       explode: step === 4 ? 1 : 0,
+      // Red marks the part being explained: profile, steel core, gaskets, glass.
+      hlProfile: step === 1 ? 1 : 0,
+      hlGlass: step === 4 ? 1 : 0,
     };
     for (const key of Object.keys(target) as (keyof typeof target)[]) v[key] += (target[key] - v[key]) * k;
 
@@ -197,9 +200,13 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
     if (steelB.current) steelB.current.position.z = v.steel * 0.42;
     mats.upvc.opacity = v.ghost;
     mats.upvc.depthWrite = v.ghost > 0.95;
-    mats.steel.emissiveIntensity = 0.6 + v.steel * 2.2;
-    // Gaskets glow white (red stays reserved for the steel).
-    mats.gasket.emissive.setScalar(v.gasket * 0.9);
+    mats.upvc.color.lerpColors(WHITE, RED, v.hlProfile * 0.8);
+    mats.steel.color.lerpColors(STEEL, RED, v.steel);
+    mats.steel.emissive.lerpColors(BLACK, DEEP_RED, v.steel);
+    mats.gasket.color.lerpColors(BLACK, RED, v.gasket);
+    mats.gasket.emissive.lerpColors(BLACK, DEEP_RED, v.gasket);
+    mats.glass.color.lerpColors(GLASS, RED, v.hlGlass * 0.7);
+    mats.glass.opacity = 0.32 + v.hlGlass * 0.28;
     if (gaskets.current) gaskets.current.scale.setScalar(1 + v.gasket * 0.08);
     if (paneOut.current) paneOut.current.position.x = -v.explode * 0.16;
     if (paneIn.current) paneIn.current.position.x = v.explode * 0.16;
@@ -225,6 +232,13 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
 }
 
 /** The WebGL canvas. Rendering pauses entirely while `active` is false. */
+const WHITE = new THREE.Color("#f1f2f0");
+const STEEL = new THREE.Color("#9aa3ad");
+const BLACK = new THREE.Color("#121316");
+const GLASS = new THREE.Color("#cfe6df");
+const RED = new THREE.Color("#d71920");
+const DEEP_RED = new THREE.Color("#5a0408");
+
 export default function ProfileScene({ stateRef, active }: { stateRef: React.RefObject<ProfileState>; active: boolean }) {
   return (
     <Canvas

@@ -4,6 +4,7 @@ import { photos } from "@/content/photos";
 import { featuredProjects, getProject, projectTypes } from "@/content/projects";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeIntro } from "@/components/home/HomeIntro";
+import { HomeCounters } from "@/components/home/HomeCounters";
 import { HomeOpenings } from "@/components/home/HomeOpenings";
 import { HomeProjects, type FeaturedProject } from "@/components/home/HomeProjects";
 import { HomeProcess } from "@/components/home/HomeProcess";
@@ -24,6 +25,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
     <>
       <HomeHero photo={photos.heroRiverSliding} />
       <HomeIntro lang={lang} />
+      <HomeCounters lang={lang} />
       <HomeOpenings />
       <HomeProjects items={featured} />
       <HomeProcess />

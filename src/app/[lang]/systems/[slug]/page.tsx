@@ -14,7 +14,8 @@ import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
 import { OpeningShowcase } from "@/components/systems/OpeningShowcase";
 import { GlassSwitcher } from "@/components/systems/GlassSwitcher";
-import { ScreenDiagram, ShutterDemo, SlatProfile } from "@/components/systems/ShutterDemo";
+import { ScreenDiagram, ShutterDemo } from "@/components/systems/ShutterDemo";
+import { ProductPhoto } from "@/components/systems/ProductPhoto";
 import { HomeCTA } from "@/components/home/HomeCTA";
 import { Arrow } from "@/components/ui/Button";
 
@@ -266,10 +267,8 @@ function Showcase({ system, lang }: { system: SystemCategory; lang: Lang }) {
             <Reveal as="ul" items="li" className="mt-14 grid gap-px border-t border-[var(--line)] md:grid-cols-3">
               {system.items.map((s) => (
                 <li key={s.id} className="border-b border-[var(--line)] py-10 md:pe-10">
-                  <div className="max-w-[16rem] text-navy-700">
-                    <SlatProfile kind={s.id as "perforated" | "ngs" | "bk"} />
-                  </div>
-                  <h3 className="t-h2 mt-10">{t(s.name)}</h3>
+                  {s.image && <ProductPhoto photo={photos[s.image]} lang={lang} fit="cover" className="aspect-[6/5] bg-paper" />}
+                  <h3 className="t-h2 mt-8">{t(s.name)}</h3>
                   <p className="t-body mt-3 max-w-[32ch] text-ink-2">{t(s.text)}</p>
                 </li>
               ))}
@@ -309,27 +308,21 @@ function Showcase({ system, lang }: { system: SystemCategory; lang: Lang }) {
     );
   }
 
-  // hardware
+  // hardware: every part with its own photo
+  const handleColours = ["#f4f4f1", "#e2d3b6", "#7f858d", "#1f2125", "#8a5a32", "#c9a450", "#c4c9ce"];
   return (
     <section className="theme-white section" data-header="light" aria-labelledby="range-title">
-      <div className="wrap grid gap-y-14 lg:grid-cols-12 lg:gap-x-8">
+      <div className="wrap">
         <RangeTitle>{t(system.count)}</RangeTitle>
-        <div className="lg:col-span-4">
-          <div className="lg:sticky lg:top-[calc(var(--header-h)+2rem)]">
-            <figure>
-              <ShutterImage photo={photos.tiltTurn} sizes="(min-width: 1024px) 30vw, 100vw" className="aspect-[4/5] w-full" decorative />
-              <figcaption className="t-label mt-4 text-ink-2">{t(photos.tiltTurn.alt)}</figcaption>
-            </figure>
-          </div>
-        </div>
-        <Reveal as="ul" items="li" className="grid gap-px border-t border-[var(--line)] sm:grid-cols-2 lg:col-span-7 lg:col-start-6">
+        <Reveal as="ul" items="li" className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {system.items.map((h) => (
-            <li key={h.id} className="border-b border-[var(--line)] py-8 sm:pe-8">
-              <h3 className="t-h3">{t(h.name)}</h3>
+            <li key={h.id}>
+              {h.image && <ProductPhoto photo={photos[h.image]} lang={lang} className="aspect-[16/10] bg-paper" />}
+              <h3 className="t-h3 mt-6">{t(h.name)}</h3>
               <p className="t-body mt-3 text-ink-2">{t(h.text)}</p>
               {h.id === "handles" && (
                 <div className="mt-5 flex gap-2" aria-hidden="true">
-                  {["#f4f4f1", "#e2d3b6", "#7f858d", "#1f2125", "#8a5a32"].map((c) => (
+                  {handleColours.map((c) => (
                     <span key={c} className="h-6 w-6 rounded-full border border-[var(--line)]" style={{ background: c }} />
                   ))}
                 </div>

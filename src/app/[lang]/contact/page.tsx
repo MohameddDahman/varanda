@@ -12,7 +12,6 @@ import { Reveal } from "@/components/motion/Reveal";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ContactLines, SampleTag } from "@/components/contact/ContactLines";
-import { ServiceMap } from "@/components/contact/ServiceMap";
 
 const copy = {
   title: { en: "Book a site visit", ar: "احجز معاينة" },
@@ -34,6 +33,11 @@ export default async function ContactPage({ params }: PageProps<"/[lang]/contact
   const t = (s: { en: string; ar: string }) => s[lang];
   const { contact } = site;
   const next = process.steps.slice(0, 3);
+  // Directions only once the real address is in.
+  const mapsLink =
+    contactIsLive && contact.mapQuery
+      ? (contact.mapsUrl ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.mapQuery)}`)
+      : null;
 
   return (
     <>
@@ -82,58 +86,56 @@ export default async function ContactPage({ params }: PageProps<"/[lang]/contact
         </div>
       </section>
 
-      {/* Where we work */}
-      <section className="theme-dark section" data-header="dark" aria-labelledby="areas-title">
-        <ServiceMap
-          intro={
-            <>
-              <Eyebrow>{lang === "ar" ? "مناطق العمل" : "Where we work"}</Eyebrow>
-              <SplitReveal as="h2" id="areas-title" className="t-h1 mt-6 max-w-[14ch]">
-                {lang === "ar" ? "من التجمع الخامس إلى أكتوبر" : "From New Cairo to October"}
-                <span className="dot">.</span>
-              </SplitReveal>
-              <p className="t-body mt-6 max-w-[38ch] text-mist">
-                {lang === "ar"
-                  ? "مشروعاتنا الأخيرة في التجمع الخامس والشيخ زايد و6 أكتوبر. مشروعك في منطقة أخرى بالقاهرة الكبرى؟ اسألنا."
-                  : "Our recent projects are in New Cairo, Sheikh Zayed and 6th of October. Somewhere else in Greater Cairo? Ask us."}
-              </p>
-            </>
-          }
-          details={
-            (contact.address || contact.hours) && (
-              <div className="mt-12">
-                <dl className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
-                  {contact.address && (
-                    <div>
-                      <dt className="t-label flex items-center gap-2 text-mist">
-                        <Icon name="pin" className="h-4 w-4" />
-                        {lang === "ar" ? "العنوان" : "Address"}
-                      </dt>
-                      <dd className="t-body mt-2">{t(contact.address)}</dd>
-                    </div>
-                  )}
-                  {contact.hours && (
-                    <div>
-                      <dt className="t-label flex items-center gap-2 text-mist">
-                        <Icon name="clock" className="h-4 w-4" />
-                        {lang === "ar" ? "مواعيد العمل" : "Opening hours"}
-                      </dt>
-                      <dd className="t-body mt-2">{t(contact.hours)}</dd>
-                    </div>
-                  )}
-                </dl>
-                {contact.sample && <SampleTag lang={lang} className="mt-8" />}
-                {contactIsLive && contact.mapsUrl && (
-                  <div className="mt-8">
-                    <Button href={contact.mapsUrl} external variant="light">
-                      {lang === "ar" ? "الاتجاهات على الخريطة" : "Get directions"}
-                    </Button>
-                  </div>
-                )}
+      {/* The branch: address, hours and the real location on Google Maps */}
+      <section className="theme-dark section" data-header="dark" aria-labelledby="branch-title">
+        <div className="wrap grid gap-y-12 lg:grid-cols-12 lg:gap-x-8">
+          <div className="lg:col-span-4">
+            <Eyebrow>{lang === "ar" ? "زورونا" : "Visit us"}</Eyebrow>
+            <SplitReveal as="h2" id="branch-title" className="t-h1 mt-6 max-w-[12ch]">
+              {lang === "ar" ? "فرعنا" : "Our branch"}
+              <span className="dot">.</span>
+            </SplitReveal>
+            <dl className="mt-10 grid gap-6">
+              {contact.address && (
+                <div>
+                  <dt className="t-label flex items-center gap-2 text-mist">
+                    <Icon name="pin" className="h-4 w-4" />
+                    {lang === "ar" ? "العنوان" : "Address"}
+                  </dt>
+                  <dd className="t-body mt-2">{t(contact.address)}</dd>
+                </div>
+              )}
+              {contact.hours && (
+                <div>
+                  <dt className="t-label flex items-center gap-2 text-mist">
+                    <Icon name="clock" className="h-4 w-4" />
+                    {lang === "ar" ? "مواعيد العمل" : "Opening hours"}
+                  </dt>
+                  <dd className="t-body mt-2">{t(contact.hours)}</dd>
+                </div>
+              )}
+            </dl>
+            {contact.sample && <SampleTag lang={lang} className="mt-8" />}
+            {mapsLink && (
+              <div className="mt-8">
+                <Button href={mapsLink} external variant="light">
+                  {lang === "ar" ? "افتح الموقع على خرائط جوجل" : "Open in Google Maps"}
+                </Button>
               </div>
-            )
-          }
-        />
+            )}
+          </div>
+          {contact.mapQuery && (
+            <div className="lg:col-span-8">
+              <iframe
+                title={lang === "ar" ? "موقع الفرع على خرائط جوجل" : "Branch location on Google Maps"}
+                src={`https://www.google.com/maps?q=${encodeURIComponent(contact.mapQuery)}&hl=${lang}&z=15&output=embed`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="branch-map"
+              />
+            </div>
+          )}
+        </div>
       </section>
     </>
   );

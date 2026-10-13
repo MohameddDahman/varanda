@@ -36,6 +36,9 @@ export function watchConsole(page: Page, { allow404 = false } = {}) {
   const problems: string[] = [];
   page.on("pageerror", (e) => problems.push(`page error: ${e.message}`));
   page.on("console", (m) => {
+    // Embedded third-party frames (the Google map) log their own noise; only our pages count.
+    const from = m.location().url;
+    if (from && page.url() && new URL(from).origin !== new URL(page.url()).origin) return;
     const text = m.text();
     if (m.type() === "error") {
       if (allow404 && /status of 404/.test(text)) return;

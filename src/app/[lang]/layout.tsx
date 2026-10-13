@@ -11,6 +11,7 @@ import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { TransitionProvider } from "@/components/transition/TransitionProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { FloatingCta } from "@/components/layout/FloatingCta";
 
 // The company profile's typefaces: Montserrat for English (headings, text and the
 // letter-spaced labels), Tajawal for Arabic.
@@ -82,6 +83,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
               {children}
             </main>
             <Footer lang={lang} />
+            <FloatingCta />
           </TransitionProvider>
         </LangProvider>
       </body>

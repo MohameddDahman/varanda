@@ -11,8 +11,6 @@ import { BackToTop } from "./BackToTop";
 export function Footer({ lang }: { lang: Lang }) {
   const t = (text: { en: string; ar: string }) => text[lang];
   const { contact } = site;
-  // Sample details stay on the contact page, where they're labelled; the footer waits for real ones.
-  const hasContact = contactIsLive && (contact.phone || contact.whatsapp || contact.email || contact.address);
   const year = new Date().getFullYear();
 
   return (
@@ -63,38 +61,32 @@ export function Footer({ lang }: { lang: Lang }) {
           </nav>
 
           <div className="lg:col-span-2">
-            <h2 className="t-label text-mist">{t({ en: "Where we work", ar: "مناطق العمل" })}</h2>
+            <h2 className="t-label text-mist">{t({ en: "Contact", ar: "تواصل معنا" })}</h2>
+            {/* Plain text while the details are samples; links once they're real. */}
             <ul className="mt-6 space-y-3 text-white/85">
-              {site.areas[lang].map((area) => (
-                <li key={area}>{area}</li>
-              ))}
+              {contact.phone && (
+                <li>
+                  <a className="footer-link" href={telHref(contact.phone)} dir="ltr">
+                    {contact.phone}
+                  </a>
+                </li>
+              )}
+              {contact.whatsapp && contactIsLive && (
+                <li>
+                  <a className="footer-link" href={whatsappHref(contact.whatsapp)} target="_blank" rel="noopener noreferrer">
+                    WhatsApp
+                  </a>
+                </li>
+              )}
+              {contact.email && (
+                <li>
+                  <a className="footer-link" href={mailHref(contact.email)}>
+                    {contact.email}
+                  </a>
+                </li>
+              )}
+              {contact.address && <li>{t(contact.address)}</li>}
             </ul>
-            {hasContact && (
-              <ul className="mt-8 space-y-3">
-                {contact.phone && (
-                  <li>
-                    <a className="footer-link" href={telHref(contact.phone)} dir="ltr">
-                      {contact.phone}
-                    </a>
-                  </li>
-                )}
-                {contact.whatsapp && (
-                  <li>
-                    <a className="footer-link" href={whatsappHref(contact.whatsapp)} target="_blank" rel="noopener noreferrer">
-                      WhatsApp
-                    </a>
-                  </li>
-                )}
-                {contact.email && (
-                  <li>
-                    <a className="footer-link" href={mailHref(contact.email)}>
-                      {contact.email}
-                    </a>
-                  </li>
-                )}
-                {contact.address && <li className="text-white/85">{t(contact.address)}</li>}
-              </ul>
-            )}
           </div>
         </div>
 

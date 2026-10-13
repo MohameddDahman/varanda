@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { isLang } from "@/i18n/config";
 import { projects, sitePhotos } from "@/content/projects";
-import { site } from "@/content/site";
 import { pageMeta } from "@/lib/meta";
 import { PageHero } from "@/components/ui/PageHero";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -58,8 +57,6 @@ export default async function ProjectsPage({ params }: PageProps<"/[lang]/projec
                 ? "لقطات من مواقع التركيب: شبابيك بغلافها الواقي، وشاتر بمقاسات خاصة، وأبواب في انتظار التسليم."
                 : "Shots from installation days: windows still in their protective film, made-to-measure shutters and doors waiting for handover."}
             </p>
-            <p className="t-label mt-8 text-mist">{lang === "ar" ? "مناطق العمل" : "Where we've worked"}</p>
-            <p className="t-small mt-2 text-white/85">{site.areas[lang].join(" · ")}</p>
           </Reveal>
         </div>
         <div className="mt-16">

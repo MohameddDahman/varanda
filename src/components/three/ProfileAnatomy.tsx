@@ -1,6 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import poster from "@/assets/profile-poster.png";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ScrollTrigger, useGSAP, reducedMotion } from "@/lib/gsap";
 import { useLang } from "@/components/providers/LangProvider";
@@ -9,10 +11,8 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { cn } from "@/lib/cn";
 import type { ProfileState } from "./ProfileScene";
 
-const ProfileScene = dynamic(() => import("./ProfileScene"), {
-  ssr: false,
-  loading: () => <div className="anatomy-loading" aria-hidden="true" />,
-});
+const loadScene = () => import("./ProfileScene");
+const ProfileScene = dynamic(loadScene, { ssr: false });
 
 let webglSupport: boolean | undefined;
 const hasWebGL = () => {
@@ -40,10 +40,17 @@ export function ProfileAnatomy() {
   const [step, setStep] = useState(0);
   const [near, setNear] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [ready, setReady] = useState(false);
   const webgl = useSyncExternalStore(noop, hasWebGL, () => true);
   const parts = anatomy.parts;
 
-  // Mount the canvas when close; render only while on screen.
+  // Fetch the 3D code as soon as the page is idle, so it is ready before the visitor
+  // scrolls here; mount the canvas well ahead of the section; render only while on screen.
+  useEffect(() => {
+    const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1200));
+    idle(() => void loadScene());
+  }, []);
+
   useEffect(() => {
     const el = root.current;
     if (!el) return;
@@ -52,7 +59,7 @@ export function ProfileAnatomy() {
         if (e.isIntersecting) setNear(true);
         setVisible(e.isIntersecting);
       },
-      { rootMargin: "60% 0px" },
+      { rootMargin: "200% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -117,7 +124,15 @@ export function ProfileAnatomy() {
 
         <div className="anatomy-stage">
           {webgl ? (
-            near && <ProfileScene stateRef={sceneState} active={visible} />
+            <>
+              {/* A still of the model shows instantly; the live 3D fades in over it. */}
+              <Image src={poster} alt="" fill sizes="(min-width: 1024px) 55vw, 100vw" className={cn("anatomy-poster", ready && "is-hidden")} priority={false} />
+              {near && (
+                <div className={cn("anatomy-canvas", ready && "is-ready")}>
+                  <ProfileScene stateRef={sceneState} active={visible} onReady={() => setReady(true)} />
+                </div>
+              )}
+            </>
           ) : (
             <p className="t-small text-mist">{lang === "ar" ? "يتطلب العرض ثلاثي الأبعاد دعم WebGL." : "The 3D view needs WebGL."}</p>
           )}

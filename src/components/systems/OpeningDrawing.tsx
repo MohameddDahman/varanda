@@ -66,18 +66,32 @@ function ViewScene() {
   );
 }
 
-/** Opening symbols, drawn the way the client's shop drawings show them (apex = opening side). */
-function Symbol({ kind }: { kind: OpeningKind }) {
-  const s = { fill: "none", stroke: "currentColor", strokeWidth: 0.55 };
+const stroke = { fill: "none", stroke: "currentColor", strokeWidth: 0.55 };
+
+/**
+ * Opening symbol drawn on a sash, so it moves with the sash as it opens. As on the
+ * client's drawings, the triangle's point faces the handle: right for a side-hung sash,
+ * top for a tilt sash; tilt & turn shows both, the tilt one dashed.
+ */
+function SashSymbol({ point }: { point: "right" | "left" | "top" | "both" }) {
   return (
     <svg viewBox="0 0 80 100" preserveAspectRatio="none" className="od-symbol" aria-hidden="true">
-      {(kind === "hinged" || kind === "tilt-turn") && <path data-sym d="M0 0 L80 50 L0 100" {...s} />}
-      {(kind === "tilt" || kind === "tilt-turn") && (
-        <path data-sym d="M0 100 L40 0 L80 100" {...s} strokeDasharray={kind === "tilt-turn" ? "2.5 2" : undefined} />
+      {(point === "right" || point === "both") && <path data-sym d="M0 0 L80 50 L0 100" {...stroke} />}
+      {point === "left" && <path data-sym d="M80 0 L0 50 L80 100" {...stroke} />}
+      {(point === "top" || point === "both") && (
+        <path data-sym d="M0 100 L40 0 L80 100" {...stroke} strokeDasharray={point === "both" ? "2.5 2" : undefined} />
       )}
-      {kind === "hinged-double" && <path data-sym d="M0 0 L40 50 L0 100 M80 0 L40 50 L80 100" {...s} />}
-      {kind === "sliding" && <path data-sym d="M48 50 H22 M28 44 L22 50 L28 56" {...s} strokeWidth={0.8} />}
-      {kind === "folding" && <path data-sym d="M6 66 L23 34 L40 66 L57 34 L74 66" {...s} />}
+    </svg>
+  );
+}
+
+/** Symbols that belong to the whole frame: the sliding arrow and the folding zig-zag. */
+function FrameSymbol({ kind }: { kind: OpeningKind }) {
+  if (kind !== "sliding" && kind !== "folding") return null;
+  return (
+    <svg viewBox="0 0 80 100" preserveAspectRatio="none" className="od-symbol" aria-hidden="true">
+      {kind === "sliding" && <path data-sym d="M48 50 H22 M28 44 L22 50 L28 56" {...stroke} strokeWidth={0.8} />}
+      {kind === "folding" && <path data-sym d="M6 66 L23 34 L40 66 L57 34 L74 66" {...stroke} />}
     </svg>
   );
 }
@@ -142,7 +156,7 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
           t.to(q("[data-fold]"), { rotateY: (i: number) => (i === 0 ? 70 : i % 2 ? -140 : 140), duration: 2 }, 0.2);
           break;
       }
-      if (sym.length) t.to(sym, { opacity: 0.3, duration: 0.6 }, ">-0.6");
+      if (sym.length) t.to(sym, { opacity: 0.75, duration: 0.6 }, ">-0.6");
       tl.current = t;
 
       if (reducedMotion()) {
@@ -189,6 +203,7 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
           {(kind === "hinged" || kind === "tilt-turn") && (
             <div data-swing className="od-sash od-origin-left">
               <Glass />
+              <SashSymbol point={kind === "tilt-turn" ? "both" : "right"} />
               <span className="od-handle" />
             </div>
           )}
@@ -196,10 +211,12 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
             <>
               <div data-swing className="od-sash od-half-left od-origin-left">
                 <Glass />
+                <SashSymbol point="right" />
                 <span className="od-handle" />
               </div>
               <div data-swing className="od-sash od-half-right od-origin-right">
                 <Glass />
+                <SashSymbol point="left" />
                 <span className="od-handle od-handle-start" />
               </div>
             </>
@@ -207,6 +224,7 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
           {kind === "tilt" && (
             <div data-swing className="od-sash od-origin-bottom">
               <Glass />
+              <SashSymbol point="top" />
               <span className="od-handle od-handle-top" />
             </div>
           )}
@@ -231,7 +249,7 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
             </div>
           )}
         </div>
-        <Symbol kind={kind} />
+        <FrameSymbol kind={kind} />
       </div>
     </div>
   );

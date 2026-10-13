@@ -2615,6 +2615,12 @@ button:hover > .finish-swatch {
   inset: 1.8cqi;
 }
 
+.od-fold > .od-symbol {
+  inset: 1.8cqi;
+  width: calc(100% - 3.6cqi);
+  height: calc(100% - 3.6cqi);
+}
+
 .od-fold-next {
   left: 100%;
   width: 100%;

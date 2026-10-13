@@ -85,13 +85,12 @@ function SashSymbol({ point }: { point: "right" | "left" | "top" | "both" }) {
   );
 }
 
-/** Symbols that belong to the whole frame: the sliding arrow and the folding zig-zag. */
+/** The sliding arrow belongs to the whole frame. */
 function FrameSymbol({ kind }: { kind: OpeningKind }) {
-  if (kind !== "sliding" && kind !== "folding") return null;
+  if (kind !== "sliding") return null;
   return (
     <svg viewBox="0 0 80 100" preserveAspectRatio="none" className="od-symbol" aria-hidden="true">
       {kind === "sliding" && <path data-sym d="M48 50 H22 M28 44 L22 50 L28 56" {...stroke} strokeWidth={0.8} />}
-      {kind === "folding" && <path data-sym d="M6 66 L23 34 L40 66 L57 34 L74 66" {...stroke} />}
     </svg>
   );
 }
@@ -237,12 +236,16 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
           {kind === "folding" && (
             <div data-fold className="od-fold">
               <Glass />
+              <SashSymbol point="right" />
               <div data-fold className="od-fold od-fold-next">
                 <Glass />
+                <SashSymbol point="left" />
                 <div data-fold className="od-fold od-fold-next">
                   <Glass />
+                  <SashSymbol point="right" />
                   <div data-fold className="od-fold od-fold-next">
                     <Glass />
+                    <SashSymbol point="left" />
                   </div>
                 </div>
               </div>

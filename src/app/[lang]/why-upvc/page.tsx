@@ -8,7 +8,8 @@ import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
-import { AcousticDemo, SecurityDemo, ThermalDemo } from "@/components/why/BenefitDemos";
+import { AcousticDemo, ThermalDemo } from "@/components/why/BenefitDemos";
+import { LockMechanism } from "@/components/why/LockMechanism";
 import { ProfileAnatomy } from "@/components/three/ProfileAnatomy";
 import { HomeCTA } from "@/components/home/HomeCTA";
 
@@ -27,7 +28,7 @@ export default async function WhyPage({ params }: PageProps<"/[lang]/why-upvc">)
   const featured = [
     { item: thermal, demo: <ThermalDemo /> },
     { item: acoustic, demo: <AcousticDemo /> },
-    { item: security, demo: <SecurityDemo /> },
+    { item: security, demo: <LockMechanism /> },
   ];
 
   return (

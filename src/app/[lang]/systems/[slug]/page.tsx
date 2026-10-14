@@ -16,6 +16,7 @@ import { OpeningShowcase } from "@/components/systems/OpeningShowcase";
 import { GlassSwitcher } from "@/components/systems/GlassSwitcher";
 import { ScreenDiagram, ShutterDemo } from "@/components/systems/ShutterDemo";
 import { ProductPhoto } from "@/components/systems/ProductPhoto";
+import { LockMechanism } from "@/components/why/LockMechanism";
 import { HomeCTA } from "@/components/home/HomeCTA";
 import { Arrow } from "@/components/ui/Button";
 
@@ -330,6 +331,20 @@ function Showcase({ system, lang }: { system: SystemCategory; lang: Lang }) {
             </li>
           ))}
         </Reveal>
+
+        {/* How the espagnolette locks the sash */}
+        <div className="mt-24 grid gap-y-10 border-t border-[var(--line)] pt-16 lg:grid-cols-12 lg:gap-x-8">
+          <div className="lg:col-span-4">
+            <Eyebrow>{lang === "ar" ? "كيف يعمل الغلق" : "How the lock works"}</Eyebrow>
+            <h3 className="t-h1 mt-6 max-w-[12ch]">{lang === "ar" ? "حركة واحدة، أربع نقاط غلق" : "One turn, four locking points"}<span className="dot">.</span></h3>
+            <p className="t-body mt-6 max-w-[38ch] text-ink-2">
+              {lang === "ar"
+                ? "اختر وضع المقبض وشاهد كيف تحرّك علبة التروس ذراع السبليونة لتُدخل نقاط الغلق في المقابلات."
+                : "Pick a handle position and watch the gearbox move the espagnolette rod and drive the locking pins into their keepers."}
+            </p>
+          </div>
+          <LockMechanism className="lg:col-span-8" />
+        </div>
       </div>
     </section>
   );

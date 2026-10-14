@@ -6,28 +6,59 @@ import { useLang } from "@/components/providers/LangProvider";
 import { cn } from "@/lib/cn";
 import { startWind, type Wind } from "./wind";
 
-/** Heat drifts in from the street and fades out at the frame. */
+/**
+ * Heat from the street against two kinds of window. An ordinary frame lets it stream
+ * through and the room warms; the multi-chamber uPVC profile stops it at the frame.
+ */
 export function ThermalDemo() {
   const { lang } = useLang();
+  const ar = lang === "ar";
+  const [upvc, setUpvc] = useState(false);
+  const lines = [0, 1, 2, 3, 4];
   return (
-    <div className="demo demo-thermal" aria-hidden="true">
-      <div className="demo-side demo-hot">
-        <span className="t-label">{lang === "ar" ? "الخارج" : "Outside"}</span>
-        {[0, 1, 2, 3, 4].map((i) => (
-          <span key={i} className="heat-line" style={{ top: `${22 + i * 13}%`, animationDelay: `${i * 0.45}s` }} />
-        ))}
-      </div>
-      <div className="demo-wall">
-        <svg viewBox="0 0 40 120" className="h-full w-full">
-          <rect x="2" y="2" width="36" height="116" fill="#eef0f3" />
-          {[8, 30, 52, 74, 96].map((y) => (
-            <rect key={y} x="7" y={y} width="26" height="16" fill="#d5dae1" />
+    <div className={cn("demo-thermal-wrap", upvc && "is-upvc")}>
+      <div className="demo demo-thermal" aria-hidden="true">
+        <div className="demo-side demo-hot">
+          <span className="t-label">{ar ? "الخارج" : "Outside"}</span>
+          {lines.map((i) => (
+            <span key={i} className="heat-line" style={{ top: `${22 + i * 13}%`, animationDelay: `${i * 0.45}s` }} />
           ))}
-        </svg>
+        </div>
+        <div className="demo-wall">
+          {/* Ordinary frame: one thin solid section. */}
+          <svg viewBox="0 0 40 120" className="demo-wall-plain">
+            <rect x="15" y="2" width="10" height="116" fill="#a9b2bd" />
+          </svg>
+          {/* uPVC: a deep profile full of insulating air chambers. */}
+          <svg viewBox="0 0 40 120" className="demo-wall-upvc">
+            <rect x="2" y="2" width="36" height="116" fill="#eef0f3" />
+            {[8, 30, 52, 74, 96].map((y) => (
+              <rect key={y} x="7" y={y} width="26" height="16" fill="#d5dae1" />
+            ))}
+          </svg>
+        </div>
+        <div className="demo-side demo-cool">
+          <span className="demo-warmth" />
+          <span className="t-label relative">{ar ? "الداخل" : "Inside"}</span>
+          {lines.map((i) => (
+            <span key={i} className="heat-line heat-leak" style={{ top: `${22 + i * 13}%`, animationDelay: `${0.9 + i * 0.45}s` }} />
+          ))}
+          <span className="demo-room-state t-label">
+            {upvc ? (ar ? "الغرفة تبقى مريحة" : "Room stays comfortable") : ar ? "الحرارة تتسرب للداخل" : "Heat gets in"}
+          </span>
+        </div>
       </div>
-      <div className="demo-side demo-cool">
-        <span className="t-label">{lang === "ar" ? "الداخل" : "Inside"}</span>
+      <div className="mt-6 flex flex-wrap gap-2" role="group" aria-label={ar ? "نوع الشباك" : "Window type"}>
+        <button type="button" className={cn("chip", !upvc && "is-active")} aria-pressed={!upvc} onClick={() => setUpvc(false)}>
+          {ar ? "شباك عادي" : "Ordinary window"}
+        </button>
+        <button type="button" className={cn("chip", upvc && "is-active")} aria-pressed={upvc} onClick={() => setUpvc(true)}>
+          {ar ? "شباك uPVC" : "uPVC window"}
+        </button>
       </div>
+      <p className="sr-only" aria-live="polite">
+        {upvc ? (ar ? "شباك uPVC: الحرارة تتوقف عند الإطار." : "uPVC window: the heat stops at the frame.") : ar ? "شباك عادي: الحرارة تعبر إلى الداخل." : "Ordinary window: the heat passes inside."}
+      </p>
     </div>
   );
 }
@@ -45,7 +76,8 @@ const barStyle = (i: number) =>
 export function AcousticDemo() {
   const { lang } = useLang();
   const ar = lang === "ar";
-  const [closed, setClosed] = useState(true);
+  // Starts open, so the first thing the visitor does is close it and hear the difference.
+  const [closed, setClosed] = useState(false);
   const [sound, setSound] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const outsideRow = useRef<HTMLDivElement>(null);

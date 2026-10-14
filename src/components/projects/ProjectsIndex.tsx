@@ -16,6 +16,17 @@ import { cn } from "@/lib/cn";
 
 if (typeof window !== "undefined") gsap.registerPlugin(Flip);
 
+/**
+ * Column spans on the 3-column grid: rows alternate wide + narrow and narrow + wide,
+ * and the last card stretches to finish its row, so no filter leaves a hole.
+ */
+function gridSpans(count: number) {
+  const spans: number[] = Array.from({ length: count }, (_, i) => (i % 4 === 0 || i % 4 === 3 ? 2 : 1));
+  const used = spans.reduce((sum, n) => sum + n, 0) % 3;
+  if (count && used) spans[count - 1] += 3 - used;
+  return spans;
+}
+
 type Filter = "all" | ProjectType;
 type View = "grid" | "list";
 
@@ -96,6 +107,7 @@ export function ProjectsIndex() {
   );
 
   const visible = projects.filter((p) => filter === "all" || p.type === filter);
+  const spans = gridSpans(visible.length);
   const filters: Filter[] = ["all", "residential", "commercial", "outdoor"];
 
   return (
@@ -145,13 +157,13 @@ export function ProjectsIndex() {
       {view === "grid" ? (
         <ul className="projects-grid mt-12">
           {visible.map((p, i) => (
-            <li key={p.slug} data-flip data-flip-id={p.slug} className={cn("projects-grid-item", i % 3 === 0 && "is-wide")}>
+            <li key={p.slug} data-flip data-flip-id={p.slug} className="projects-grid-item" style={{ "--span": spans[i] } as React.CSSProperties}>
               <TLink href={href(`/projects/${p.slug}`)} className="group block" data-cursor={t(ui.view)}>
                 <div className="relative overflow-hidden">
                   <ShutterImage
                     photo={photos[p.cover]}
                     sizes={i % 3 === 0 ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 33vw, 100vw"}
-                    className={cn("w-full transition-transform duration-700 group-hover:scale-[1.02]", i % 3 === 0 ? "aspect-[16/10]" : "aspect-[4/5]")}
+                    className={cn("w-full transition-transform duration-700 group-hover:scale-[1.02]", spans[i] === 3 ? "aspect-[21/9]" : spans[i] === 2 ? "aspect-[16/10]" : "aspect-[4/5]")}
                   />
                 </div>
                 <div className="mt-5 flex items-start justify-between gap-6">

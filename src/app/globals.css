@@ -1540,8 +1540,8 @@ svg {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .projects-grid-item.is-wide {
-    grid-column: span 2;
+  .projects-grid-item {
+    grid-column: span var(--span, 1);
   }
 }
 
@@ -2347,6 +2347,60 @@ button:hover > .finish-swatch {
   }
 }
 
+/* Thermal demo: ordinary frame vs uPVC */
+.demo-wall {
+  position: relative;
+}
+
+.demo-wall svg {
+  position: absolute;
+  inset: 0.5rem 0;
+  width: 100%;
+  height: calc(100% - 1rem);
+  transition: opacity 0.6s ease;
+}
+
+.demo-wall-upvc,
+.is-upvc .demo-wall-plain {
+  opacity: 0;
+}
+
+.is-upvc .demo-wall-upvc {
+  opacity: 1;
+}
+
+.demo-cool {
+  overflow: hidden;
+}
+
+/* The room warms while heat leaks in, and cools back down behind uPVC. */
+.demo-warmth {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #f0b48a, #d98a62);
+  opacity: 0.75;
+  transition: opacity 1.6s ease;
+}
+
+.is-upvc .demo-warmth {
+  opacity: 0;
+}
+
+.heat-leak {
+  transition: opacity 0.6s ease;
+}
+
+.is-upvc .heat-leak {
+  opacity: 0 !important;
+  animation-play-state: paused;
+}
+
+.demo-room-state {
+  position: absolute;
+  inset-inline: 1.25rem;
+  bottom: 1rem;
+}
+
 [dir="rtl"] .demo-thermal {
   direction: ltr;
 }
@@ -2442,6 +2496,38 @@ button:hover > .finish-swatch {
   to {
     opacity: 1;
   }
+}
+
+/* Multi-point lock explainer */
+.lock-mech {
+  padding: clamp(1rem, 2.5vw, 2rem);
+  background: var(--color-white);
+  border: 1px solid var(--line);
+}
+
+.lock-mech-svg {
+  width: 100%;
+  height: auto;
+}
+
+.lock-mech-caption {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: var(--color-ink-2);
+}
+
+:lang(ar) .lock-mech-caption {
+  font-family: var(--font-arabic);
+  font-size: 16px;
+  letter-spacing: 0;
+}
+
+.lock-mech-controls {
+  margin-top: 1.25rem;
+  min-height: 7rem;
 }
 
 .demo-security {

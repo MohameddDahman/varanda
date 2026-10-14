@@ -234,6 +234,20 @@ function LockHardware({ material, cams }: { material: THREE.Material; cams: Reac
   );
 }
 
+/** The window handle on the room side of the sash; `lever` turns it from across (open) to down (locked). */
+function Handle({ material, lever }: { material: THREE.Material; lever: React.Ref<THREE.Group> }) {
+  const rose = useMemo(() => new THREE.BoxGeometry(2.2 * S, 7 * S, 0.11), []);
+  const arm = useMemo(() => new THREE.BoxGeometry(2.6 * S, 0.17, 2.4 * S), []);
+  return (
+    <group position={[X(61.1), Y(67.5), 0]}>
+      <mesh geometry={rose} material={material} castShadow />
+      <group ref={lever} position={[2.4 * S, 0, 0]}>
+        <mesh geometry={arm} material={material} position={[0, -0.075, 0]} castShadow />
+      </group>
+    </group>
+  );
+}
+
 /** Screws fixing the steel reinforcement through the frame wall. */
 function Screws({ material }: { material: THREE.Material }) {
   const geo = useMemo(() => new THREE.CylinderGeometry(0.9 * S, 0.9 * S, 7 * S, 12), []);
@@ -248,6 +262,7 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
   const unitIn = useRef<THREE.Group>(null);
   const gaskets = useRef<THREE.Group>(null);
   const cams = useRef<THREE.Group>(null);
+  const lever = useRef<THREE.Group>(null);
   const shapes = useShapes();
 
   const mats = useMemo(
@@ -317,6 +332,8 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
     mats.hardware.color.lerpColors(METAL, RED, v.lock);
     mats.hardware.emissive.lerpColors(BLACK, DEEP_RED, v.lock);
     if (cams.current) cams.current.position.z = v.lock * 0.075;
+    // The handle turns down as the cams slide home: across when open, down when locked.
+    if (lever.current) lever.current.rotation.x = (1 - v.lock) * (Math.PI / 2);
     // The glass unit opens up: panes move apart, the spacer and seals stay between them.
     if (unitOut.current) unitOut.current.position.x = -v.explode * 0.16;
     if (unitIn.current) unitIn.current.position.x = v.explode * 0.16;
@@ -343,6 +360,7 @@ function Profile({ stateRef }: { stateRef: React.RefObject<ProfileState> }) {
       <Part shape={shapes.settingBlock} material={mats.block} bevel={false} />
       <Part shape={shapes.rod} material={mats.hardware} depth={LENGTH * 0.98} bevel={false} />
       <LockHardware material={mats.hardware} cams={cams} />
+      <Handle material={mats.upvc} lever={lever} />
       <Screws material={mats.screw} />
       <group ref={gaskets}>
         {shapes.gaskets.map((s, i) => (

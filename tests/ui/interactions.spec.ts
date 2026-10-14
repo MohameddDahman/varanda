@@ -80,11 +80,11 @@ test("the wind sound plays, follows the window, and stops when you scroll away",
   await expect(demo).toHaveClass(/is-live/);
   await page.waitForTimeout(1200);
   expect(await contexts()).toEqual(["running"]);
-  const closed = await roomLevel();
+  // The window starts open; closing it is the visitor's first move.
+  const openLevel = await roomLevel();
 
-  await demo.getByRole("button", { name: /Window closed/ }).click();
-  await page.waitForTimeout(1500);
-  expect(await roomLevel(), "opening the window lets more sound in").toBeGreaterThan(closed + 0.3);
+  await demo.getByRole("button", { name: /Window open/ }).click();
+  await expect.poll(roomLevel, { message: "closing the window shuts the noise out", timeout: 8000 }).toBeLessThan(openLevel - 0.3);
 
   await page.evaluate(() => window.scrollBy(0, 2500));
   await expect(demo).not.toHaveClass(/is-live/, { timeout: 5_000 });
@@ -117,4 +117,25 @@ test("phones get a floating 'Book a site visit' after the first screen", async (
   await expect(cta).toHaveAttribute("href", "/en/contact");
   await open(page, "/en/contact");
   await expect(page.locator(".cta-float")).toHaveCount(0);
+});
+
+test("the lock demo locks, opens and tilts on request", async ({ page }) => {
+  await open(page, "/en/systems/hardware");
+  const lock = page.locator(".lock-mech");
+  await lock.scrollIntoViewIfNeeded();
+  const keeperRed = () => lock.locator("rect[data-keeper]").first().evaluate((el) => getComputedStyle(el).fill);
+  await lock.getByRole("button", { name: "Open" }).click();
+  await expect(lock.getByRole("button", { name: "Open" })).toHaveAttribute("aria-pressed", "true");
+  await expect.poll(keeperRed).not.toBe("rgb(215, 25, 32)");
+  await lock.getByRole("button", { name: "Locked" }).click();
+  await expect.poll(keeperRed, { timeout: 4000 }).toBe("rgb(215, 25, 32)");
+  await expect(lock.locator("[aria-live]")).toContainText("four locking pins");
+});
+
+test("the thermal demo compares an ordinary window with uPVC", async ({ page }) => {
+  await open(page, "/en/why-upvc");
+  const demo = page.locator(".demo-thermal-wrap");
+  await expect(demo).not.toHaveClass(/is-upvc/);
+  await demo.getByRole("button", { name: "uPVC window" }).click();
+  await expect(demo).toHaveClass(/is-upvc/);
 });

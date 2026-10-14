@@ -706,8 +706,7 @@ svg {
 
 /* "Book a site visit" — the one action every page leads to: solid red, larger, with a
    light sweeping across it and a soft pulse every few seconds. */
-.btn-header,
-.cta-float {
+.btn-header {
   --btn-fg: var(--color-white);
   --btn-bg: var(--color-red);
   --btn-border: var(--color-red);
@@ -723,8 +722,7 @@ svg {
   font-size: 0.9375rem;
 }
 
-.btn-header::after,
-.cta-float::after {
+.btn-header::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -760,35 +758,9 @@ svg {
   display: none;
 }
 
-/* Phones: the header has no room for the button, so it floats at the bottom once the
-   visitor has scrolled past the first screen. */
-.cta-float {
-  position: fixed;
-  inset-inline: 1rem;
-  bottom: max(1rem, env(safe-area-inset-bottom));
-  z-index: 55;
-  justify-content: center;
-  height: 3.25rem;
-  transition: transform 0.5s var(--ease-out), opacity 0.4s ease;
-}
-
-.cta-float[data-hidden="true"] {
-  transform: translateY(160%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-@media (min-width: 40rem) {
-  .cta-float {
-    display: none;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .btn-header,
-  .cta-float,
-  .btn-header::after,
-  .cta-float::after {
+  .btn-header::after {
     animation: none;
   }
 }
@@ -2266,11 +2238,10 @@ button:hover > .finish-swatch {
 }
 
 /* Phones and tablets: drawing on top, then the current part only, with a progress bar;
-   room is left for the floating booking button. */
+   it all fits on one screen. */
 @media (max-width: 63.99rem) {
   .anatomy-inner {
     grid-template-rows: minmax(0, 1fr) auto;
-    padding-bottom: 5.5rem;
   }
 
   .anatomy-stage {

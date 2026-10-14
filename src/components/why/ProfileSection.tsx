@@ -70,6 +70,19 @@ function gearPath(cx: number, cy: number, r: number, teeth: number, depth: numbe
 
 const RED = "#d71920";
 
+// Depth: the profile is extruded backwards as a stack of offset layers (up and to the right),
+// shaded darker with distance. Static SVG, so it costs nothing while scrolling.
+const DEPTH = 18;
+const STEP_X = 0.55;
+const STEP_Y = 0.42;
+const shade = (k: number) => {
+  const t = k / DEPTH; // 0 = just behind the face, 1 = far end
+  const mix = (a: number, b: number) => Math.round(a + (b - a) * t);
+  return `rgb(${mix(198, 92)} ${mix(205, 103)} ${mix(214, 118)})`;
+};
+const LAYERS = Array.from({ length: DEPTH }, (_, i) => DEPTH - i); // back to front
+const PROFILE = [FRAME_OUTLINE + FRAME_CHAMBERS.map(rect).join(""), SASH_OUTLINE + SASH_CHAMBERS.map(rect).join(""), BEAD];
+
 export function ProfileSection() {
   const { t, lang } = useLang();
   const root = useRef<HTMLElement>(null);
@@ -158,9 +171,15 @@ export function ProfileSection() {
             <span className="dot">.</span>
           </h2>
           <p className="t-body mt-5 max-w-[40ch] text-mist">{t(anatomy.intro)}</p>
+          {/* Phones show a progress bar and only the current part, so it all fits on screen. */}
+          <div className="anatomy-progress" aria-hidden="true">
+            {parts.map((p, i) => (
+              <span key={p.id} className={cn(step > i && "is-on")} />
+            ))}
+          </div>
           <ol className="mt-10 border-t border-[var(--line)]">
             {parts.map((p, i) => (
-              <li key={p.id} className="border-b border-[var(--line)]">
+              <li key={p.id} className={cn("border-b border-[var(--line)]", step === i + 1 && "is-current")}>
                 <button
                   type="button"
                   aria-pressed={step === i + 1}
@@ -186,7 +205,17 @@ export function ProfileSection() {
           <svg viewBox="0 0 800 600" className="profile-svg" style={{ direction: "ltr" }} aria-hidden="true">
             {/* ── Cross-section of the frame, sash and glass ── */}
             <g data-section>
-              <g transform="translate(295 18) scale(3)">
+              <g transform="translate(270 34) scale(3)">
+                {/* Back end of the glass and the extruded body */}
+                <rect x={18.4 + DEPTH * STEP_X} y={H - 172 - DEPTH * STEP_Y} width="4.2" height="78" className="ps-glass" />
+                <rect x={37.4 + DEPTH * STEP_X} y={H - 172 - DEPTH * STEP_Y} width="4.2" height="78" className="ps-glass" />
+                {LAYERS.map((k) => (
+                  <g key={k} transform={`translate(${k * STEP_X} ${-k * STEP_Y})`} fill={shade(k)}>
+                    {PROFILE.map((d, i) => (
+                      <path key={i} d={d} fillRule="evenodd" />
+                    ))}
+                  </g>
+                ))}
                 {/* Glass unit (drawn first: the profile overlaps its edge) */}
                 <rect data-pane="out" x="18.4" y={H - 172} width="4.2" height="78" className="ps-glass" />
                 <rect data-pane="in" x="37.4" y={H - 172} width="4.2" height="78" className="ps-glass" />
@@ -223,7 +252,7 @@ export function ProfileSection() {
                   <path d={`M0 ${H + 6}H70M0 ${H + 3}V${H + 9}M70 ${H + 3}V${H + 9}`} />
                 </g>
               </g>
-              <text x="400" y="590" textAnchor="middle" className="ps-dim-text">
+              <text x="375" y="594" textAnchor="middle" className="ps-dim-text">
                 70 mm
               </text>
             </g>

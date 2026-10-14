@@ -588,26 +588,59 @@ svg {
   clip-path: inset(0% 0% 100% 0%);
 }
 
-.site-menu-slats {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    180deg,
-    transparent 0 46px,
-    rgb(255 255 255 / 0.035) 46px 47px,
-    rgb(0 0 0 / 0.18) 47px 48px
-  );
+/* One row per page: number, name and arrow, evenly spaced with hairline dividers. */
+.menu-list {
+  border-top: 1px solid var(--line);
 }
 
 .menu-link {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding-block: clamp(0.85rem, 2.4svh, 1.25rem);
+  border-bottom: 1px solid var(--line);
   color: var(--color-white);
   transition: color 0.3s ease;
 }
 
-.menu-link:hover,
-.menu-link[aria-current="page"] {
+.menu-link-label {
+  font-size: clamp(1.75rem, 7.5vw, 2.75rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+:lang(ar) .menu-link-label {
+  font-family: var(--font-arabic);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.menu-link-num {
+  color: var(--color-red-bright);
+}
+
+.menu-link-arrow {
   color: var(--color-mist);
+  transition: transform 0.4s var(--ease-out), color 0.3s ease;
+}
+
+.menu-link:hover .menu-link-arrow {
+  color: var(--color-white);
+  transform: translateX(0.3rem);
+}
+
+[dir="rtl"] .menu-link:hover .menu-link-arrow {
+  transform: translateX(-0.3rem) scaleX(-1);
+}
+
+.menu-link:hover {
+  color: var(--color-mist);
+}
+
+.menu-link[aria-current="page"] .menu-link-label {
+  color: var(--color-red-bright);
 }
 
 /* ───────────────────────── Buttons ───────────────────────── */

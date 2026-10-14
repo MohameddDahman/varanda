@@ -7,10 +7,11 @@ import { nav, site, ui } from "@/content/site";
 import { useLang } from "@/components/providers/LangProvider";
 import { TLink } from "@/components/transition/TLink";
 import { LangSwitch } from "./LangSwitch";
+import { Arrow } from "@/components/ui/Button";
 import { scroller } from "@/components/transition/store";
 
 /**
- * Small-screen menu. It rolls down like a roller shutter — slats and all —
+ * Small-screen menu. It rolls down like a roller shutter
  * then the links rise into place.
  */
 export function Menu({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -86,22 +87,25 @@ export function Menu({ open, onClose }: { open: boolean; onClose: () => void }) 
       aria-hidden={!open}
       inert={!open}
     >
-      <div className="site-menu-slats" aria-hidden="true" />
-      <div className="wrap flex min-h-full flex-col justify-between pt-[calc(var(--header-h)+2rem)] pb-8">
+      <div className="wrap flex min-h-full flex-col justify-between pt-[calc(var(--header-h)+1rem)] pb-8">
         <nav aria-label={t(ui.menu)}>
-          <ul className="flex flex-col gap-1">
-            {[{ key: "home", href: "/", label: ui.home }, ...nav].map((n) => (
+          <ul className="menu-list">
+            {[{ key: "home", href: "/", label: ui.home }, ...nav].map((n, i) => (
               <li key={n.key} className="overflow-hidden">
                 <TLink
                   href={href(n.href)}
                   data-menu-item
-                  className="menu-link t-display block py-1"
+                  className="menu-link"
                   aria-current={pathname === href(n.href) ? "page" : undefined}
                   // Other pages: the doors close over the menu and the route
                   // change folds it away unseen. Same page: just close it.
                   onClick={() => pathname === href(n.href) && onClose()}
                 >
-                  {t(n.label)}
+                  <span className="menu-link-num t-label" dir="ltr">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="menu-link-label">{t(n.label)}</span>
+                  <Arrow className="menu-link-arrow" />
                 </TLink>
               </li>
             ))}

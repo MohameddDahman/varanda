@@ -81,10 +81,11 @@ test("the wind sound plays, follows the window, and stops when you scroll away",
   await page.waitForTimeout(1200);
   expect(await contexts()).toEqual(["running"]);
   // The window starts open; closing it is the visitor's first move.
-  const openLevel = await roomLevel();
+  // Wait for the bars to follow the open-window sound before closing it (slow under load).
+  await expect.poll(roomLevel, { message: "the open window lets the wind in", timeout: 8000 }).toBeGreaterThan(0.5);
 
   await demo.getByRole("button", { name: /Window open/ }).click();
-  await expect.poll(roomLevel, { message: "closing the window shuts the noise out", timeout: 8000 }).toBeLessThan(openLevel - 0.3);
+  await expect.poll(roomLevel, { message: "closing the window shuts the noise out", timeout: 8000 }).toBeLessThan(0.25);
 
   await page.evaluate(() => window.scrollBy(0, 2500));
   await expect(demo).not.toHaveClass(/is-live/, { timeout: 5_000 });

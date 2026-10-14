@@ -507,22 +507,18 @@ svg {
   transform: scaleX(1);
 }
 
-.header-link.is-active::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  inset-inline-start: -0.8rem;
-  width: 4px;
-  height: 4px;
-  margin-top: -2px;
+/* The current page: a red rule under the link, so the gaps between links stay even. */
+.header-link.is-active::after {
   background: var(--color-red);
+  height: 2px;
+  transform: scaleX(1);
 }
 
 .header-lang {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.5rem;
+  height: 2.875rem;
   min-width: 2.75rem;
   padding-inline: 0.75rem;
   font-size: 0.9375rem;
@@ -546,8 +542,8 @@ svg {
 
 .menu-button {
   position: relative;
-  width: 2.75rem;
-  height: 2.5rem;
+  width: 2.875rem;
+  height: 2.875rem;
   border: 1px solid var(--h-line);
 }
 

@@ -76,12 +76,12 @@ export function Header() {
         data-menu={menuOpen ? "open" : "closed"}
       >
         <div className="wrap flex h-[var(--header-h)] items-center justify-between gap-6">
-          <TLink href={href("/")} aria-label={`VARANDA — ${t(ui.home)}`} className="header-logo shrink-0 text-[1.05rem] sm:text-[1.15rem]">
+          <TLink href={href("/")} aria-label={`VARANDA — ${t(ui.home)}`} className="header-logo flex shrink-0 items-center text-[1.05rem] sm:text-[1.15rem]">
             <Logo />
           </TLink>
 
           {/* Kept to the end so it never sits on the hero's centre stile. */}
-          <nav aria-label={lang === "ar" ? "القائمة الرئيسية" : "Main"} className="ms-auto me-4 hidden lg:block xl:me-8">
+          <nav aria-label={lang === "ar" ? "القائمة الرئيسية" : "Main"} className="ms-auto me-[calc(clamp(1.5rem,2.6vw,2.75rem)-1.5rem)] hidden lg:block">
             <ul className="flex items-center gap-[clamp(1.5rem,2.6vw,2.75rem)]">
               {nav
                 .filter((n) => n.key !== "contact")
@@ -99,7 +99,7 @@ export function Header() {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2.5">
             <LangSwitch className="header-lang" />
             <TLink href={href("/contact")} className="btn btn-header hidden sm:inline-flex">
               {t(ui.bookVisit)}

@@ -2179,43 +2179,50 @@ button:hover > .finish-swatch {
   order: -1;
 }
 
-.anatomy-stage canvas {
-  touch-action: pan-y;
-}
-
-.anatomy-poster {
-  object-fit: contain;
-  transition: opacity 0.6s ease;
-}
-
-.anatomy-poster.is-hidden {
-  opacity: 0;
-}
-
-.anatomy-canvas {
+/* 2D profile drawing */
+.profile-svg {
   position: absolute;
   inset: 0;
-  opacity: 0;
-  transition: opacity 0.6s ease;
+  width: 100%;
+  height: 100%;
 }
 
-.anatomy-canvas.is-ready {
-  opacity: 1;
+.ps-upvc {
+  fill: #eef1f4;
+  stroke: #9aa4b1;
+  stroke-width: 0.25;
 }
 
-.anatomy-loading {
-  position: absolute;
-  inset: 20% 30%;
-  border: 1px solid var(--line);
-  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.05) 50%, transparent 70%);
-  background-size: 200% 100%;
-  animation: shimmer 1.6s linear infinite;
+.ps-glass {
+  fill: #b9cad9;
+  fill-opacity: 0.35;
+  stroke: #d8e2ec;
+  stroke-width: 0.2;
 }
 
-@keyframes shimmer {
-  to {
-    background-position: -200% 0;
-  }
+.ps-hole {
+  fill: var(--color-navy-950);
+}
+
+.ps-dim path {
+  fill: none;
+  stroke: var(--color-mist);
+  stroke-width: 0.25;
+}
+
+.ps-dim-text,
+.ps-caption {
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  fill: var(--color-mist);
+}
+
+:lang(ar) .ps-caption {
+  font-family: var(--font-arabic);
+  font-size: 17px;
+  letter-spacing: 0;
 }
 
 .anatomy-hint {
@@ -2252,6 +2259,13 @@ button:hover > .finish-swatch {
   grid-template-rows: 1fr;
   opacity: 1;
   margin-top: 0.5rem;
+}
+
+/* Phones: leave room for the floating booking button under the pinned list. */
+@media (max-width: 39.99rem) {
+  .anatomy-inner {
+    padding-bottom: 5.25rem;
+  }
 }
 
 @media (max-width: 63.99rem) {

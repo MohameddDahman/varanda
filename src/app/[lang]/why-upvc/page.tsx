@@ -10,7 +10,7 @@ import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
 import { AcousticDemo, ThermalDemo } from "@/components/why/BenefitDemos";
 import { LockMechanism } from "@/components/why/LockMechanism";
-import { ProfileAnatomy } from "@/components/three/ProfileAnatomy";
+import { ProfileSection } from "@/components/why/ProfileSection";
 import { HomeCTA } from "@/components/home/HomeCTA";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/why-upvc">) {
@@ -67,7 +67,7 @@ export default async function WhyPage({ params }: PageProps<"/[lang]/why-upvc">)
         </div>
       </section>
 
-      <ProfileAnatomy />
+      <ProfileSection />
 
       <section className="theme-white section" data-header="light" aria-labelledby="glass-teaser">
         <div className="wrap grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-x-8">

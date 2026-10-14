@@ -2,7 +2,7 @@
 
 Bilingual (English / العربية) portfolio site for **VARANDA — uPVC window & door systems. Made for life.**
 
-Built with **Next.js 16** (App Router, static generation), **GSAP 3.15** (ScrollTrigger, SplitText, Flip, CustomEase), **Lenis** smooth scrolling, **React Three Fiber** for the 3D profile section, and **Convex** for contact requests.
+Built with **Next.js 16** (App Router, static generation), **GSAP 3.15** (ScrollTrigger, SplitText, Flip, CustomEase), **Lenis** smooth scrolling and **Convex** for contact requests. The profile section on Why uPVC is a scroll-scrubbed SVG drawing (no WebGL), so it stays smooth on low-end phones.
 
 ## Run it
 
@@ -33,7 +33,7 @@ Test the live site instead with `BASE_URL=https://varanda-kappa.vercel.app npm r
 | `/[lang]` | Home — sliding-door hero, opening-systems rail, projects, process, warranty |
 | `/[lang]/systems` and `/systems/[slug]` | Windows & doors · Glass · Roller shutters · Fly screens · Hardware |
 | `/[lang]/projects` and `/projects/[slug]` | Filterable project index (grid/list) and project pages with a photo viewer |
-| `/[lang]/why-upvc` | Benefits with live demos and the 3D cross-section |
+| `/[lang]/why-upvc` | Benefits with live demos (heat, sound, multi-point lock) and the scroll-driven profile cross-section |
 | `/[lang]/about` | Story, process, installation, warranty |
 | `/[lang]/contact` | Direct lines (call, WhatsApp, email), site-visit request form (Convex), service-area map |
 
@@ -44,7 +44,7 @@ Signature motion: every navigation closes and reopens a pair of sliding glass do
 All words, in both languages, live in `src/content/`:
 
 - `site.ts` — tagline, navigation, service areas (with rough coordinates for the contact-page map) and **contact details**. The contact details are currently **samples** (`contact.sample: true`): the contact page shows them with a "Sample details" tag and no working links, and the footer leaves them out. Put in the real values and set `sample: false` — that switches on the call / WhatsApp / email links, the footer details and the "Get directions" button (once `mapsUrl` is set). Anything set to `null` is hidden.
-- `company.ts` — about text, the 6 process steps, warranty, uPVC benefits, 3D section callouts.
+- `company.ts` — about text, the 6 process steps, warranty, uPVC benefits, profile section callouts.
 - `systems.ts` — the five product lines and the colour finishes.
 - `projects.ts` — projects (title, type, year, location, text, photos).
 - `photos.ts` — every photo with its English and Arabic alt text.

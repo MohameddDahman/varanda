@@ -42,7 +42,7 @@ export const site = {
     // The main line (sales) — used in the footer and by the request form's WhatsApp fallback.
     phone: "+20 106 116 6677" as string | null,
     whatsapp: "201061166677" as string | null, // international format without +
-    email: "Mohamedmahrous768@gmail.com" as string | null,
+    email: null as string | null, // the company address, once it exists
     address: null as L | null,
     mapsUrl: null as string | null, // Google Maps link to the branch
     mapQuery: null as string | null, // what the embedded map shows: the branch address or its Google Maps name

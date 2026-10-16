@@ -43,7 +43,7 @@ Signature motion: every navigation closes and reopens a pair of sliding glass do
 
 All words, in both languages, live in `src/content/`:
 
-- `site.ts` — tagline, navigation and **contact details**: the people a visitor can call or message (`contact.people`: sales manager and supervisor, each with call and WhatsApp), the main line used in the footer and form fallback, and the email. Address, opening hours and `mapQuery` / `mapsUrl` are still `null`: fill them in and the contact page shows the branch with its Google map. Anything set to `null` is hidden.
+- `site.ts` — tagline, navigation and **contact details**: the people a visitor can call or message (`contact.people`: sales manager and supervisor, each with call and WhatsApp), the main line used in the footer and form fallback, and the email (none yet — the company address will be added later). Address, opening hours and `mapQuery` / `mapsUrl` are still `null`: fill them in and the contact page shows the branch with its Google map. Anything set to `null` is hidden.
 - `company.ts` — about text, the 6 process steps, warranty, uPVC benefits, profile section callouts.
 - `systems.ts` — the five product lines and the colour finishes.
 - `projects.ts` — projects (title, type, year, location, text, photos).

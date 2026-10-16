@@ -92,7 +92,6 @@ test("contact details link only when they're real", async ({ page }) => {
     expect(people).toBeGreaterThan(0);
     await expect(lines.locator('a[href^="tel:"]')).toHaveCount(people);
     await expect(lines.locator('a[href*="wa.me"]')).toHaveCount(people);
-    await expect(lines.locator('a[href^="mailto:"]')).toHaveCount(1);
     await expect(footerLinks.first()).toBeVisible();
   }
 });

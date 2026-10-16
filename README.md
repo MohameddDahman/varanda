@@ -19,7 +19,7 @@ npm run test:ui    # UI tests (see below)
 `npm run test:ui` builds the site, starts it on port 3100 and runs the Playwright suite in `tests/ui/` on a desktop and a phone viewport. On Windows it uses the installed Microsoft Edge; elsewhere run `npx playwright install chromium` once.
 
 - `pages.spec.ts` — every page in both languages: status code, `lang`/`dir`, the profile fonts actually loaded, no sideways overflow, no broken images, one `h1`, no console errors or animation warnings, and an axe accessibility scan (WCAG 2.2 AA) with zero violations.
-- `layout.spec.ts` — regressions found during the build: the header blur surviving the CSS minifier, hero labels staying on their door panel, the logo not mirroring in Arabic, paragraph tracking (open in English, word-spaced in Arabic), no doubled gaps between same-colour sections, sample contact details never linked, split text readable to screen readers.
+- `layout.spec.ts` — regressions found during the build: the header blur surviving the CSS minifier, hero labels staying on their door panel, the logo not mirroring in Arabic, paragraph tracking (open in English, word-spaced in Arabic), no doubled gaps between same-colour sections, contact details linked only once real, split text readable to screen readers.
 - `interactions.spec.ts` — the door transition, the phone menu, the language switch, the projects filter, the wind-sound demo and the request form.
 
 Test the live site instead with `BASE_URL=https://varanda-kappa.vercel.app npm run test:ui` (PowerShell: `$env:BASE_URL="https://varanda-kappa.vercel.app"; npm run test:ui`). `npm run test:ui:report` opens the last report; failures keep a screenshot and a trace.
@@ -43,7 +43,7 @@ Signature motion: every navigation closes and reopens a pair of sliding glass do
 
 All words, in both languages, live in `src/content/`:
 
-- `site.ts` — tagline, navigation, service areas (with rough coordinates for the contact-page map) and **contact details**. The contact details are currently **samples** (`contact.sample: true`): the contact page shows them with a "Sample details" tag and no working links, and the footer leaves them out. Put in the real values and set `sample: false` — that switches on the call / WhatsApp / email links, the footer details and the "Get directions" button (once `mapsUrl` is set). Anything set to `null` is hidden.
+- `site.ts` — tagline, navigation and **contact details**: the people a visitor can call or message (`contact.people`: sales manager and supervisor, each with call and WhatsApp), the main line used in the footer and form fallback, and the email. Address, opening hours and `mapQuery` / `mapsUrl` are still `null`: fill them in and the contact page shows the branch with its Google map. Anything set to `null` is hidden.
 - `company.ts` — about text, the 6 process steps, warranty, uPVC benefits, profile section callouts.
 - `systems.ts` — the five product lines and the colour finishes.
 - `projects.ts` — projects (title, type, year, location, text, photos).
@@ -71,7 +71,7 @@ At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-dom
 
 ## Before launch — needed from the client
 
-- Phone / WhatsApp, email, address, opening hours and Google Maps link → `src/content/site.ts`, replacing the sample values, then set `contact.sample` to `false`. (Neither the company profile nor the Drive folder contains any contact details.)
+- The branch address, opening hours and Google Maps link → `src/content/site.ts` (`address`, `hours`, `mapQuery`, `mapsUrl`). Phones, WhatsApp and email are in.
 - Confirm project names, areas and systems used in `src/content/projects.ts` (grouped from the Drive photos by date).
 - Confirm the garden-fencing work belongs on the site (it's in the Drive but not in the profile).
 - Higher-resolution photos of the four projects shown in the profile (Fifth Settlement, Sheikh Zayed, October) — the profile only contains low-resolution copies. A professional shoot of 2–3 finished projects would lift the site the most.

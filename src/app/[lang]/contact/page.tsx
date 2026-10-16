@@ -86,6 +86,9 @@ export default async function ContactPage({ params }: PageProps<"/[lang]/contact
         </div>
       </section>
 
+      {/* Shown once the branch address (or its map) is in. */}
+      {(contact.address || contact.mapQuery) && (
+        <>
       {/* The branch: address, hours and the real location on Google Maps */}
       <section className="theme-dark section" data-header="dark" aria-labelledby="branch-title">
         <div className="wrap grid gap-y-12 lg:grid-cols-12 lg:gap-x-8">
@@ -137,6 +140,8 @@ export default async function ContactPage({ params }: PageProps<"/[lang]/contact
           )}
         </div>
       </section>
+        </>
+      )}
     </>
   );
 }

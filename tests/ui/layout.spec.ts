@@ -77,17 +77,23 @@ test("sections on the same background don't stack two gaps", async ({ page }) =>
   }
 });
 
-test("sample contact details never dial anyone", async ({ page }) => {
+test("contact details link only when they're real", async ({ page }) => {
   await open(page, "/en/contact", { reduced: true });
+  const lines = page.locator(".contact-lines");
   const sample = (await page.locator(".sample-tag").count()) > 0;
-  const linked = await page.locator(".contact-line[href]").count();
-  const cards = await page.locator(".contact-line").count();
-  const footerLinks = await page.locator('.site-footer a[href^="tel:"], .site-footer a[href^="mailto:"], .site-footer a[href*="wa.me"]').count();
+  const links = lines.locator('a[href^="tel:"], a[href^="mailto:"], a[href*="wa.me"]');
+  const footerLinks = page.locator('.site-footer a[href^="tel:"], .site-footer a[href^="mailto:"], .site-footer a[href*="wa.me"]');
   if (sample) {
-    expect(linked, "no linked contact cards while the details are samples").toBe(0);
-    expect(footerLinks, "no contact links in the footer while the details are samples").toBe(0);
+    await expect(links, "nothing dials while the details are samples").toHaveCount(0);
+    await expect(footerLinks).toHaveCount(0);
   } else {
-    expect(linked, "every contact card links once the details are real").toBe(cards);
+    // Each person can be called and messaged, and the email opens a mail app.
+    const people = await lines.locator(".contact-line-actions").count();
+    expect(people).toBeGreaterThan(0);
+    await expect(lines.locator('a[href^="tel:"]')).toHaveCount(people);
+    await expect(lines.locator('a[href*="wa.me"]')).toHaveCount(people);
+    await expect(lines.locator('a[href^="mailto:"]')).toHaveCount(1);
+    await expect(footerLinks.first()).toBeVisible();
   }
 });
 

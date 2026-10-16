@@ -2045,7 +2045,8 @@ button:hover > .finish-swatch {
   transform-origin: right;
 }
 
-.contact-line[href]:is(:hover, :focus-visible)::before {
+.contact-line[href]:is(:hover, :focus-visible)::before,
+.contact-line:has(a:is(:hover, :focus-visible))::before {
   transform: scaleX(1);
 }
 
@@ -2057,8 +2058,12 @@ button:hover > .finish-swatch {
   color: var(--fg-2);
 }
 
+.contact-line-name {
+  margin-top: 2rem;
+}
+
 .contact-line-value {
-  margin-top: 2.25rem;
+  margin-top: 0.5rem;
   font-size: clamp(1.45rem, 2.1vw, 2rem);
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -2089,6 +2094,38 @@ button:hover > .finish-swatch {
 
 [dir="rtl"] .contact-line[href]:hover .contact-line-cta svg {
   translate: -0.4rem 0;
+}
+
+/* Email addresses are long: smaller than a phone number so they never overflow. */
+.contact-line-email {
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  letter-spacing: 0;
+}
+
+.contact-line-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1.75rem;
+}
+
+.contact-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.75rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--line);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.contact-action:hover {
+  background: var(--color-red);
+  border-color: var(--color-red);
+  color: var(--color-white);
 }
 
 .sample-tag {

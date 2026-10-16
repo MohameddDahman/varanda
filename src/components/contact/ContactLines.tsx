@@ -1,11 +1,9 @@
 import type { L, Lang } from "@/i18n/config";
 import { site } from "@/content/site";
-import { mailHref, prettyWhatsapp, telHref, whatsappHref } from "@/lib/contact";
+import { mailHref, telHref, whatsappHref } from "@/lib/contact";
 import { Icon } from "@/components/ui/Icon";
 import { Arrow } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
-
-type Line = { id: string; icon: string; label: L; value: string; note?: L; action: L; href?: string; external?: boolean };
 
 const greeting: L = {
   en: "Hello VARANDA, I'd like to ask about windows and doors.",
@@ -13,78 +11,73 @@ const greeting: L = {
 };
 
 /**
- * The direct ways to reach the team, one column each. While the details are samples the
- * cards render without links or calls to action, so nobody dials a made-up number.
+ * The direct ways to reach the team: a card for each person (call or WhatsApp) and one for
+ * email. While the details are samples the cards render without links, so nobody dials a
+ * made-up number.
  */
 export function ContactLines({ lang, className }: { lang: Lang; className?: string }) {
   const t = (s: L) => s[lang];
   const { contact } = site;
-
-  const lines: Line[] = [];
-  if (contact.phone) {
-    lines.push({
-      id: "phone",
-      icon: "phone",
-      label: { en: "Call", ar: "اتصل بنا" },
-      value: contact.phone,
-      note: contact.hours ?? undefined,
-      action: { en: "Call now", ar: "اتصل الآن" },
-      href: telHref(contact.phone),
-    });
-  }
-  if (contact.whatsapp) {
-    lines.push({
-      id: "whatsapp",
-      icon: "chat",
-      label: { en: "WhatsApp", ar: "واتساب" },
-      value: prettyWhatsapp(contact.whatsapp),
-      note: { en: "Send photos and rough sizes of your openings.", ar: "أرسل صورًا ومقاسات تقريبية لفتحاتك." },
-      action: { en: "Start a chat", ar: "ابدأ المحادثة" },
-      href: whatsappHref(contact.whatsapp, t(greeting)),
-      external: true,
-    });
-  }
-  if (contact.email) {
-    lines.push({
-      id: "email",
-      icon: "mail",
-      label: { en: "Email", ar: "البريد الإلكتروني" },
-      value: contact.email,
-      note: { en: "For drawings, plans and quotations.", ar: "للرسومات والمخططات وعروض الأسعار." },
-      action: { en: "Write to us", ar: "راسلنا" },
-      href: mailHref(contact.email),
-    });
-  }
-  if (!lines.length) return null;
+  if (!contact.people.length && !contact.email) return null;
 
   return (
     <ul className={cn("contact-lines", className)}>
-      {lines.map((line) => (
-        <li key={line.id}>
-          <a
-            href={line.href}
-            className="contact-line"
-            data-cursor={line.href ? t(line.action) : undefined}
-            {...(line.external && line.href ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-          >
+      {contact.people.map((person) => {
+        const call = telHref(person.phone);
+        const chat = person.whatsapp ? whatsappHref(person.whatsapp, t(greeting)) : undefined;
+        return (
+          <li key={person.phone}>
+            <div className="contact-line">
+              <span className="contact-line-head">
+                <span className="t-label">{t(person.role)}</span>
+                <Icon name="phone" className="h-5 w-5" />
+              </span>
+              <span className="contact-line-name t-h3">{t(person.name)}</span>
+              {/* The number reads left to right; the block still aligns with the page direction. */}
+              <span className="contact-line-value t-num">
+                <span dir="ltr">{person.phone}</span>
+              </span>
+              {(call || chat) && (
+                <span className="contact-line-actions">
+                  {call && (
+                    <a href={call} className="contact-action">
+                      <Icon name="phone" className="h-4 w-4" />
+                      {lang === "ar" ? "اتصال" : "Call"}
+                    </a>
+                  )}
+                  {chat && (
+                    <a href={chat} className="contact-action" target="_blank" rel="noopener noreferrer">
+                      <Icon name="chat" className="h-4 w-4" />
+                      {lang === "ar" ? "واتساب" : "WhatsApp"}
+                    </a>
+                  )}
+                </span>
+              )}
+            </div>
+          </li>
+        );
+      })}
+
+      {contact.email && (
+        <li>
+          <a href={mailHref(contact.email)} className="contact-line">
             <span className="contact-line-head">
-              <span className="t-label">{t(line.label)}</span>
-              <Icon name={line.icon} className="h-5 w-5" />
+              <span className="t-label">{lang === "ar" ? "البريد الإلكتروني" : "Email"}</span>
+              <Icon name="mail" className="h-5 w-5" />
             </span>
-            {/* The number reads left to right; the block still aligns with the page direction. */}
-            <span className="contact-line-value t-num">
-              <span dir="ltr">{line.value}</span>
+            <span className="contact-line-name t-h3">{lang === "ar" ? "للرسومات وعروض الأسعار" : "Drawings & quotations"}</span>
+            <span className="contact-line-value contact-line-email">
+              <span dir="ltr">{contact.email}</span>
             </span>
-            {line.note && <span className="contact-line-note t-small">{t(line.note)}</span>}
-            {line.href && (
+            {mailHref(contact.email) && (
               <span className="contact-line-cta t-label">
-                {t(line.action)}
+                {lang === "ar" ? "راسلنا" : "Write to us"}
                 <Arrow />
               </span>
             )}
           </a>
         </li>
-      ))}
+      )}
     </ul>
   );
 }

@@ -63,14 +63,15 @@ export function Footer({ lang }: { lang: Lang }) {
           <div className="lg:col-span-2">
             <h2 className="t-label text-mist">{t({ en: "Contact", ar: "تواصل معنا" })}</h2>
             {/* Plain text while the details are samples; links once they're real. */}
-            <ul className="mt-6 space-y-3 text-white/85">
-              {contact.phone && (
-                <li>
-                  <a className="footer-link" href={telHref(contact.phone)} dir="ltr">
-                    {contact.phone}
+            <ul className="mt-6 space-y-4 text-white/85">
+              {contact.people.map((person) => (
+                <li key={person.phone}>
+                  <span className="t-label block text-mist">{t(person.role)}</span>
+                  <a className="footer-link mt-1 inline-block" href={telHref(person.phone)} dir="ltr">
+                    {person.phone}
                   </a>
                 </li>
-              )}
+              ))}
               {contact.whatsapp && contactIsLive && (
                 <li>
                   <a className="footer-link" href={whatsappHref(contact.whatsapp)} target="_blank" rel="noopener noreferrer">
@@ -80,8 +81,10 @@ export function Footer({ lang }: { lang: Lang }) {
               )}
               {contact.email && (
                 <li>
+                  {/* Long addresses wrap at the @ instead of running off the page. */}
                   <a className="footer-link" href={mailHref(contact.email)}>
-                    {contact.email}
+                    {contact.email.split("@")[0]}
+                    <wbr />@{contact.email.split("@")[1]}
                   </a>
                 </li>
               )}

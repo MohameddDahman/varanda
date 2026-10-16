@@ -1,8 +1,7 @@
 import type { L } from "@/i18n/config";
 
 /**
- * Brand + contact details. The contact details are samples until the client sends the
- * real ones (see `contact.sample`); anything set to null is hidden.
+ * Brand + contact details. Anything set to null is hidden.
  */
 export const site = {
   name: "Varanda",
@@ -22,18 +21,32 @@ export const site = {
     ar: "فاراندا تصمم وتصنّع وتركّب أنظمة الأبواب والشبابيك uPVC والشاتر وسلك الحشرات — لراحة أكبر وهدوء أكثر وعمر أطول.",
   } satisfies L,
   contact: {
-    // TODO(client): SAMPLE values so the contact page shows its full layout. Replace every
-    // value with the client's real details, then set `sample` to false. While it is true the
-    // contact page labels the details as samples, nothing dials, opens WhatsApp or sends
-    // mail, and the footer leaves them out.
-    sample: true,
-    phone: "+20 100 000 0000" as string | null,
-    whatsapp: "201000000000" as string | null, // international format without +
-    email: "info@varanda.example" as string | null, // .example is reserved: it never delivers
-    address: { en: "Office address — Cairo, Egypt", ar: "عنوان المكتب — القاهرة، مصر" } as L | null,
+    // Real details from the client (2026-10-16). Address, opening hours and the map are
+    // still to come: anything null is hidden.
+    sample: false,
+    /** People a visitor can call or message directly. */
+    people: [
+      {
+        name: { en: "Mohamed Mahrous Soliman", ar: "محمد محروس سليمان" },
+        role: { en: "Sales manager", ar: "مدير المبيعات" },
+        phone: "+20 106 116 6677",
+        whatsapp: "201061166677",
+      },
+      {
+        name: { en: "Haitham Mohamed El-Halawany", ar: "هيثم محمد الحلواني" },
+        role: { en: "Supervisor", ar: "المشرف" },
+        phone: "+20 111 001 8160",
+        whatsapp: "201110018160",
+      },
+    ] as { name: L; role: L; phone: string; whatsapp: string | null }[],
+    // The main line (sales) — used in the footer and by the request form's WhatsApp fallback.
+    phone: "+20 106 116 6677" as string | null,
+    whatsapp: "201061166677" as string | null, // international format without +
+    email: "Mohamedmahrous768@gmail.com" as string | null,
+    address: null as L | null,
     mapsUrl: null as string | null, // Google Maps link to the branch
-    mapQuery: "Cairo, Egypt" as string | null, // what the embedded map shows: the branch address or its Google Maps name
-    hours: { en: "Saturday to Thursday, 10 am – 6 pm", ar: "السبت إلى الخميس، من 10 صباحًا إلى 6 مساءً" } as L | null,
+    mapQuery: null as string | null, // what the embedded map shows: the branch address or its Google Maps name
+    hours: null as L | null,
   },
   social: [] as { label: string; href: string }[],
 };

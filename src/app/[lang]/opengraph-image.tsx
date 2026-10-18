@@ -16,7 +16,8 @@ export const contentType = "image/png";
 const TAGLINE_VIEWBOX = "688 764 1134 62";
 
 export default async function OpengraphImage() {
-  const photo = await readFile(join(process.cwd(), "src/assets/photos/hero-river-sliding.jpg"));
+  // The home hero's photo.
+  const photo = await readFile(join(process.cwd(), "src/assets/photos/garden-villa-window.jpg"));
   const src = `data:image/jpeg;base64,${photo.toString("base64")}`;
 
   return new ImageResponse(

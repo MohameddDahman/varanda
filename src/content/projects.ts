@@ -391,5 +391,12 @@ export const sitePhotos: { photo: PhotoKey; label: L }[] = [
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
 
-/** The projects stacked on the home page, in order. */
-export const featuredProjects = ["modern-villa", "garden-villa", "sea-view-house", "pool-villa"];
+/** The installation behind the home page's sliding panels; its caption links to the project. */
+export const homeHero: { project: string; photo: PhotoKey; caption: L } = {
+  project: "garden-villa",
+  photo: "gardenVillaWindow",
+  caption: { en: "Window with glazing bars — Garden villa", ar: "شباك بتقسيمات — فيلا بحديقة" },
+};
+
+/** The projects stacked on the home page, in order (the hero's project is left out). */
+export const featuredProjects = ["modern-villa", "sea-view-house", "pool-villa", "round-windows-villa"];

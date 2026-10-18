@@ -6,6 +6,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { onPageEnter } from "@/components/transition/store";
 import { useLang } from "@/components/providers/LangProvider";
 import { TLink } from "@/components/transition/TLink";
+import type { L } from "@/i18n/config";
 import type { Photo } from "@/content/photos";
 import { site } from "@/content/site";
 
@@ -19,7 +20,7 @@ const WORDS = {
  * Varanda installation. The headline straddles the meeting stile; scrolling
  * slides the panels apart and the clear view takes over.
  */
-export function HomeHero({ photo }: { photo: Photo }) {
+export function HomeHero({ photo, project, caption }: { photo: Photo; project: string; caption: L }) {
   const { lang, t, href, rtl } = useLang();
   const root = useRef<HTMLElement>(null);
   const [first, second] = WORDS[lang];
@@ -162,11 +163,9 @@ export function HomeHero({ photo }: { photo: Photo }) {
       </div>
 
       <div data-caption className="hero-caption wrap">
-        <TLink href={href("/projects/nile-view-apartment")} className="hero-caption-link" data-cursor={lang === "ar" ? "عرض" : "View"}>
+        <TLink href={href(`/projects/${project}`)} className="hero-caption-link" data-cursor={lang === "ar" ? "عرض" : "View"}>
           <span className="t-label text-red">/</span>
-          <span className="t-label">
-            {lang === "ar" ? "نظام جرار — شقة بإطلالة على النيل" : "Sliding system — Nile-view apartment"}
-          </span>
+          <span className="t-label">{t(caption)}</span>
         </TLink>
       </div>
     </section>

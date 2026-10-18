@@ -32,7 +32,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       <section className="theme-light pb-[var(--section-y)]" data-header="light" aria-label={t(about.title)}>
         <div className="wrap grid gap-y-16 lg:grid-cols-12 lg:gap-x-8">
           <div className="lg:col-span-5">
-            <ShutterImage photo={photos.gardenVillaWindow} sizes="(min-width: 1024px) 40vw, 100vw" trigger="enter" className="aspect-[4/5] w-full" />
+            <ShutterImage photo={photos.frenchDoorsWindow} sizes="(min-width: 1024px) 40vw, 100vw" trigger="enter" className="aspect-[4/5] w-full" />
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
             <Reveal items="p" className="space-y-6">

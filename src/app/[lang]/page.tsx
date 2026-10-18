@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { isLang } from "@/i18n/config";
 import { photos } from "@/content/photos";
-import { featuredProjects, getProject, projectTypes } from "@/content/projects";
+import { featuredProjects, getProject, homeHero, projectTypes } from "@/content/projects";
 import { HomeHero } from "@/components/home/HomeHero";
 import { HomeIntro } from "@/components/home/HomeIntro";
 import { HomeCounters } from "@/components/home/HomeCounters";
@@ -23,7 +23,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
 
   return (
     <>
-      <HomeHero photo={photos.heroRiverSliding} />
+      <HomeHero photo={photos[homeHero.photo]} project={homeHero.project} caption={homeHero.caption} />
       <HomeIntro lang={lang} />
       <HomeCounters lang={lang} />
       <HomeOpenings />

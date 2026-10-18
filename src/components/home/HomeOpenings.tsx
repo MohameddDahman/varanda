@@ -97,7 +97,7 @@ export function HomeOpenings() {
               }}
               kind={item.id as OpeningKind}
             />
-            <div className="mt-6">
+            <div className="mt-4 md:mt-6">
               <h3 id={`opening-${item.id}`} className="t-h2">
                 {t(item.name)}
               </h3>

@@ -107,3 +107,25 @@ test("split text stays readable to screen readers while animating", async ({ pag
   }
   expect(problems, "console problems with motion on").toEqual([]);
 });
+
+test("phone opening cards end above the rail's progress line", async ({ page, isMobile }) => {
+  // The tags under each window once ran past the bottom of the pinned rail, under its progress line.
+  test.skip(!isMobile, "the cards only run short of room on phones");
+  for (const [width, height] of [
+    [390, 726],
+    [360, 560],
+  ]) {
+    await page.setViewportSize({ width, height });
+    for (const lang of ["en", "ar"]) {
+      await open(page, `/${lang}`);
+      const rail = await page.evaluate(() => {
+        const box = document.querySelector(".rail")!.getBoundingClientRect();
+        const bar = document.querySelector(".rail-progress")!.getBoundingClientRect().top - box.top;
+        const gaps = [...document.querySelectorAll("[data-card]")].map((c) => bar - (c.lastElementChild!.getBoundingClientRect().bottom - box.top));
+        return { height: box.height, gap: Math.round(Math.min(...gaps)) };
+      });
+      expect(rail.height, `${lang} at ${width}x${height}: rail height`).toBeLessThanOrEqual(height);
+      expect(rail.gap, `${lang} at ${width}x${height}: space between the lowest caption and the progress line`).toBeGreaterThanOrEqual(8);
+    }
+  }
+});

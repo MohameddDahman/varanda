@@ -1295,6 +1295,32 @@ svg {
   transform-origin: 100% 50%;
 }
 
+/* Phones: a caption needs about 17rem under its drawing, so the drawing takes whatever
+   height is left and the tags stay clear of the progress line. */
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .rail {
+    min-height: 0;
+  }
+
+  .rail-track {
+    padding-top: var(--header-h);
+    padding-bottom: 19rem;
+  }
+
+  .rail-intro {
+    align-self: flex-start;
+    margin-top: 1.5rem;
+  }
+
+  .rail-card {
+    width: min(78vw, 19rem);
+  }
+
+  .rail-card > .od {
+    width: min(100%, max(8rem, calc((100svh - var(--header-h) - 20rem) * 0.8)));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rail {
     height: auto;

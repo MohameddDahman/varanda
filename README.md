@@ -19,7 +19,7 @@ npm run test:ui    # UI tests (see below)
 `npm run test:ui` builds the site, starts it on port 3100 and runs the Playwright suite in `tests/ui/` on a desktop and a phone viewport. On Windows it uses the installed Microsoft Edge; elsewhere run `npx playwright install chromium` once.
 
 - `pages.spec.ts` — every page in both languages: status code, `lang`/`dir`, the profile fonts actually loaded, no sideways overflow, no broken images, one `h1`, no console errors or animation warnings, and an axe accessibility scan (WCAG 2.2 AA) with zero violations.
-- `layout.spec.ts` — regressions found during the build: the header blur surviving the CSS minifier, hero labels staying on their door panel, the logo not mirroring in Arabic, paragraph tracking (open in English, word-spaced in Arabic), no doubled gaps between same-colour sections, contact details linked only once real, split text readable to screen readers.
+- `layout.spec.ts` — regressions found during the build: the header blur surviving the CSS minifier, hero labels staying on their door panel, the logo not mirroring in Arabic, paragraph tracking (open in English, word-spaced in Arabic), no doubled gaps between same-colour sections, contact details linked only once real, split text readable to screen readers, opening-system cards fitting above the rail's progress line on phones.
 - `interactions.spec.ts` — the door transition, the phone menu, the language switch, the projects filter, the wind-sound demo and the request form.
 
 Test the live site instead with `BASE_URL=https://varanda-kappa.vercel.app npm run test:ui` (PowerShell: `$env:BASE_URL="https://varanda-kappa.vercel.app"; npm run test:ui`). `npm run test:ui:report` opens the last report; failures keep a screenshot and a trace.

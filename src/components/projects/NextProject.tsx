@@ -44,7 +44,7 @@ export function NextProject({ project }: { project: Project }) {
       <TLink href={href(`/projects/${project.slug}`)} className="group relative block h-[100svh] min-h-[32rem]" data-cursor={t(ui.next)}>
         <div data-next-frame className="absolute inset-0 overflow-hidden">
           <div data-next-img className="absolute inset-0">
-            <Image src={photos[project.cover].src} alt="" fill sizes="100vw" placeholder="blur" className="object-cover" />
+            <Image src={photos[project.cover].src} alt="" fill sizes="100vw" placeholder="blur" className="object-cover" style={{ objectPosition: photos[project.cover].focus }} />
           </div>
           <span className="absolute inset-0 bg-[linear-gradient(180deg,rgb(4_12_23/0.55),rgb(4_12_23/0.25)_40%,rgb(4_12_23/0.8))]" />
         </div>

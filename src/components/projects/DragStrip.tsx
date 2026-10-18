@@ -74,6 +74,7 @@ export function DragStrip({ items, label }: { items: { photo: PhotoKey; label: L
               placeholder="blur"
               draggable={false}
               className="object-cover"
+              style={{ objectPosition: photos[item.photo].focus }}
             />
           </div>
           <figcaption className="t-label mt-4 text-[var(--fg-2)]">{t(item.label)}</figcaption>

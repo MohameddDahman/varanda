@@ -49,9 +49,9 @@ All words, in both languages, live in `src/content/`:
 - `projects.ts` — projects (title, type, year, location, text, photos).
 - `photos.ts` — every photo with its English and Arabic alt text.
 
-Photos are in `src/assets/photos/` (already cropped, graded and stripped of GPS data). To add a project: drop the graded photo there, register it in `photos.ts`, then add an entry to `projects.ts` — the page, sitemap and filters pick it up automatically.
+Photos are in `src/assets/photos/` (already cropped, enhanced, graded and stripped of GPS data); `_manifest.json` there records each one's original file and whether it was AI-upscaled. To add a project: drop the graded photo there, register it in `photos.ts`, then add an entry to `projects.ts` — the page, sitemap and filters pick it up automatically.
 
-Originals from the client's Drive and profile are kept in `_source/` (git-ignored, not deployed).
+Originals from the client's Drive, the 2017–2025 photo archive (WeTransfer) and the profile are kept in `_source/` (git-ignored, not deployed). `_source/photo-work/process.py` re-creates every site photo from them: small photos are upscaled with Real-ESRGAN on the GPU, then each is straightened, cropped, has its shadows recovered and colour cast removed, and gets the site's grade. A photo whose subject sits off-centre can set a `focus` (CSS object-position) in `photos.ts` so wide crops keep it.
 
 ## Connecting Convex
 
@@ -71,9 +71,12 @@ At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-dom
 
 ## Before launch — needed from the client
 
-- The branch address, opening hours and Google Maps link → `src/content/site.ts` (`address`, `hours`, `mapQuery`, `mapsUrl`). Phones, WhatsApp and email are in.
-- Confirm project names, areas and systems used in `src/content/projects.ts` (grouped from the Drive photos by date).
-- Confirm the garden-fencing work belongs on the site (it's in the Drive but not in the profile).
+- The branch address, opening hours and Google Maps link → `src/content/site.ts` (`address`, `hours`, `mapQuery`, `mapsUrl`). Phones and WhatsApp are in; the company email comes later (`email`).
+- Confirm project names, areas and systems used in `src/content/projects.ts` (grouped from the Drive photos and the photo archive by shoot date).
+- Confirm the photos in the archive's "Finestra" folder (2015–2020) are VARANDA's own installations: most of the new projects come from it.
+- Confirm the "American University site" can be named on the site (the name comes from the archive's folder label).
+- Confirm the garden-fencing and pergola work belongs on the site (it's in the photos but not in the profile).
+- Some installation photos show the profile maker's name on the protective film (Deceuninck on the classic-apartment and family-home photos). Confirm that's fine, or send photos with the film removed.
 - Higher-resolution photos of the four projects shown in the profile (Fifth Settlement, Sheikh Zayed, October) — the profile only contains low-resolution copies. A professional shoot of 2–3 finished projects would lift the site the most.
 - A native Arabic review of the copy.
 

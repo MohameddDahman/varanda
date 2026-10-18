@@ -92,6 +92,7 @@ export function ShutterImage({
             preload={preload}
             placeholder="blur"
             className={cn("object-cover", imgClassName)}
+            style={photo.focus ? { objectPosition: photo.focus } : undefined}
           />
         </div>
       </div>

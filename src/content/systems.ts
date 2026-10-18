@@ -51,7 +51,7 @@ export const systems: SystemCategory[] = [
       ar: "مجموعة متنوعة من أنظمة الفتح لتناسب مختلف الاحتياجات المعمارية، وتوفر أعلى درجات الراحة والمرونة في الاستخدام.",
     },
     count: { en: "6 opening systems", ar: "6 أنظمة فتح" },
-    cover: "heroRiverSliding",
+    cover: "frenchDoors",
     gallery: ["apartmentLiving", "classicFrenchDoor", "homeWindow1", "tiltTurn", "slidingDoor2020", "classicTilt"],
     items: [
       {
@@ -140,7 +140,7 @@ export const systems: SystemCategory[] = [
       ar: "مجموعة متنوعة من أنظمة الزجاج لتناسب مختلف الاحتياجات، وتوفر العزل الحراري والصوتي مع درجات عالية من الوضوح والخصوصية.",
     },
     count: { en: "4 glass options", ar: "4 خيارات للزجاج" },
-    cover: "apartmentLiving",
+    cover: "seaViewFacade",
     gallery: ["heroRiverSliding", "apartmentBedroom", "homeWindow2"],
     items: [
       {

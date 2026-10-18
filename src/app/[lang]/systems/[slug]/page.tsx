@@ -18,7 +18,7 @@ import { ScreenDiagram, ShutterDemo } from "@/components/systems/ShutterDemo";
 import { ProductPhoto } from "@/components/systems/ProductPhoto";
 import { LockMechanism } from "@/components/why/LockMechanism";
 import { HomeCTA } from "@/components/home/HomeCTA";
-import { Arrow } from "@/components/ui/Button";
+import { Arrow, Button } from "@/components/ui/Button";
 
 export const dynamicParams = false;
 
@@ -41,6 +41,7 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
   if (!isLang(lang) || !system) notFound();
   const t = T(lang);
   const related = projects.filter((p) => p.systems.includes(system.slug));
+  const RELATED_MAX = 6;
   const others = systems.filter((s) => s.slug !== system.slug);
   const lists = [
     system.features && { eyebrow: { en: "Benefits", ar: "المميزات" }, ...system.features },
@@ -134,7 +135,7 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
           <div className="wrap">
             <Eyebrow>{lang === "ar" ? "في مشروعاتنا" : "In our projects"}</Eyebrow>
             <ul className="mt-10 grid gap-10 md:grid-cols-3">
-              {related.map((p) => (
+              {related.slice(0, RELATED_MAX).map((p) => (
                 <li key={p.slug}>
                   <TLink href={path(lang, `/projects/${p.slug}`)} className="group block" data-cursor={t(ui.view)}>
                     <ShutterImage photo={photos[p.cover]} sizes="(min-width: 768px) 30vw, 100vw" className="aspect-[4/3] w-full" />
@@ -146,6 +147,13 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
                 </li>
               ))}
             </ul>
+            {related.length > RELATED_MAX && (
+              <div className="mt-14">
+                <Button href={path(lang, "/projects")} variant="outline">
+                  {t(ui.allProjects)}
+                </Button>
+              </div>
+            )}
           </div>
         </section>
       )}

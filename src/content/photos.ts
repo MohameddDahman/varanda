@@ -46,10 +46,46 @@ import slatPerforated from "@/assets/profile/slat-perforated.jpg";
 import slatNgs from "@/assets/profile/slat-ngs.jpg";
 import slatBk from "@/assets/profile/slat-bk.jpg";
 import installTeam from "@/assets/profile/install-team.jpg";
+// From the client's photo archive (2017–2025), enhanced: small WhatsApp copies AI-upscaled,
+// dark interiors lifted, colour corrected and given the same grade as the rest of the site.
+import modernVilla from "@/assets/photos/modern-villa.jpg";
+import modernVillaFront from "@/assets/photos/modern-villa-front.jpg";
+import modernVillaWindow from "@/assets/photos/modern-villa-window.jpg";
+import frenchDoors from "@/assets/photos/french-doors.jpg";
+import frenchDoorsKitchen from "@/assets/photos/french-doors-kitchen.jpg";
+import frenchDoorsWindow from "@/assets/photos/french-doors-window.jpg";
+import gardenVilla from "@/assets/photos/garden-villa.jpg";
+import gardenVillaWindow from "@/assets/photos/garden-villa-window.jpg";
+import stoneVilla from "@/assets/photos/stone-villa.jpg";
+import stoneVillaWindow from "@/assets/photos/stone-villa-window.jpg";
+import redVilla from "@/assets/photos/red-villa.jpg";
+import redVillaTower from "@/assets/photos/red-villa-tower.jpg";
+import redVillaEntrance from "@/assets/photos/red-villa-entrance.jpg";
+import seaView from "@/assets/photos/sea-view.jpg";
+import seaView2 from "@/assets/photos/sea-view-2.jpg";
+import seaViewFacade from "@/assets/photos/sea-view-facade.jpg";
+import seaViewDoor from "@/assets/photos/sea-view-door.jpg";
+import poolVilla from "@/assets/photos/pool-villa.jpg";
+import poolVillaBay from "@/assets/photos/pool-villa-bay.jpg";
+import pergolaPool from "@/assets/photos/pergola-pool.jpg";
+import pergolaGarden from "@/assets/photos/pergola-garden.jpg";
+import pergolaNight from "@/assets/photos/pergola-night.jpg";
+import pergolaDeck from "@/assets/photos/pergola-deck.jpg";
+import gardenGate from "@/assets/photos/garden-gate.jpg";
+import universityWindows from "@/assets/photos/university-windows.jpg";
+import universityCorridor from "@/assets/photos/university-corridor.jpg";
+import universityFacade from "@/assets/photos/university-facade.jpg";
+import roundWindows from "@/assets/photos/round-windows.jpg";
+import roundWindow from "@/assets/photos/round-window.jpg";
+import roundWindow2 from "@/assets/photos/round-window-2.jpg";
+import archedDoors from "@/assets/photos/arched-doors.jpg";
+import archedDoorsOpen from "@/assets/photos/arched-doors-open.jpg";
+import foldingDoors from "@/assets/photos/folding-doors.jpg";
 
-export type Photo = { src: StaticImageData; alt: L };
+/** `focus` is a CSS object-position: the part of the photo to keep when a wide frame crops it. */
+export type Photo = { src: StaticImageData; alt: L; focus?: string };
 
-const p = (src: StaticImageData, en: string, ar: string): Photo => ({ src, alt: { en, ar } });
+const p = (src: StaticImageData, en: string, ar: string, focus?: string): Photo => ({ src, alt: { en, ar }, focus });
 
 export const photos = {
   heroRiverSliding: p(
@@ -164,6 +200,39 @@ export const photos = {
   slatNgs: p(slatNgs, "NGS roller-shutter slats with extra insulation", "شرائح شاتر NGS بعزل أعلى"),
   slatBk: p(slatBk, "BK roller-shutter slats, the everyday economical choice", "شرائح شاتر BK الاقتصادية الشائعة"),
   installTeam: p(installTeam, "A VARANDA installer fitting a uPVC sliding window", "فني من VARANDA يركّب شباك uPVC سحاب"),
+  modernVilla: p(modernVilla, "Modern villa with its ground-floor roller shutters down", "فيلا مودرن والشاتر مُغلق على الدور الأرضي"),
+  modernVillaFront: p(modernVillaFront, "Garden side of the modern villa with large glazed doors on the ground floor", "واجهة الفيلا المودرن من ناحية الحديقة بأبواب زجاجية كبيرة في الدور الأرضي"),
+  modernVillaWindow: p(modernVillaWindow, "Wide sliding window above a built-in window seat", "شباك سحاب عريض فوق مقعد مدمج"),
+  frenchDoors: p(frenchDoors, "White French doors opening onto a balcony, in a room with blue walls and a marble floor", "باب فرنسي أبيض على الشرفة في غرفة بحوائط زرقاء وأرضية رخام"),
+  frenchDoorsKitchen: p(frenchDoorsKitchen, "Kitchen with two white uPVC windows above the counter", "مطبخ بشباكين uPVC أبيض فوق الرخامة"),
+  frenchDoorsWindow: p(frenchDoorsWindow, "White uPVC window with glazing bars in a blue dining room", "شباك uPVC أبيض بتقسيمات في غرفة طعام زرقاء"),
+  gardenVilla: p(gardenVilla, "Villa terrace with roller shutters and an awning over the garden doors", "تراس فيلا بشاتر وتندة فوق أبواب الحديقة"),
+  gardenVillaWindow: p(gardenVillaWindow, "Tall window with glazing bars and a decorative grille, looking onto the garden", "شباك طويل بتقسيمات وحماية زخرفية يطل على الحديقة"),
+  stoneVilla: p(stoneVilla, "Arched window in a stone-clad tower, with a window below", "شباك مقوس في برج مكسو بالحجر وأسفله شباك آخر", "50% 8%"),
+  stoneVillaWindow: p(stoneVillaWindow, "Arched double window above built-in drawers", "شباك مقوس بضلفتين فوق أدراج مدمجة"),
+  redVilla: p(redVilla, "Red villa with sliding doors on the ground floor and wide windows above", "فيلا حمراء بأبواب سحاب في الدور الأرضي وشبابيك عريضة بالأعلى"),
+  redVillaTower: p(redVillaTower, "Tall window set into a round tower", "شباك طويل في برج دائري"),
+  redVillaEntrance: p(redVillaEntrance, "Entrance of the red villa behind flowering trees", "مدخل الفيلا الحمراء خلف أشجار مزهرة"),
+  seaView: p(seaView, "Sliding window framing the sea", "شباك سحاب يطل على البحر"),
+  seaView2: p(seaView2, "Wide sliding window looking out to the beach", "شباك سحاب عريض يطل على الشاطئ"),
+  seaViewFacade: p(seaViewFacade, "Stone-clad facade with cream sliding windows reflecting the sea", "واجهة مكسوة بالحجر بشبابيك سحاب كريمي تعكس البحر"),
+  seaViewDoor: p(seaViewDoor, "Cream sliding door opening onto the terrace", "باب سحاب كريمي على التراس"),
+  poolVilla: p(poolVilla, "Villa with a curved bay of windows facing the pool", "فيلا بواجهة شبابيك منحنية تطل على حمام السباحة"),
+  poolVillaBay: p(poolVillaBay, "The curved bay of windows from inside, looking out to the pool", "واجهة الشبابيك المنحنية من الداخل وتطل على حمام السباحة"),
+  pergolaPool: p(pergolaPool, "Wood-effect pergola beside a pool, with sun loungers", "برجولة بمظهر الخشب بجوار حمام سباحة مع كراسي استلقاء"),
+  pergolaGarden: p(pergolaGarden, "Pergola with slatted screens in a landscaped garden", "برجولة بسواتر من الشرائح في حديقة منسقة"),
+  pergolaNight: p(pergolaNight, "Pergola lit at dusk beside the pool", "برجولة مضاءة عند الغروب بجوار حمام السباحة"),
+  pergolaDeck: p(pergolaDeck, "Pergola on a raised deck with wood-effect slats", "برجولة على منصة مرتفعة بشرائح بمظهر الخشب"),
+  gardenGate: p(gardenGate, "Wood-effect fence and gate along a garden path", "سور وبوابة بمظهر الخشب على امتداد ممر الحديقة"),
+  universityWindows: p(universityWindows, "Dark-frame windows overlooking a busy street", "شبابيك بإطار داكن تطل على شارع مزدحم"),
+  universityCorridor: p(universityCorridor, "A row of dark-frame windows along a corridor", "صف من الشبابيك بإطار داكن على امتداد ممر"),
+  universityFacade: p(universityFacade, "Building facade with dark-frame windows on every floor", "واجهة مبنى بشبابيك ذات إطار داكن في كل الأدوار"),
+  roundWindows: p(roundWindows, "Reception room with two round windows and an inlaid marble floor", "غرفة استقبال بشباكين دائريين وأرضية رخام مطعّمة"),
+  roundWindow: p(roundWindow, "Round window with glazing bars beneath a chandelier", "شباك دائري بتقسيمات أسفل نجفة"),
+  roundWindow2: p(roundWindow2, "Round window casting sunlight across the floor", "شباك دائري يرسم ضوء الشمس على الأرضية"),
+  archedDoors: p(archedDoors, "Arched doors with a fanlight, closed", "أبواب مقوسة بشباك علوي مروحي، مغلقة"),
+  archedDoorsOpen: p(archedDoorsOpen, "Arched doors folded back to open the room onto the balcony", "أبواب مقوسة مطوية لتفتح الغرفة على الشرفة", "50% 22%"),
+  foldingDoors: p(foldingDoors, "Folding doors opening a room onto the terrace", "أبواب طي تفتح الغرفة على التراس"),
 } satisfies Record<string, Photo>;
 
 export type PhotoKey = keyof typeof photos;

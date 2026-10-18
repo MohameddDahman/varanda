@@ -32,7 +32,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       <section className="theme-light pb-[var(--section-y)]" data-header="light" aria-label={t(about.title)}>
         <div className="wrap grid gap-y-16 lg:grid-cols-12 lg:gap-x-8">
           <div className="lg:col-span-5">
-            <ShutterImage photo={photos.apartmentLiving} sizes="(min-width: 1024px) 40vw, 100vw" trigger="enter" className="aspect-[4/5] w-full" />
+            <ShutterImage photo={photos.gardenVillaWindow} sizes="(min-width: 1024px) 40vw, 100vw" trigger="enter" className="aspect-[4/5] w-full" />
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
             <Reveal items="p" className="space-y-6">
@@ -92,7 +92,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 lg:col-span-6 lg:col-start-7">
-            <ShutterImage photo={photos.classicFrenchDoor} sizes="(min-width: 1024px) 25vw, 50vw" className="aspect-[3/4] w-full" />
+            <ShutterImage photo={photos.archedDoorsOpen} sizes="(min-width: 1024px) 25vw, 50vw" className="aspect-[3/4] w-full" />
             <ShutterImage photo={photos.entranceDoor} sizes="(min-width: 1024px) 25vw, 50vw" className="mt-16 aspect-[3/4] w-full" />
           </div>
         </div>

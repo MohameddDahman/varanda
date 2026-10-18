@@ -69,11 +69,11 @@ export function Gallery({ items }: { items: PhotoKey[] }) {
   }, [open, close, go, lang]);
 
   // Pair consecutive portrait photos; landscapes run full width.
+  const isPortrait = (i: number) => photos[items[i]].src.height > photos[items[i]].src.width;
   const rows: number[][] = [];
-  items.forEach((key, i) => {
-    const portrait = photos[key].src.height > photos[key].src.width;
+  items.forEach((_, i) => {
     const prev = rows[rows.length - 1];
-    if (portrait && prev && prev.length === 1 && photos[items[prev[0]]].src.height > photos[items[prev[0]]].src.width) prev.push(i);
+    if (isPortrait(i) && prev && prev.length === 1 && isPortrait(prev[0])) prev.push(i);
     else rows.push([i]);
   });
 
@@ -85,34 +85,47 @@ export function Gallery({ items }: { items: PhotoKey[] }) {
   return (
     <>
       <div className="space-y-[clamp(1.5rem,4vw,4rem)]">
-        {rows.map((row, r) => (
-          <div key={r} className={cn("grid gap-[clamp(1.5rem,4vw,4rem)]", row.length === 2 && "md:grid-cols-2", row.length === 1 && r % 2 === 1 && "md:w-[78%] md:ms-auto")}>
-            {row.map((i) => {
-              const key = items[i];
-              const p = photos[key];
-              const portrait = p.src.height > p.src.width;
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={openAt(i)}
-                  className="group block w-full text-start"
-                  aria-label={`${lang === "ar" ? "عرض الصورة" : "Open photo"}: ${t(p.alt)}`}
-                >
-                  <ShutterImage
-                    photo={p}
-                    sizes={row.length === 2 ? "(min-width: 768px) 45vw, 100vw" : "(min-width: 768px) 80vw, 100vw"}
-                    className={cn("w-full", portrait ? "aspect-[4/5]" : "aspect-[3/2]")}
-                    imgClassName="transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.03]"
-                    cursor={lang === "ar" ? "تكبير" : "Enlarge"}
-                    decorative
-                  />
-                  <span className="t-label mt-3 block text-ink-2">{t(p.alt)}</span>
-                </button>
-              );
-            })}
-          </div>
-        ))}
+        {rows.map((row, r) => {
+          // A portrait without a partner keeps its paired width, so it never towers over the page.
+          const half = row.length === 2 || isPortrait(row[0]);
+          return (
+            <div
+              key={r}
+              className={cn(
+                "grid gap-[clamp(1.5rem,4vw,4rem)]",
+                row.length === 2 && "md:grid-cols-2",
+                row.length === 1 && half && "md:w-[calc((100%_-_clamp(1.5rem,4vw,4rem))/2)]",
+                row.length === 1 && !half && r % 2 === 1 && "md:w-[78%]",
+                row.length === 1 && r % 2 === 1 && "md:ms-auto",
+              )}
+            >
+              {row.map((i) => {
+                const key = items[i];
+                const p = photos[key];
+                const portrait = isPortrait(i);
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={openAt(i)}
+                    className="group block w-full text-start"
+                    aria-label={`${lang === "ar" ? "عرض الصورة" : "Open photo"}: ${t(p.alt)}`}
+                  >
+                    <ShutterImage
+                      photo={p}
+                      sizes={half ? "(min-width: 768px) 45vw, 100vw" : "(min-width: 768px) 80vw, 100vw"}
+                      className={cn("w-full", portrait ? "aspect-[4/5]" : "aspect-[3/2]")}
+                      imgClassName="transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.03]"
+                      cursor={lang === "ar" ? "تكبير" : "Enlarge"}
+                      decorative
+                    />
+                    <span className="t-label mt-3 block text-ink-2">{t(p.alt)}</span>
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
 
       {/* Portalled to <body> so it sits above the fixed header, outside <main>'s stacking context. */}

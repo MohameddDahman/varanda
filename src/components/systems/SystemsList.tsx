@@ -28,7 +28,7 @@ export function SystemsList() {
               data-cursor={lang === "ar" ? "افتح" : "Open"}
             >
               <div className="relative mb-6 aspect-[16/10] overflow-hidden lg:hidden">
-                <Image src={photos[s.cover].src} alt="" fill sizes="100vw" className="object-cover" placeholder="blur" />
+                <Image src={photos[s.cover].src} alt="" fill sizes="100vw" className="object-cover" placeholder="blur" style={{ objectPosition: photos[s.cover].focus }} />
               </div>
               <div className="flex items-baseline justify-between gap-6">
                 <h2 className={cn("t-h1 transition-colors duration-300", active === i ? "lg:text-[var(--fg)]" : "lg:text-[var(--fg-2)]")}>
@@ -58,7 +58,7 @@ export function SystemsList() {
               )}
               aria-hidden={active !== i}
             >
-              <Image src={photos[s.cover].src} alt={t(photos[s.cover].alt)} fill sizes="34vw" className="object-cover" placeholder="blur" />
+              <Image src={photos[s.cover].src} alt={t(photos[s.cover].alt)} fill sizes="34vw" className="object-cover" placeholder="blur" style={{ objectPosition: photos[s.cover].focus }} />
             </div>
           ))}
           <span className="t-label absolute bottom-4 start-4 bg-navy-950/70 px-3 py-2 text-white backdrop-blur">

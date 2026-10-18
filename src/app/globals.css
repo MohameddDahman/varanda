@@ -1525,10 +1525,14 @@ svg {
   border-color: var(--color-white);
 }
 
+/* Full strength on the pale chips: at 11px, a faded count falls below 4.5:1. */
 .chip-count {
   font-family: var(--font-label);
   font-size: 0.6875rem;
-  opacity: 0.7;
+}
+
+.chip.is-active .chip-count {
+  opacity: 0.75;
 }
 
 .projects-grid {

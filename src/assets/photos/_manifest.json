@@ -86,9 +86,10 @@
   "arched-shutter": {
     "source": "IMG-20241013-WA0006.jpg",
     "size": [
-      960,
-      1280
-    ]
+      1800,
+      2400
+    ],
+    "upscaled": true
   },
   "building-progress": {
     "source": "IMG-20250828-WA0009.jpg",
@@ -100,58 +101,66 @@
   "fence-1": {
     "source": "IMG-20251227-WA0020.jpg",
     "size": [
-      1280,
-      960
-    ]
+      2400,
+      1800
+    ],
+    "upscaled": true
   },
   "fence-2": {
     "source": "IMG-20251227-WA0021.jpg",
     "size": [
-      1280,
-      960
-    ]
+      2400,
+      1800
+    ],
+    "upscaled": true
   },
   "fence-3": {
     "source": "IMG-20251227-WA0022.jpg",
     "size": [
-      1280,
-      960
-    ]
+      2400,
+      1800
+    ],
+    "upscaled": true
   },
   "fence-4": {
     "source": "IMG-20251227-WA0031.jpg",
     "size": [
-      1152,
-      864
-    ]
+      2304,
+      1728
+    ],
+    "upscaled": true
   },
   "fence-5": {
     "source": "IMG-20251227-WA0033.jpg",
     "size": [
-      1280,
-      960
-    ]
+      2400,
+      1800
+    ],
+    "upscaled": true
   },
   "fence-6": {
     "source": "IMG-20251227-WA0034.jpg",
     "size": [
-      1280,
-      960
-    ]
+      2400,
+      1800
+    ],
+    "upscaled": true
   },
   "woodgrain": {
     "source": "IMG-20260408-WA0008.jpg",
     "size": [
-      480,
-      1203
-    ]
+      900,
+      2256
+    ],
+    "upscaled": true
   },
   "tilt-turn": {
     "source": "IMG-20260810-WA0005.jpg",
     "size": [
-      1243,
-      1042
-    ]
+      2400,
+      2012
+    ],
+    "upscaled": true
   },
   "classic-window": {
     "source": "IMG_20200625_165928.jpg",
@@ -200,6 +209,248 @@
     "size": [
       2400,
       1800
+    ]
+  },
+  "modern-villa": {
+    "source": "20190717_180805.jpg",
+    "size": [
+      2400,
+      1901
+    ]
+  },
+  "modern-villa-front": {
+    "source": "20190717_180853.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "french-doors": {
+    "source": "20190725_142949.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "french-doors-kitchen": {
+    "source": "20190725_143021.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "french-doors-window": {
+    "source": "20190725_143009.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "garden-villa": {
+    "source": "20200113_152853.jpg",
+    "size": [
+      2400,
+      1764
+    ]
+  },
+  "garden-villa-window": {
+    "source": "20200113_151624.jpg",
+    "size": [
+      1743,
+      2400
+    ]
+  },
+  "stone-villa": {
+    "source": "20200106_165537.jpg",
+    "size": [
+      1729,
+      2400
+    ]
+  },
+  "stone-villa-window": {
+    "source": "20200106_163213.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "red-villa": {
+    "source": "20180610_160428.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  },
+  "red-villa-tower": {
+    "source": "20180610_135837.jpg",
+    "size": [
+      2000,
+      2400
+    ]
+  },
+  "red-villa-entrance": {
+    "source": "20180610_140249.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "sea-view": {
+    "source": "20170118_154245.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  },
+  "sea-view-2": {
+    "source": "20170118_171535.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  },
+  "sea-view-facade": {
+    "source": "20170218_163714.jpg",
+    "size": [
+      2400,
+      1800
+    ]
+  },
+  "sea-view-door": {
+    "source": "20170218_163752.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "pool-villa": {
+    "source": "20170815_160917.jpg",
+    "size": [
+      2400,
+      1746
+    ]
+  },
+  "pool-villa-bay": {
+    "source": "20170716_160026.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "pergola-pool": {
+    "source": "WhatsApp Image 2023-01-12 at 12.36.14 PM (3).jpeg",
+    "size": [
+      2400,
+      1800
+    ],
+    "upscaled": true
+  },
+  "pergola-garden": {
+    "source": "WhatsApp Image 2023-01-12 at 12.36.14 PM (4).jpeg",
+    "size": [
+      2400,
+      1800
+    ],
+    "upscaled": true
+  },
+  "pergola-night": {
+    "source": "WhatsApp Image 2023-01-12 at 12.36.14 PM (5).jpeg",
+    "size": [
+      2400,
+      1136
+    ],
+    "upscaled": true
+  },
+  "pergola-deck": {
+    "source": "IMG-20250531-WA0037.jpg",
+    "size": [
+      2400,
+      1800
+    ],
+    "upscaled": true
+  },
+  "garden-gate": {
+    "source": "WhatsApp Image 2023-01-12 at 12.36.15 PM (1).jpeg",
+    "size": [
+      2304,
+      1728
+    ],
+    "upscaled": true
+  },
+  "university-windows": {
+    "source": "47e79be4-25db-4c47-9aae-a45568410e65.jpg",
+    "size": [
+      2400,
+      1800
+    ],
+    "upscaled": true
+  },
+  "university-corridor": {
+    "source": "6feb9872-00ad-4468-9710-742edf128336.jpg",
+    "size": [
+      2400,
+      1800
+    ],
+    "upscaled": true
+  },
+  "university-facade": {
+    "source": "WhatsApp Image 2025-08-27 at 11.50.39_0da68f09.jpg",
+    "size": [
+      2352,
+      1800
+    ],
+    "upscaled": true
+  },
+  "round-windows": {
+    "source": "WhatsApp Image 2021-09-06 at 2.21.08 PM.jpeg",
+    "size": [
+      2400,
+      1800
+    ],
+    "upscaled": true
+  },
+  "round-window": {
+    "source": "IMG-20250531-WA0110.jpg",
+    "size": [
+      1800,
+      2400
+    ],
+    "upscaled": true
+  },
+  "round-window-2": {
+    "source": "IMG-20250531-WA0109.jpg",
+    "size": [
+      1350,
+      2400
+    ],
+    "upscaled": true
+  },
+  "arched-doors": {
+    "source": "20170115_125004.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "arched-doors-open": {
+    "source": "20170115_125038.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "folding-doors": {
+    "source": "20170115_133746.jpg",
+    "size": [
+      1800,
+      2400
+    ]
+  },
+  "modern-villa-window": {
+    "source": "20190715_163625.jpg",
+    "size": [
+      1800,
+      2400
     ]
   }
 }

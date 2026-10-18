@@ -2,13 +2,13 @@ import type { L } from "@/i18n/config";
 import type { PhotoKey } from "./photos";
 import type { SystemSlug } from "./systems";
 
-export type ProjectType = "residential" | "commercial" | "outdoor";
+export type ProjectType = "residential" | "commercial" | "education" | "outdoor";
 
 export type Project = {
   slug: string;
   title: L;
   type: ProjectType;
-  /** Year taken from the photo dates in the client's Drive. */
+  /** Year taken from the photo dates. */
   year: number;
   /** Fill in once the client confirms; hidden while null. */
   location: L | null;
@@ -22,14 +22,56 @@ export type Project = {
 export const projectTypes: Record<ProjectType, L> = {
   residential: { en: "Residential", ar: "سكني" },
   commercial: { en: "Administrative", ar: "إداري" },
+  education: { en: "Educational", ar: "تعليمي" },
   outdoor: { en: "Outdoor", ar: "خارجي" },
 };
 
 /**
- * Grouped from the client's Drive photos by shoot date.
+ * Grouped from the client's photos (the Drive folder and the 2017–2025 photo archive) by
+ * shoot date, best work first.
  * TODO(client): confirm project names, areas and the systems used.
  */
 export const projects: Project[] = [
+  {
+    slug: "modern-villa",
+    title: { en: "Modern villa", ar: "فيلا مودرن" },
+    type: "residential",
+    year: 2019,
+    location: null,
+    summary: {
+      en: "Wide glazed sliding doors onto the lawn, with roller shutters that close the ground floor completely.",
+      ar: "أبواب سحاب زجاجية عريضة على الحديقة، مع شاتر يُغلق الدور الأرضي بالكامل.",
+    },
+    body: [
+      {
+        en: "With the roller shutters down, the ground floor closes up completely; with them up, wide glazed sliding doors open the rooms onto the lawn. Inside, a wide sliding window sits above a built-in window seat.",
+        ar: "عند إنزال الشاتر يُغلق الدور الأرضي بالكامل، وعند رفعه تفتح الأبواب السحاب الزجاجية العريضة الغرف على الحديقة. ومن الداخل يعلو شباك سحاب عريض مقعدًا مدمجًا.",
+      },
+    ],
+    systems: ["windows-doors", "roller-shutters"],
+    cover: "modernVilla",
+    gallery: ["modernVillaFront", "modernVillaWindow"],
+  },
+  {
+    slug: "garden-villa",
+    title: { en: "Garden villa", ar: "فيلا بحديقة" },
+    type: "residential",
+    year: 2020,
+    location: null,
+    summary: {
+      en: "Roller shutters and an awning over the garden doors, and tall windows with glazing bars inside.",
+      ar: "شاتر وتندة فوق أبواب الحديقة، وشبابيك طويلة بتقسيمات من الداخل.",
+    },
+    body: [
+      {
+        en: "Outside, the terrace doors close behind roller shutters; inside, tall windows with glazing bars and a decorative grille frame the garden.",
+        ar: "من الخارج تُغلق أبواب التراس خلف الشاتر، ومن الداخل تؤطر الشبابيك الطويلة ذات التقسيمات والحماية الزخرفية مشهد الحديقة.",
+      },
+    ],
+    systems: ["windows-doors", "roller-shutters"],
+    cover: "gardenVilla",
+    gallery: ["gardenVillaWindow"],
+  },
   {
     slug: "nile-view-apartment",
     title: { en: "Nile-view apartment", ar: "شقة بإطلالة على النيل" },
@@ -55,6 +97,107 @@ export const projects: Project[] = [
     gallery: ["apartmentLiving", "apartmentBedroom", "apartmentKitchen", "apartmentWindow"],
   },
   {
+    slug: "sea-view-house",
+    title: { en: "Sea-view house", ar: "منزل بإطلالة على البحر" },
+    type: "residential",
+    year: 2017,
+    location: null,
+    summary: {
+      en: "Cream sliding windows and doors that frame the sea, set into a stone-clad facade.",
+      ar: "شبابيك وأبواب سحاب بلون كريمي تؤطر البحر، في واجهة مكسوة بالحجر.",
+    },
+    body: [
+      {
+        en: "Wide sliding windows look straight out to the beach, and their cream frames sit quietly against the stone cladding.",
+        ar: "تطل الشبابيك السحاب العريضة مباشرة على الشاطئ، وينسجم اللون الكريمي لإطاراتها مع الكسوة الحجرية.",
+      },
+    ],
+    systems: ["windows-doors"],
+    cover: "seaView",
+    gallery: ["seaViewFacade", "seaViewDoor", "seaView2"],
+  },
+  {
+    slug: "pool-villa",
+    title: { en: "Pool villa", ar: "فيلا بحمام سباحة" },
+    type: "residential",
+    year: 2017,
+    location: null,
+    summary: {
+      en: "A curved bay of windows that turns the ground floor toward the pool, with arched windows on the floors above.",
+      ar: "واجهة شبابيك منحنية تفتح الدور الأرضي على حمام السباحة، مع شبابيك مقوسة في الأدوار العلوية.",
+    },
+    body: [
+      {
+        en: "The bay's panels follow the curve of the wall, so from inside the pool and garden read as one wide view.",
+        ar: "تتبع ضلف الواجهة انحناء الحائط، فيظهر حمام السباحة والحديقة من الداخل كمشهد واحد واسع.",
+      },
+    ],
+    systems: ["windows-doors"],
+    cover: "poolVilla",
+    gallery: ["poolVillaBay"],
+  },
+  {
+    slug: "red-villa",
+    title: { en: "Red villa", ar: "الفيلا الحمراء" },
+    type: "residential",
+    year: 2018,
+    location: null,
+    summary: {
+      en: "Sliding doors along the ground floor and a tall window set into a round tower.",
+      ar: "أبواب سحاب على امتداد الدور الأرضي، وشباك طويل في برج دائري.",
+    },
+    body: [
+      {
+        en: "White frames stand out crisply against the red render, from the wide sliding doors on the ground floor to the tall window in the tower.",
+        ar: "تبرز الإطارات البيضاء بوضوح على الواجهة الحمراء، من أبواب السحاب العريضة في الدور الأرضي إلى الشباك الطويل في البرج.",
+      },
+    ],
+    systems: ["windows-doors"],
+    cover: "redVilla",
+    gallery: ["redVillaTower", "redVillaEntrance"],
+  },
+  {
+    slug: "round-windows-villa",
+    title: { en: "Villa with round windows", ar: "فيلا بشبابيك دائرية" },
+    type: "residential",
+    year: 2021,
+    location: null,
+    summary: {
+      en: "Round windows with glazing bars, made to fit the openings of a classic reception room.",
+      ar: "شبابيك دائرية بتقسيمات، مصنوعة بمقاس فتحات غرفة استقبال كلاسيكية.",
+    },
+    body: [
+      {
+        en: "Each frame follows its circular opening exactly, and the glazing bars keep the classic lines of the room.",
+        ar: "يتبع كل إطار فتحته الدائرية بدقة، وتحافظ التقسيمات على الطابع الكلاسيكي للغرفة.",
+      },
+    ],
+    systems: ["windows-doors"],
+    cover: "roundWindows",
+    gallery: ["roundWindow", "roundWindow2"],
+  },
+  {
+    // Named after the client's own folder label for these photos — TODO(client): confirm it can be shown.
+    slug: "american-university",
+    title: { en: "American University site", ar: "موقع الجامعة الأمريكية" },
+    type: "education",
+    year: 2025,
+    location: null,
+    summary: {
+      en: "Dark-frame windows fitted along the floors of an existing building.",
+      ar: "شبابيك بإطار داكن رُكّبت على امتداد أدوار مبنى قائم.",
+    },
+    body: [
+      {
+        en: "The dark-frame windows run along every floor of the facade; inside, they line the corridors.",
+        ar: "تمتد الشبابيك ذات الإطار الداكن على كل أدوار الواجهة، ومن الداخل تصطف على امتداد الممرات.",
+      },
+    ],
+    systems: ["windows-doors"],
+    cover: "universityWindows",
+    gallery: ["universityCorridor", "universityFacade"],
+  },
+  {
     slug: "office-building",
     title: { en: "Office building", ar: "مبنى إداري" },
     type: "commercial",
@@ -75,6 +218,66 @@ export const projects: Project[] = [
     gallery: ["officeNight2", "officeNight3"],
   },
   {
+    slug: "french-doors-apartment",
+    title: { en: "Apartment with French doors", ar: "شقة بأبواب فرنسية" },
+    type: "residential",
+    year: 2019,
+    location: null,
+    summary: {
+      en: "White French doors onto the balcony, and windows with glazing bars in the dining room and kitchen.",
+      ar: "باب فرنسي أبيض على الشرفة، وشبابيك بتقسيمات في غرفة الطعام والمطبخ.",
+    },
+    body: [
+      {
+        en: "Glazing bars carry the same pattern from the French doors to the dining-room window, so the rooms share one classic detail.",
+        ar: "تتكرر التقسيمات نفسها من الباب الفرنسي إلى شباك غرفة الطعام، فتتشارك الغرف تفصيلة كلاسيكية واحدة.",
+      },
+    ],
+    systems: ["windows-doors"],
+    cover: "frenchDoors",
+    gallery: ["frenchDoorsWindow", "frenchDoorsKitchen"],
+  },
+  {
+    slug: "arched-doors-apartment",
+    title: { en: "Apartment with arched doors", ar: "شقة بأبواب مقوسة" },
+    type: "residential",
+    year: 2017,
+    location: null,
+    summary: {
+      en: "Arched folding doors under a fanlight, and folding doors that open the rooms onto the balcony and terrace.",
+      ar: "أبواب طي مقوسة أسفل شباك علوي مروحي، وأبواب طي تفتح الغرف على الشرفة والتراس.",
+    },
+    body: [
+      {
+        en: "The doors fold back to open the room onto the balcony; closed, their glazing bars and arched fanlight keep its classic look.",
+        ar: "تُطوى الأبواب لتفتح الغرفة على الشرفة، وعند غلقها تحافظ التقسيمات والشباك العلوي المقوس على طابعها الكلاسيكي.",
+      },
+    ],
+    systems: ["windows-doors"],
+    cover: "archedDoorsOpen",
+    gallery: ["archedDoors", "foldingDoors"],
+  },
+  {
+    slug: "stone-villa",
+    title: { en: "Villa with arched windows", ar: "فيلا بشبابيك مقوسة" },
+    type: "residential",
+    year: 2020,
+    location: null,
+    summary: {
+      en: "Arched double windows made to fit a stone-clad tower.",
+      ar: "شبابيك مقوسة بضلفتين مصنوعة بمقاس برج مكسو بالحجر.",
+    },
+    body: [
+      {
+        en: "Outside, an arched window sits in the stone-clad tower; inside, an arched double window opens above built-in drawers.",
+        ar: "من الخارج يستقر شباك مقوس في البرج المكسو بالحجر، ومن الداخل يُفتح شباك مقوس بضلفتين فوق أدراج مدمجة.",
+      },
+    ],
+    systems: ["windows-doors"],
+    cover: "stoneVilla",
+    gallery: ["stoneVillaWindow"],
+  },
+  {
     slug: "villa-roller-shutters",
     title: { en: "Villa roller shutters", ar: "شاتر لفيلا سكنية" },
     type: "residential",
@@ -93,6 +296,26 @@ export const projects: Project[] = [
     systems: ["roller-shutters"],
     cover: "villaShutter",
     gallery: ["villaShuttersFacade"],
+  },
+  {
+    slug: "pergolas",
+    title: { en: "Pergolas & outdoor living", ar: "برجولات ومساحات خارجية" },
+    type: "outdoor",
+    year: 2023,
+    location: null,
+    summary: {
+      en: "Wood-effect pergolas beside the pool and in the garden, with a matching fence and gate.",
+      ar: "برجولات بمظهر الخشب بجوار حمام السباحة وفي الحديقة، مع سور وبوابة بنفس الطابع.",
+    },
+    body: [
+      {
+        en: "Slatted roofs and screens give shade without closing the space in, and the same wood-effect finish carries on to the fence along the garden path.",
+        ar: "تمنح الأسقف والسواتر الشرائحية الظل دون أن تُغلق المساحة، ويمتد نفس التشطيب بمظهر الخشب إلى السور على امتداد ممر الحديقة.",
+      },
+    ],
+    systems: [],
+    cover: "pergolaPool",
+    gallery: ["pergolaGarden", "pergolaNight", "pergolaDeck", "gardenGate"],
   },
   {
     slug: "garden-fencing",
@@ -169,4 +392,4 @@ export const sitePhotos: { photo: PhotoKey; label: L }[] = [
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
 
 /** The projects stacked on the home page, in order. */
-export const featuredProjects = ["nile-view-apartment", "office-building", "villa-roller-shutters", "garden-fencing"];
+export const featuredProjects = ["modern-villa", "garden-villa", "sea-view-house", "pool-villa"];

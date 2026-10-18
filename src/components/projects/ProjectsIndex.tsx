@@ -44,7 +44,7 @@ export function ProjectsIndex() {
   const flipState = useRef<Flip.FlipState | null>(null);
 
   const counts = useMemo(() => {
-    const c: Record<Filter, number> = { all: projects.length, residential: 0, commercial: 0, outdoor: 0 };
+    const c: Record<Filter, number> = { all: projects.length, residential: 0, commercial: 0, education: 0, outdoor: 0 };
     projects.forEach((p) => c[p.type]++);
     return c;
   }, []);
@@ -108,7 +108,7 @@ export function ProjectsIndex() {
 
   const visible = projects.filter((p) => filter === "all" || p.type === filter);
   const spans = gridSpans(visible.length);
-  const filters: Filter[] = ["all", "residential", "commercial", "outdoor"];
+  const filters: Filter[] = ["all", "residential", "commercial", "education", "outdoor"];
 
   return (
     <div ref={root}>
@@ -210,7 +210,7 @@ export function ProjectsIndex() {
       <div ref={preview} className="projects-preview" aria-hidden="true">
         {projects.map((p) => (
           <div key={p.slug} className={cn("absolute inset-0 transition-opacity duration-300", hovered === p.slug ? "opacity-100" : "opacity-0")}>
-            <Image src={photos[p.cover].src} alt="" fill sizes="340px" className="object-cover" />
+            <Image src={photos[p.cover].src} alt="" fill sizes="340px" className="object-cover" style={{ objectPosition: photos[p.cover].focus }} />
           </div>
         ))}
       </div>

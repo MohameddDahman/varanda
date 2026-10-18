@@ -9,6 +9,7 @@ import { TLink } from "@/components/transition/TLink";
 import type { L } from "@/i18n/config";
 import type { Photo } from "@/content/photos";
 import { site } from "@/content/site";
+import { screenSizes } from "@/lib/sizes";
 
 const WORDS = {
   en: ["Made", "for life"],
@@ -106,7 +107,7 @@ export function HomeHero({ photo, project, caption }: { photo: Photo; project: s
       <div className="hero-view" aria-hidden="true">
         <div data-photo-enter className="absolute inset-0">
           <div data-photo className="absolute inset-0" style={{ transform: "scale(1.12)" }}>
-            <Image src={photo.src} alt="" fill sizes="100vw" preload placeholder="blur" className="object-cover" />
+            <Image src={photo.src} alt="" fill sizes={screenSizes(photo.src, 100, 1.12)} preload placeholder="blur" className="object-cover" />
           </div>
         </div>
         <div className="hero-view-shade" />

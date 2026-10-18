@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { useLang } from "@/components/providers/LangProvider";
 import { photos, type PhotoKey } from "@/content/photos";
+import { coverSizes } from "@/lib/sizes";
 import { ui } from "@/content/site";
 import type { L } from "@/i18n/config";
 
@@ -70,7 +71,7 @@ export function DragStrip({ items, label }: { items: { photo: PhotoKey; label: L
               src={photos[item.photo].src}
               alt={t(photos[item.photo].alt)}
               fill
-              sizes="(min-width: 768px) 28vw, 70vw"
+              sizes={coverSizes(photos[item.photo].src, "(min-width: 768px) 28vw, 70vw", 4 / 5)}
               placeholder="blur"
               draggable={false}
               className="object-cover"

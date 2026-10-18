@@ -129,3 +129,77 @@ test("phone opening cards end above the rail's progress line", async ({ page, is
     }
   }
 });
+
+test("photos stay sharp when a tall frame crops them", async ({ page, isMobile }) => {
+  // `sizes` once described only the frame's width, so on phones a landscape photo filling a
+  // tall frame was drawn from a file half the size it needed and looked soft.
+  test.skip(!isMobile, "the frames are tallest on phones");
+  const scale = (selector: string) =>
+    page.evaluate(async (sel) => {
+      const img = document.querySelector<HTMLImageElement>(sel)!;
+      img.scrollIntoView({ block: "center" });
+      await img.decode().catch(() => {});
+      // naturalWidth is corrected for the srcset density, so load the chosen file on its own.
+      const file = new Image();
+      file.src = img.currentSrc;
+      await file.decode();
+      const r = img.getBoundingClientRect();
+      return Math.max((r.width * devicePixelRatio) / file.naturalWidth, (r.height * devicePixelRatio) / file.naturalHeight);
+    }, selector);
+  await open(page, "/en/projects/modern-villa");
+  expect(await scale(".shutter img"), "project header photo, enlarged by").toBeLessThanOrEqual(1.25);
+  await open(page, "/en/projects");
+  // The second card spans one column, so its frame is portrait (4:5).
+  expect(await scale(".projects-grid-item:nth-child(2) .shutter img"), "portrait project card, enlarged by").toBeLessThanOrEqual(1.25);
+});
+
+test("the profile section's copy stays inside it on short laptop screens", async ({ page, isMobile }) => {
+  // On 1280x720 and 1366x768 the open part's text once ran past the bottom of the pinned section.
+  test.skip(isMobile, "laptops only");
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await open(page, "/en/why-upvc");
+  const top = await page.evaluate(() => document.querySelector(".anatomy")!.getBoundingClientRect().top + scrollY);
+  let worst = -Infinity;
+  for (let d = 0; d <= 720 * 6; d += 90) {
+    await page.evaluate((y) => scrollTo(0, y), top + d);
+    await page.waitForTimeout(90);
+    const over = await page.evaluate(() => {
+      const s = document.querySelector(".anatomy")!.getBoundingClientRect();
+      const c = document.querySelector(".anatomy-copy")!.getBoundingClientRect();
+      return Math.abs(s.top) < 2 ? Math.max(c.bottom - s.bottom, s.top - c.top) : -Infinity;
+    });
+    worst = Math.max(worst, over);
+  }
+  expect(worst, "copy past the section edge, in px").toBeLessThanOrEqual(0);
+});
+
+test("Arabic pages don't jump when the Arabic font arrives", async ({ page, isMobile }) => {
+  // Tajawal wasn't preloaded, so Arabic text first set in the narrower fallback and reflowed.
+  test.skip(isMobile, "one viewport is enough");
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await page.addInitScript(() => {
+    (window as unknown as { cls: number }).cls = 0;
+    new PerformanceObserver((list) => {
+      for (const e of list.getEntries() as unknown as { hadRecentInput: boolean; value: number }[]) if (!e.hadRecentInput) (window as unknown as { cls: number }).cls += e.value;
+    }).observe({ type: "layout-shift", buffered: true });
+  });
+  await open(page, "/ar/about");
+  await page.waitForTimeout(1500);
+  expect(await page.evaluate(() => (window as unknown as { cls: number }).cls), "layout shift while loading").toBeLessThan(0.1);
+});
+
+test("phone numbers stay on one line inside their column", async ({ page, isMobile }) => {
+  // At 1024px the footer's contact column was narrower than a number, which broke onto two lines.
+  test.skip(isMobile, "the narrow footer column is a laptop layout");
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await open(page, "/en/contact");
+  const numbers = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLElement>('footer a[href^="tel:"], .contact-line-value span')].map((el) => {
+      const r = el.getBoundingClientRect();
+      const col = el.closest("li, .contact-line")!.getBoundingClientRect();
+      return { text: el.textContent!.trim(), oneLine: r.height < parseFloat(getComputedStyle(el).fontSize) * 2, inside: r.right <= col.right + 1 && r.left >= col.left - 1 };
+    }),
+  );
+  expect(numbers.length).toBeGreaterThan(0);
+  for (const n of numbers) expect(n, n.text).toMatchObject({ oneLine: true, inside: true });
+});

@@ -1,6 +1,7 @@
 import type { Lang } from "@/i18n/config";
 import { warranty } from "@/content/company";
 import { photos } from "@/content/photos";
+import { coverSizes, DRIFT } from "@/lib/sizes";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { ShutterImage } from "@/components/motion/ShutterImage";
 import { SplitReveal } from "@/components/motion/SplitReveal";
@@ -13,7 +14,7 @@ export function HomeWarranty({ lang }: { lang: Lang }) {
     <section className="theme-light section" data-header="light" aria-labelledby="warranty-title">
       <div className="wrap grid gap-y-16 lg:grid-cols-12 lg:gap-x-8">
         <figure className="lg:col-span-5">
-          <ShutterImage photo={photos.installTeam} sizes="(min-width: 1024px) 40vw, 100vw" className="aspect-[4/5] w-full" />
+          <ShutterImage photo={photos.installTeam} sizes={coverSizes(photos.installTeam.src, "(min-width: 1024px) 40vw, 100vw", 4 / 5, DRIFT)} className="aspect-[4/5] w-full" />
           <figcaption className="t-label mt-4 text-ink-2">
             {lang === "ar" ? "فريق التركيب — نتابع معك بعد التسليم" : "Our installation team — still with you after handover"}
           </figcaption>

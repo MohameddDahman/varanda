@@ -6,6 +6,7 @@ import { photos } from "@/content/photos";
 import { ui } from "@/content/site";
 import { pageMeta } from "@/lib/meta";
 import { cn } from "@/lib/cn";
+import { coverSizes, DRIFT } from "@/lib/sizes";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { TLink } from "@/components/transition/TLink";
 import { ShutterImage } from "@/components/motion/ShutterImage";
@@ -78,7 +79,7 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
           <div className="lg:col-span-5 lg:col-start-8">
             <ShutterImage
               photo={photos[system.cover]}
-              sizes="(min-width: 1024px) 40vw, 100vw"
+              sizes={coverSizes(photos[system.cover].src, "(min-width: 1024px) 40vw, 100vw", 4 / 5, DRIFT)}
               trigger="enter"
               preload
               className="aspect-[4/5] w-full"
@@ -138,7 +139,7 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
               {related.slice(0, RELATED_MAX).map((p) => (
                 <li key={p.slug}>
                   <TLink href={path(lang, `/projects/${p.slug}`)} className="group block" data-cursor={t(ui.view)}>
-                    <ShutterImage photo={photos[p.cover]} sizes="(min-width: 768px) 30vw, 100vw" className="aspect-[4/3] w-full" />
+                    <ShutterImage photo={photos[p.cover]} sizes={coverSizes(photos[p.cover].src, "(min-width: 768px) 30vw, 100vw", 4 / 3, DRIFT)} className="aspect-[4/3] w-full" />
                     <h3 className="t-h3 mt-5">{t(p.title)}</h3>
                     <p className="t-label mt-2 text-ink-2">
                       {t(projectTypes[p.type])} · {p.year}

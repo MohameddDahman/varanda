@@ -4,6 +4,7 @@ import { useRef } from "react";
 import type { L } from "@/i18n/config";
 import type { Photo } from "@/content/photos";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { DRIFT, screenSizes } from "@/lib/sizes";
 import { useLang } from "@/components/providers/LangProvider";
 import { ui } from "@/content/site";
 import { TLink } from "@/components/transition/TLink";
@@ -66,7 +67,7 @@ export function HomeProjects({ items }: { items: FeaturedProject[] }) {
                 <TLink href={href(`/projects/${p.slug}`)} className="stack-link" data-cursor={t(ui.view)}>
                   <ShutterImage
                     photo={p.photo}
-                    sizes="(min-width: 1680px) 1600px, 100vw"
+                    sizes={`(min-width: 1680px) 1600px, ${screenSizes(p.photo.src, 78, DRIFT)}`}
                     className="absolute inset-0"
                     slats={9}
                   />

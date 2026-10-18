@@ -20,12 +20,14 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+// Only the Arabic files are preloaded (about 9KB a weight). Without them Arabic text first renders
+// in the fallback font, which runs narrower, and pages jump as Tajawal swaps in. Tajawal's Latin
+// letters still load on demand.
 const tajawal = Tajawal({
-  subsets: ["arabic", "latin"],
+  subsets: ["arabic"],
   weight: ["300", "400", "500", "700"],
   variable: "--font-tajawal",
   display: "swap",
-  preload: false,
 });
 
 export async function generateStaticParams() {

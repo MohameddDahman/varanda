@@ -2412,6 +2412,30 @@ button:hover > .finish-swatch {
   }
 }
 
+/* Short laptop screens (1366x768 leaves about 650px inside the browser): tighten the copy so the
+   open part never runs past the bottom of the pinned section, and below 720px drop the intro as
+   phones do. */
+@media (min-width: 64rem) and (max-height: 56rem) {
+  .anatomy-copy h2 {
+    margin-top: 1rem;
+    font-size: clamp(2.25rem, 5.4vh, 3.25rem);
+  }
+
+  .anatomy-copy ol {
+    margin-top: 1.5rem;
+  }
+
+  .anatomy-part {
+    padding-block: 0.6rem;
+  }
+}
+
+@media (min-width: 64rem) and (max-height: 45rem) {
+  .anatomy-copy .t-body {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .anatomy {
     height: auto;

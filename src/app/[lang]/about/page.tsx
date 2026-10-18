@@ -3,6 +3,7 @@ import { isLang } from "@/i18n/config";
 import { about, warranty } from "@/content/company";
 import { photos } from "@/content/photos";
 import { pageMeta } from "@/lib/meta";
+import { coverSizes, DRIFT } from "@/lib/sizes";
 import { PageHero } from "@/components/ui/PageHero";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Icon } from "@/components/ui/Icon";
@@ -32,7 +33,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       <section className="theme-light pb-[var(--section-y)]" data-header="light" aria-label={t(about.title)}>
         <div className="wrap grid gap-y-16 lg:grid-cols-12 lg:gap-x-8">
           <div className="lg:col-span-5">
-            <ShutterImage photo={photos.frenchDoorsWindow} sizes="(min-width: 1024px) 40vw, 100vw" trigger="enter" className="aspect-[4/5] w-full" />
+            <ShutterImage photo={photos.frenchDoorsWindow} sizes={coverSizes(photos.frenchDoorsWindow.src, "(min-width: 1024px) 40vw, 100vw", 4 / 5, DRIFT)} trigger="enter" className="aspect-[4/5] w-full" />
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
             <Reveal items="p" className="space-y-6">
@@ -92,8 +93,8 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 lg:col-span-6 lg:col-start-7">
-            <ShutterImage photo={photos.archedDoorsOpen} sizes="(min-width: 1024px) 25vw, 50vw" className="aspect-[3/4] w-full" />
-            <ShutterImage photo={photos.entranceDoor} sizes="(min-width: 1024px) 25vw, 50vw" className="mt-16 aspect-[3/4] w-full" />
+            <ShutterImage photo={photos.archedDoorsOpen} sizes={coverSizes(photos.archedDoorsOpen.src, "(min-width: 1024px) 25vw, 50vw", 3 / 4, DRIFT)} className="aspect-[3/4] w-full" />
+            <ShutterImage photo={photos.entranceDoor} sizes={coverSizes(photos.entranceDoor.src, "(min-width: 1024px) 25vw, 50vw", 3 / 4, DRIFT)} className="mt-16 aspect-[3/4] w-full" />
           </div>
         </div>
       </section>

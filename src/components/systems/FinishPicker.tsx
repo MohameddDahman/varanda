@@ -39,8 +39,9 @@ export function FinishPicker() {
                 )}
                 style={{ background: f.color }}
               >
+                {/* Swatches reach about 135px on tablets, and the grain is drawn at twice that. */}
                 {f.texture === "wood" && (
-                  <Image src={photos.woodgrain.src} alt="" fill sizes="120px" className="rotate-90 scale-[2] object-cover" />
+                  <Image src={photos.woodgrain.src} alt="" fill sizes="300px" className="rotate-90 scale-[2] object-cover" />
                 )}
               </span>
               <span className="t-small mt-3 block">{t(f.name)}</span>

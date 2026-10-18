@@ -32,7 +32,8 @@ export function Footer({ lang }: { lang: Lang }) {
             </div>
           </div>
 
-          <nav aria-label={t(ui.systems)} className="lg:col-span-3 lg:col-start-6">
+          {/* Below 1280px the spacer column goes to Contact, so the phone numbers fit on one line. */}
+          <nav aria-label={t(ui.systems)} className="lg:col-span-3 lg:col-start-5 xl:col-start-6">
             <h2 className="t-label text-mist">{t(ui.systems)}</h2>
             <ul className="mt-6 space-y-3">
               {systems.map((s) => (
@@ -60,14 +61,14 @@ export function Footer({ lang }: { lang: Lang }) {
             </ul>
           </nav>
 
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3 xl:col-span-2">
             <h2 className="t-label text-mist">{t({ en: "Contact", ar: "تواصل معنا" })}</h2>
             {/* Plain text while the details are samples; links once they're real. */}
             <ul className="mt-6 space-y-4 text-white/85">
               {contact.people.map((person) => (
                 <li key={person.phone}>
                   <span className="t-label block text-mist">{t(person.role)}</span>
-                  <a className="footer-link mt-1 inline-block" href={telHref(person.phone)} dir="ltr">
+                  <a className="footer-link mt-1 inline-block whitespace-nowrap" href={telHref(person.phone)} dir="ltr">
                     {person.phone}
                   </a>
                 </li>

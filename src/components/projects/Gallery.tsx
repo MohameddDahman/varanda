@@ -9,6 +9,7 @@ import { photos, type PhotoKey } from "@/content/photos";
 import { ShutterImage } from "@/components/motion/ShutterImage";
 import { scroller } from "@/components/transition/store";
 import { cn } from "@/lib/cn";
+import { coverSizes, DRIFT } from "@/lib/sizes";
 
 /**
  * Editorial gallery: landscape photos run wide, portrait photos pair up.
@@ -113,7 +114,7 @@ export function Gallery({ items }: { items: PhotoKey[] }) {
                   >
                     <ShutterImage
                       photo={p}
-                      sizes={half ? "(min-width: 768px) 45vw, 100vw" : "(min-width: 768px) 80vw, 100vw"}
+                      sizes={coverSizes(p.src, half ? "(min-width: 768px) 45vw, 100vw" : "(min-width: 768px) 80vw, 100vw", portrait ? 4 / 5 : 3 / 2, DRIFT)}
                       className={cn("w-full", portrait ? "aspect-[4/5]" : "aspect-[3/2]")}
                       imgClassName="transition-transform duration-[1.2s] ease-[var(--ease-out)] group-hover:scale-[1.03]"
                       cursor={lang === "ar" ? "تكبير" : "Enlarge"}

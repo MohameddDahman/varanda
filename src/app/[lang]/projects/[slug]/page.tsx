@@ -12,6 +12,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Gallery } from "@/components/projects/Gallery";
 import { NextProject } from "@/components/projects/NextProject";
+import { DRIFT, screenSizes } from "@/lib/sizes";
 
 export const dynamicParams = false;
 
@@ -39,7 +40,7 @@ export default async function ProjectPage({ params }: PageProps<"/[lang]/project
       <section className="theme-deep relative h-[100svh] min-h-[36rem]" data-header="dark">
         <ShutterImage
           photo={photos[project.cover]}
-          sizes="100vw"
+          sizes={screenSizes(photos[project.cover].src, 100, DRIFT)}
           trigger="enter"
           preload
           slats={10}

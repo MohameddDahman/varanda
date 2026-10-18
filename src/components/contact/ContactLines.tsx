@@ -35,7 +35,9 @@ export function ContactLines({ lang, className }: { lang: Lang; className?: stri
               <span className="contact-line-name t-h3">{t(person.name)}</span>
               {/* The number reads left to right; the block still aligns with the page direction. */}
               <span className="contact-line-value t-num">
-                <span dir="ltr">{person.phone}</span>
+                <span dir="ltr" className="whitespace-nowrap">
+                  {person.phone}
+                </span>
               </span>
               {(call || chat) && (
                 <span className="contact-line-actions">

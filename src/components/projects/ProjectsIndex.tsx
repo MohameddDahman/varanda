@@ -13,6 +13,7 @@ import { TLink } from "@/components/transition/TLink";
 import { ShutterImage } from "@/components/motion/ShutterImage";
 import { Arrow } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { coverSizes, DRIFT } from "@/lib/sizes";
 
 if (typeof window !== "undefined") gsap.registerPlugin(Flip);
 
@@ -162,7 +163,7 @@ export function ProjectsIndex() {
                 <div className="relative overflow-hidden">
                   <ShutterImage
                     photo={photos[p.cover]}
-                    sizes={i % 3 === 0 ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 33vw, 100vw"}
+                    sizes={coverSizes(photos[p.cover].src, `(min-width: 768px) ${[33, 66, 100][spans[i] - 1]}vw, 100vw`, [4 / 5, 16 / 10, 21 / 9][spans[i] - 1], DRIFT)}
                     className={cn("w-full transition-transform duration-700 group-hover:scale-[1.02]", spans[i] === 3 ? "aspect-[21/9]" : spans[i] === 2 ? "aspect-[16/10]" : "aspect-[4/5]")}
                   />
                 </div>

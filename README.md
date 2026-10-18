@@ -2,13 +2,14 @@
 
 Bilingual (English / العربية) portfolio site for **VARANDA — uPVC window & door systems. Made for life.**
 
-Built with **Next.js 16** (App Router, static generation), **GSAP 3.15** (ScrollTrigger, SplitText, Flip, CustomEase), **Lenis** smooth scrolling and **Convex** for contact requests. The profile section on Why uPVC is a scroll-scrubbed SVG drawing (no WebGL), so it stays smooth on low-end phones.
+Built with **Next.js 16** (App Router, static generation), **GSAP 3.15** (ScrollTrigger, SplitText, Flip, CustomEase), **Lenis** smooth scrolling and **Convex** for contact requests, projects and their photos, managed in a bilingual admin dashboard at `/admin` built for phones first. The profile section on Why uPVC is a scroll-scrubbed SVG drawing (no WebGL), so it stays smooth on low-end phones.
 
 ## Run it
 
 ```bash
 npm install
 npm run dev        # http://localhost:3000 → redirects to /en or /ar
+node scripts/convex-local.mjs   # the database, no Convex account needed (see below)
 npm run build      # production build (all pages are pre-rendered)
 npm run lint
 npm run test:ui    # UI tests (see below)
@@ -21,6 +22,7 @@ npm run test:ui    # UI tests (see below)
 - `pages.spec.ts` — every page in both languages: status code, `lang`/`dir`, the profile fonts actually loaded, no sideways overflow, no broken images, one `h1`, no console errors or animation warnings, and an axe accessibility scan (WCAG 2.2 AA) with zero violations.
 - `layout.spec.ts` — regressions found during the build: the header blur surviving the CSS minifier, hero labels staying on their door panel, the logo not mirroring in Arabic, paragraph tracking (open in English, word-spaced in Arabic), no doubled gaps between same-colour sections, contact details linked only once real, split text readable to screen readers, opening-system cards fitting above the rail's progress line on phones, photos staying sharp when a tall frame crops them, the profile section's copy fitting short laptop screens, Arabic pages not jumping when the Arabic font arrives, phone numbers staying on one line.
 - `interactions.spec.ts` — the door transition, the phone menu, the language switch, the projects filter, the wind-sound demo and the request form.
+- `admin.spec.ts` — the dashboard: locked behind the password, a request travelling from the contact form to the inbox and through its statuses, a project edit appearing on the site, a photo upload, and every screen fitting a phone and passing axe. It needs the database running and `ADMIN_PASSWORD` in `.env.local` (otherwise it skips), and cleans up after itself.
 
 Test the live site instead with `BASE_URL=https://varanda-kappa.vercel.app npm run test:ui` (PowerShell: `$env:BASE_URL="https://varanda-kappa.vercel.app"; npm run test:ui`). `npm run test:ui:report` opens the last report; failures keep a screenshot and a trace.
 
@@ -36,6 +38,7 @@ Test the live site instead with `BASE_URL=https://varanda-kappa.vercel.app npm r
 | `/[lang]/why-upvc` | Benefits with live demos (heat, sound, multi-point lock) and the scroll-driven profile cross-section |
 | `/[lang]/about` | Story, process, installation, warranty |
 | `/[lang]/contact` | Direct lines (call, WhatsApp, email), site-visit request form (Convex), service-area map |
+| `/admin` | The team's dashboard (password): site-visit requests, and the projects and photos shown on the site |
 
 Signature motion: every navigation closes and reopens a pair of sliding glass doors (`src/components/transition`), with the destination printed on the glass in both languages. The first visit in a session plays the logo intro on the doors.
 
@@ -46,28 +49,45 @@ All words, in both languages, live in `src/content/`:
 - `site.ts` — tagline, navigation and **contact details**: the people a visitor can call or message (`contact.people`: sales manager and supervisor, each with call and WhatsApp), the main line used in the footer and form fallback, and the email (none yet — the company address will be added later). Address, opening hours and `mapQuery` / `mapsUrl` are still `null`: fill them in and the contact page shows the branch with its Google map. Anything set to `null` is hidden.
 - `company.ts` — about text, the 6 process steps, warranty, uPVC benefits, profile section callouts.
 - `systems.ts` — the five product lines and the colour finishes.
-- `projects.ts` — projects (title, type, year, location, text, photos), the photo behind the home hero (`homeHero`) and the projects featured on the home page.
+- `projects.ts` — the built-in projects (title, type, year, location, text, photos), the photo behind the home hero (`homeHero`) and the projects featured on the home page. Once the database holds published projects, the site shows those instead, and they are edited in `/admin`; this list stays as the fallback and as what "Import the site's projects" copies in.
+- `admin.ts` — every word in the dashboard.
 - `photos.ts` — every photo with its English and Arabic alt text.
 
 Photos are in `src/assets/photos/` (already cropped, enhanced, graded and stripped of GPS data); `_manifest.json` there records each one's original file and whether it was AI-upscaled. To add a project: drop the graded photo there, register it in `photos.ts`, then add an entry to `projects.ts` — the page, sitemap and filters pick it up automatically.
 
 Originals from the client's Drive, the 2017–2025 photo archive (WeTransfer) and the profile are kept in `_source/` (git-ignored, not deployed). `_source/photo-work/process.py` re-creates every site photo from them: small photos are upscaled with Real-ESRGAN on the GPU, then each is straightened, cropped, has its shadows recovered and colour cast removed, and gets the site's grade. A photo whose subject sits off-centre can set a `focus` (CSS object-position) in `photos.ts` so wide crops keep it.
 
-## Connecting Convex
+## The database and the admin dashboard
 
-The contact form posts to a server action (`src/app/[lang]/contact/actions.ts`) that validates the request and stores it with the `inquiries:create` mutation. Until Convex is connected the form validates normally and then explains that online requests aren't switched on yet; once real contact details are in (`sample: false`), it also offers to send the same request on WhatsApp, pre-filled, so the site can go live before Convex is set up.
+Convex stores the site-visit requests from the contact form, and the projects and photos the team manages in `/admin`. Without a database (as on Vercel today) the site still works: the contact form explains that online requests aren't switched on yet (and offers WhatsApp), the projects come from `src/content/projects.ts`, and `/admin` says it isn't set up.
 
-1. `npx convex dev` — log in, create the project. This writes `CONVEX_DEPLOYMENT` and `NEXT_PUBLIC_CONVEX_URL` to `.env.local` and regenerates `convex/_generated/` (the committed copy was hand-written to match).
-2. Restart `npm run dev` and send a test request — it appears in the Convex dashboard under **inquiries**.
-3. For production: `npx convex deploy`, then add `NEXT_PUBLIC_CONVEX_URL` (production URL) to the hosting environment.
+**The dashboard** (`src/app/admin/`, phone-first, English and Arabic):
 
-There is intentionally no public query: submitted contact details can only be read in the Convex dashboard.
+- **Requests** — new ones counted on the tab bar, filters by status, search, one tap to call or WhatsApp (the message is pre-written in the visitor's language), a status (new → contacted → closed) and a private team note.
+- **Projects** — the site's order (move up/down), shown on the site or kept as a draft, featured on the home page (the first four), and an editor for both languages with photo uploads. Photos are resized in the browser to 2400px and lose their metadata (including a phone's GPS location) before upload. Saving updates the site at once.
+
+Sign-in is one shared password (`ADMIN_PASSWORD`) with a signed 14-day session cookie; wrong passwords are rate-limited (8 per 15 minutes per address). Browsers never talk to the database with admin rights: the Next server checks the session and calls Convex with `ADMIN_TOKEN`, which every admin function checks. Changing either secret signs everyone out.
+
+**Local development, no Convex account needed** — `node scripts/convex-local.mjs` runs Convex's account-free local backend and keeps everything it stores under `.convex-local/` and `.convex/` (git-ignored). The first run writes `CONVEX_DEPLOYMENT` and `NEXT_PUBLIC_CONVEX_URL` to `.env.local`. Then add to `.env.local` a password and a long random token, and give the database the same token:
+
+```bash
+node scripts/convex-local.mjs env set ADMIN_TOKEN <the same token>
+```
+
+Sign in at http://localhost:3000/admin, open Projects and press **Import the site's projects** to copy the 17 built-in projects and their photos in.
+
+**Connecting the client's Convex account (production)**
+
+1. `npx convex dev` — log in and create the project (replaces the local values in `.env.local`), then `npx convex deploy` for production.
+2. `npx convex env set ADMIN_TOKEN <token> --prod` — a long random value.
+3. In Vercel, add `NEXT_PUBLIC_CONVEX_URL` (the production URL), `ADMIN_PASSWORD` and `ADMIN_TOKEN` (the same token), then redeploy.
+4. Sign in at `/admin` and import the site's projects. Until a project is published there, the site keeps showing the built-in list.
 
 ## Deploying
 
 Deployed on Vercel as the `varanda` project, connected to this GitHub repo: every push to `main` deploys to production (currently https://varanda-kappa.vercel.app).
 
-At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-domain.com`) so canonical links, the sitemap and share images use it. Until it is set the site tells search engines not to index it (a `noindex` tag and no sitemap in `robots.txt`), so the preview with sample details stays out of search results. Add `NEXT_PUBLIC_CONVEX_URL` once Convex is connected.
+At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-domain.com`) so canonical links, the sitemap and share images use it. Until it is set the site tells search engines not to index it (a `noindex` tag and no sitemap in `robots.txt`), so the preview with sample details stays out of search results. Once Convex is connected, add `NEXT_PUBLIC_CONVEX_URL`, `ADMIN_PASSWORD` and `ADMIN_TOKEN` (see above).
 
 ## Before launch — needed from the client
 
@@ -88,5 +108,7 @@ At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-dom
 - Logo: `src/components/brand/logo-paths.ts` holds the exact vector paths from the client's `Varanda_Logo.pdf`; `Logo.tsx` builds the mark, the wordmark and the full stacked lock-up (used in the intro and share image) from them. Brand red is the logo's `#D71920`.
 - Motion respects `prefers-reduced-motion`: no smooth scrolling, pins or door transitions, and every animated section has a readable static state.
 - `?pin=transform` (dev only) switches ScrollTrigger pins to transforms for screenshot tools.
+- Projects reach pages only through `src/lib/site-projects.ts` (`getSiteProjects` and friends): published projects from the database, cached under the `projects` tag, which every admin save expires (`updateTag`), or the built-in list. Project pages are pre-rendered and new slugs render on their first visit (`dynamicParams`).
+- Admin code: pages in `src/app/admin/` (their own root layout, outside `[lang]`), server actions in `src/app/admin/actions.ts`, session and Convex helpers in `src/lib/admin/`, Convex functions in `convex/admin/`.
 - Image `sizes`: the browser picks a file by width alone, but `object-fit: cover` scales a photo to its frame's height when the photo is wider than the frame. Use `coverSizes` (fixed-shape frames) or `screenSizes` (full-screen frames) from `src/lib/sizes.ts` for cropped photos, or phones get a file half the size they need.
 - The Arabic font's files are preloaded on every page (about 35KB). Without that, Arabic text first renders in the narrower fallback and the page jumps when Tajawal arrives.

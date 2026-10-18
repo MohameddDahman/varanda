@@ -64,7 +64,7 @@ export function HomeProjects({ items }: { items: FeaturedProject[] }) {
           {items.map((p, i) => (
             <article key={p.slug} data-stack-card className="stack-card" style={{ zIndex: i + 1 }}>
               <div data-stack-inner className="stack-inner">
-                <TLink href={href(`/projects/${p.slug}`)} className="stack-link" data-cursor={t(ui.view)}>
+                <TLink href={href(`/projects/${p.slug}`)} label={p.title} className="stack-link" data-cursor={t(ui.view)}>
                   <ShutterImage
                     photo={p.photo}
                     sizes={`(min-width: 1680px) 1600px, ${screenSizes(p.photo.src, 78, DRIFT)}`}

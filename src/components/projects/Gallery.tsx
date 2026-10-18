@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { gsap } from "@/lib/gsap";
 import { useLang } from "@/components/providers/LangProvider";
-import { photos, type PhotoKey } from "@/content/photos";
+import type { Photo } from "@/content/photos";
 import { ShutterImage } from "@/components/motion/ShutterImage";
 import { scroller } from "@/components/transition/store";
 import { cn } from "@/lib/cn";
@@ -15,7 +15,7 @@ import { coverSizes, DRIFT } from "@/lib/sizes";
  * Editorial gallery: landscape photos run wide, portrait photos pair up.
  * Any photo opens a full-screen viewer (arrows, Escape, swipe).
  */
-export function Gallery({ items }: { items: PhotoKey[] }) {
+export function Gallery({ items }: { items: Photo[] }) {
   const { lang, t } = useLang();
   const [open, setOpen] = useState<number | null>(null);
   const viewer = useRef<HTMLDivElement>(null);
@@ -70,7 +70,7 @@ export function Gallery({ items }: { items: PhotoKey[] }) {
   }, [open, close, go, lang]);
 
   // Pair consecutive portrait photos; landscapes run full width.
-  const isPortrait = (i: number) => photos[items[i]].src.height > photos[items[i]].src.width;
+  const isPortrait = (i: number) => items[i].src.height > items[i].src.width;
   const rows: number[][] = [];
   items.forEach((_, i) => {
     const prev = rows[rows.length - 1];
@@ -101,12 +101,11 @@ export function Gallery({ items }: { items: PhotoKey[] }) {
               )}
             >
               {row.map((i) => {
-                const key = items[i];
-                const p = photos[key];
+                const p = items[i];
                 const portrait = isPortrait(i);
                 return (
                   <button
-                    key={key}
+                    key={p.src.src}
                     type="button"
                     onClick={openAt(i)}
                     className="group block w-full text-start"
@@ -146,9 +145,9 @@ export function Gallery({ items }: { items: PhotoKey[] }) {
         >
           <div className="relative h-full w-full">
             <Image
-              key={items[open]}
-              src={photos[items[open]].src}
-              alt={t(photos[items[open]].alt)}
+              key={items[open].src.src}
+              src={items[open].src}
+              alt={t(items[open].alt)}
               fill
               sizes="100vw"
               quality={85}
@@ -160,7 +159,7 @@ export function Gallery({ items }: { items: PhotoKey[] }) {
               <span dir="ltr">
                 {String(open + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
               </span>
-              <span className="ms-4 hidden sm:inline">{t(photos[items[open]].alt)}</span>
+              <span className="ms-4 hidden sm:inline">{t(items[open].alt)}</span>
             </p>
             <div className="flex gap-2">
               <button type="button" className="viewer-btn" onClick={() => go(-1)} aria-label={lang === "ar" ? "الصورة السابقة" : "Previous photo"}>

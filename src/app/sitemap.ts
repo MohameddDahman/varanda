@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 import { locales } from "@/i18n/config";
 import { site } from "@/content/site";
-import { projects } from "@/content/projects";
+import { getSiteProjects } from "@/lib/site-projects";
 import { systems } from "@/content/systems";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const projects = await getSiteProjects();
   const routes = [
     "",
     "/systems",

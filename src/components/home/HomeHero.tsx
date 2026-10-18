@@ -21,7 +21,7 @@ const WORDS = {
  * Varanda installation. The headline straddles the meeting stile; scrolling
  * slides the panels apart and the clear view takes over.
  */
-export function HomeHero({ photo, project, caption }: { photo: Photo; project: string; caption: L }) {
+export function HomeHero({ photo, project, caption }: { photo: Photo; project: string | null; caption: L }) {
   const { lang, t, href, rtl } = useLang();
   const root = useRef<HTMLElement>(null);
   const [first, second] = WORDS[lang];
@@ -164,7 +164,7 @@ export function HomeHero({ photo, project, caption }: { photo: Photo; project: s
       </div>
 
       <div data-caption className="hero-caption wrap">
-        <TLink href={href(`/projects/${project}`)} className="hero-caption-link" data-cursor={lang === "ar" ? "عرض" : "View"}>
+        <TLink href={href(project ? `/projects/${project}` : "/projects")} className="hero-caption-link" data-cursor={lang === "ar" ? "عرض" : "View"}>
           <span className="t-label text-red">/</span>
           <span className="t-label">{t(caption)}</span>
         </TLink>

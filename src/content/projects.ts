@@ -1,5 +1,5 @@
 import type { L } from "@/i18n/config";
-import type { PhotoKey } from "./photos";
+import type { Photo, PhotoKey } from "./photos";
 import type { SystemSlug } from "./systems";
 
 export type ProjectType = "residential" | "commercial" | "education" | "outdoor";
@@ -17,6 +17,17 @@ export type Project = {
   systems: SystemSlug[];
   cover: PhotoKey;
   gallery: PhotoKey[];
+};
+
+/**
+ * A project as pages receive it, with its photos resolved. It comes from the database once one
+ * is connected and holds projects (see src/lib/site-projects.ts), otherwise from the list below.
+ */
+export type SiteProject = Omit<Project, "cover" | "gallery"> & {
+  /** Stacked on the home page (the first four). */
+  featured: boolean;
+  cover: Photo;
+  gallery: Photo[];
 };
 
 export const projectTypes: Record<ProjectType, L> = {

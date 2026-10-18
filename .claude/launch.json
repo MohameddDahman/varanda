@@ -8,6 +8,12 @@
       "port": 3000
     },
     {
+      "name": "convex-local",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/convex-local.mjs"],
+      "port": 3210
+    },
+    {
       "name": "varanda-prod",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start", "--", "--port", "3100"],

@@ -4,15 +4,14 @@ import Image from "next/image";
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useLang } from "@/components/providers/LangProvider";
-import { photos } from "@/content/photos";
 import { screenSizes } from "@/lib/sizes";
-import { projectTypes, type Project } from "@/content/projects";
+import { projectTypes, type SiteProject } from "@/content/projects";
 import { ui } from "@/content/site";
 import { TLink } from "@/components/transition/TLink";
 import { Arrow } from "@/components/ui/Button";
 
 /** The next project waits behind a closing frame that opens as you arrive. */
-export function NextProject({ project }: { project: Project }) {
+export function NextProject({ project }: { project: SiteProject }) {
   const { t, href } = useLang();
   const root = useRef<HTMLElement>(null);
 
@@ -42,10 +41,10 @@ export function NextProject({ project }: { project: Project }) {
 
   return (
     <section ref={root} className="theme-deep" data-header="dark" aria-label={t(ui.nextProject)}>
-      <TLink href={href(`/projects/${project.slug}`)} className="group relative block h-[100svh] min-h-[32rem]" data-cursor={t(ui.next)}>
+      <TLink href={href(`/projects/${project.slug}`)} label={project.title} className="group relative block h-[100svh] min-h-[32rem]" data-cursor={t(ui.next)}>
         <div data-next-frame className="absolute inset-0 overflow-hidden">
           <div data-next-img className="absolute inset-0">
-            <Image src={photos[project.cover].src} alt="" fill sizes={screenSizes(photos[project.cover].src, 100, 1.15)} placeholder="blur" className="object-cover" style={{ objectPosition: photos[project.cover].focus }} />
+            <Image src={project.cover.src} alt="" fill sizes={screenSizes(project.cover.src, 100, 1.15)} placeholder="blur" className="object-cover" style={{ objectPosition: project.cover.focus }} />
           </div>
           <span className="absolute inset-0 bg-[linear-gradient(180deg,rgb(4_12_23/0.55),rgb(4_12_23/0.25)_40%,rgb(4_12_23/0.8))]" />
         </div>

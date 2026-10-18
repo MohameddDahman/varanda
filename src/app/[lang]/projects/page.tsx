@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { isLang } from "@/i18n/config";
-import { projects, sitePhotos } from "@/content/projects";
+import { sitePhotos } from "@/content/projects";
+import { getSiteProjects } from "@/lib/site-projects";
 import { pageMeta } from "@/lib/meta";
 import { PageHero } from "@/components/ui/PageHero";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -27,19 +28,21 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/projects">
 export default async function ProjectsPage({ params }: PageProps<"/[lang]/projects">) {
   const { lang } = await params;
   if (!isLang(lang)) notFound();
+  // Only what the index shows, so the client bundle doesn't carry every project's text.
+  const items = (await getSiteProjects()).map(({ slug, title, type, year, systems, cover }) => ({ slug, title, type, year, systems, cover }));
 
   return (
     <>
       <PageHero
         eyebrow={lang === "ar" ? "أعمالنا" : "Our work"}
         title={copy.title[lang]}
-        count={projects.length}
+        count={items.length}
         intro={copy.intro[lang]}
       />
 
       <section className="theme-light pb-[var(--section-y)]" data-header="light">
         <div className="wrap">
-          <ProjectsIndex />
+          <ProjectsIndex items={items} />
         </div>
       </section>
 

@@ -1,0 +1,38 @@
+/* Brand tokens, shared by the site (globals.css) and the admin (admin/admin.css). */
+
+/* Brand palette only — Tailwind's default colours are removed so nothing
+   off-brand can creep in. Navy + red come from the VARANDA identity. */
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: #ffffff;
+  --color-black: #02070e;
+
+  --color-navy-950: #040c17;
+  --color-navy-900: #081a2f;
+  --color-navy-800: #0d2440;
+  --color-navy-700: #01274b;
+  --color-navy-600: #17375c;
+  --color-red: #d71920;
+  --color-red-deep: #b8121a;
+  /* Brand red lifted for small text on navy, where #d71920 falls below 4.5:1. */
+  --color-red-bright: #ff4f57;
+  --color-paper: #f2f3f5;
+  --color-paper-2: #e6e9ee;
+  --color-ink: #081a2f;
+  --color-ink-2: #4a5568;
+  --color-mist: #a3b1c6;
+  --color-steel: #6b7a90;
+
+  /* The company profile's typefaces. */
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-label: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: var(--font-tajawal), var(--font-montserrat), system-ui, sans-serif;
+
+  --ease-door: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --breakpoint-xs: 30rem;
+}

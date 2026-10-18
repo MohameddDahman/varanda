@@ -5,8 +5,7 @@ import { useMemo, useRef, useState } from "react";
 import { Flip } from "gsap/Flip";
 import { gsap, ScrollTrigger, useGSAP, reducedMotion } from "@/lib/gsap";
 import { useLang } from "@/components/providers/LangProvider";
-import { projects, projectTypes, type ProjectType } from "@/content/projects";
-import { photos } from "@/content/photos";
+import { projectTypes, type ProjectType, type SiteProject } from "@/content/projects";
 import { getSystem } from "@/content/systems";
 import { ui } from "@/content/site";
 import { TLink } from "@/components/transition/TLink";
@@ -28,6 +27,9 @@ function gridSpans(count: number) {
   return spans;
 }
 
+/** What the index shows of each project. */
+export type IndexProject = Pick<SiteProject, "slug" | "title" | "type" | "year" | "systems" | "cover">;
+
 type Filter = "all" | ProjectType;
 type View = "grid" | "list";
 
@@ -35,7 +37,7 @@ type View = "grid" | "list";
  * Filterable project index. Changing the filter or the view re-lays the
  * cards with GSAP Flip so they glide to their new places instead of jumping.
  */
-export function ProjectsIndex() {
+export function ProjectsIndex({ items }: { items: IndexProject[] }) {
   const { lang, t, href } = useLang();
   const root = useRef<HTMLDivElement>(null);
   const preview = useRef<HTMLDivElement>(null);
@@ -45,10 +47,10 @@ export function ProjectsIndex() {
   const flipState = useRef<Flip.FlipState | null>(null);
 
   const counts = useMemo(() => {
-    const c: Record<Filter, number> = { all: projects.length, residential: 0, commercial: 0, education: 0, outdoor: 0 };
-    projects.forEach((p) => c[p.type]++);
+    const c: Record<Filter, number> = { all: items.length, residential: 0, commercial: 0, education: 0, outdoor: 0 };
+    items.forEach((p) => c[p.type]++);
     return c;
-  }, []);
+  }, [items]);
 
   const capture = () => {
     if (reducedMotion() || !root.current) return;
@@ -107,7 +109,7 @@ export function ProjectsIndex() {
     { dependencies: [hovered, view], scope: root },
   );
 
-  const visible = projects.filter((p) => filter === "all" || p.type === filter);
+  const visible = items.filter((p) => filter === "all" || p.type === filter);
   const spans = gridSpans(visible.length);
   const filters: Filter[] = ["all", "residential", "commercial", "education", "outdoor"];
 
@@ -159,11 +161,11 @@ export function ProjectsIndex() {
         <ul className="projects-grid mt-12">
           {visible.map((p, i) => (
             <li key={p.slug} data-flip data-flip-id={p.slug} className="projects-grid-item" style={{ "--span": spans[i] } as React.CSSProperties}>
-              <TLink href={href(`/projects/${p.slug}`)} className="group block" data-cursor={t(ui.view)}>
+              <TLink href={href(`/projects/${p.slug}`)} label={p.title} className="group block" data-cursor={t(ui.view)}>
                 <div className="relative overflow-hidden">
                   <ShutterImage
-                    photo={photos[p.cover]}
-                    sizes={coverSizes(photos[p.cover].src, `(min-width: 768px) ${[33, 66, 100][spans[i] - 1]}vw, 100vw`, [4 / 5, 16 / 10, 21 / 9][spans[i] - 1], DRIFT)}
+                    photo={p.cover}
+                    sizes={coverSizes(p.cover.src, `(min-width: 768px) ${[33, 66, 100][spans[i] - 1]}vw, 100vw`, [4 / 5, 16 / 10, 21 / 9][spans[i] - 1], DRIFT)}
                     className={cn("w-full transition-transform duration-700 group-hover:scale-[1.02]", spans[i] === 3 ? "aspect-[21/9]" : spans[i] === 2 ? "aspect-[16/10]" : "aspect-[4/5]")}
                   />
                 </div>
@@ -188,6 +190,7 @@ export function ProjectsIndex() {
             <li key={p.slug} data-flip data-flip-id={p.slug} className="border-b border-[var(--line)]">
               <TLink
                 href={href(`/projects/${p.slug}`)}
+                label={p.title}
                 className="projects-row group"
                 onPointerEnter={() => setHovered(p.slug)}
                 onFocus={() => setHovered(p.slug)}
@@ -209,9 +212,9 @@ export function ProjectsIndex() {
 
       {/* Pointer-following preview for list view */}
       <div ref={preview} className="projects-preview" aria-hidden="true">
-        {projects.map((p) => (
+        {items.map((p) => (
           <div key={p.slug} className={cn("absolute inset-0 transition-opacity duration-300", hovered === p.slug ? "opacity-100" : "opacity-0")}>
-            <Image src={photos[p.cover].src} alt="" fill sizes="340px" className="object-cover" style={{ objectPosition: photos[p.cover].focus }} />
+            <Image src={p.cover.src} alt="" fill sizes="340px" className="object-cover" style={{ objectPosition: p.cover.focus }} />
           </div>
         ))}
       </div>

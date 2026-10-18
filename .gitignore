@@ -46,6 +46,8 @@ next-env.d.ts
 
 # convex
 .convex/
+# account-free local backend (scripts/convex-local.mjs)
+.convex-local/
 
 # UI test output
 /tests/ui/report/

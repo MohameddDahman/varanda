@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 import { isLang, path } from "@/i18n/config";
-import { getProject, projects, projectTypes } from "@/content/projects";
+import { projectTypes } from "@/content/projects";
 import { getSystem } from "@/content/systems";
-import { photos } from "@/content/photos";
 import { ui } from "@/content/site";
 import { pageMeta } from "@/lib/meta";
 import { TLink } from "@/components/transition/TLink";
@@ -13,34 +12,37 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Gallery } from "@/components/projects/Gallery";
 import { NextProject } from "@/components/projects/NextProject";
 import { DRIFT, screenSizes } from "@/lib/sizes";
+import { getSiteProject, getSiteProjects } from "@/lib/site-projects";
 
-export const dynamicParams = false;
+// Projects added in the admin after a build are rendered on their first visit, then cached.
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return (await getSiteProjects()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/projects/[slug]">) {
   const { lang, slug } = await params;
-  const project = getProject(slug);
+  const project = await getSiteProject(slug);
   if (!isLang(lang) || !project) return {};
   return pageMeta(lang, `/projects/${slug}`, project.title[lang], project.summary[lang]);
 }
 
 export default async function ProjectPage({ params }: PageProps<"/[lang]/projects/[slug]">) {
   const { lang, slug } = await params;
-  const project = getProject(slug);
+  const all = await getSiteProjects();
+  const project = all.find((p) => p.slug === slug);
   if (!isLang(lang) || !project) notFound();
   const t = (s: { en: string; ar: string }) => s[lang];
-  const next = projects[(projects.indexOf(project) + 1) % projects.length];
+  const next = all[(all.indexOf(project) + 1) % all.length];
   const photoCount = project.gallery.length + 1;
 
   return (
     <>
       <section className="theme-deep relative h-[100svh] min-h-[36rem]" data-header="dark">
         <ShutterImage
-          photo={photos[project.cover]}
-          sizes={screenSizes(photos[project.cover].src, 100, DRIFT)}
+          photo={project.cover}
+          sizes={screenSizes(project.cover.src, 100, DRIFT)}
           trigger="enter"
           preload
           slats={10}
@@ -76,8 +78,8 @@ export default async function ProjectPage({ params }: PageProps<"/[lang]/project
               {t(project.summary)}
             </SplitReveal>
             <Reveal items="p" className="mt-10 max-w-[56ch] space-y-6">
-              {project.body.map((para) => (
-                <p key={para.en} className="t-lead text-ink-2">
+              {project.body.map((para, i) => (
+                <p key={i} className="t-lead text-ink-2">
                   {t(para)}
                 </p>
               ))}
@@ -130,7 +132,7 @@ export default async function ProjectPage({ params }: PageProps<"/[lang]/project
         </section>
       )}
 
-      <NextProject project={next} />
+      {next !== project && <NextProject project={next} />}
     </>
   );
 }

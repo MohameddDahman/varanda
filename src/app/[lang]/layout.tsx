@@ -1,34 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat, Tajawal } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
 
 import { dirOf, isLang, locales } from "@/i18n/config";
 import { site, ui } from "@/content/site";
 import { cn } from "@/lib/cn";
+import { montserrat, tajawal } from "@/lib/fonts";
 import { LangProvider } from "@/components/providers/LangProvider";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { TransitionProvider } from "@/components/transition/TransitionProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-
-// The company profile's typefaces: Montserrat for English (headings, text and the
-// letter-spaced labels), Tajawal for Arabic.
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-montserrat",
-  display: "swap",
-});
-
-// Only the Arabic files are preloaded (about 9KB a weight). Without them Arabic text first renders
-// in the fallback font, which runs narrower, and pages jump as Tajawal swaps in. Tajawal's Latin
-// letters still load on demand.
-const tajawal = Tajawal({
-  subsets: ["arabic"],
-  weight: ["300", "400", "500", "700"],
-  variable: "--font-tajawal",
-  display: "swap",
-});
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));

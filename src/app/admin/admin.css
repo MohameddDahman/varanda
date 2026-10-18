@@ -1,0 +1,338 @@
+@import "tailwindcss";
+@import "../theme.css";
+
+/* The dashboard: brand colours and type from the site, plain working layouts. Square corners
+   and hairline frames echo the site; every control is at least 44px tall for thumbs. */
+
+:root {
+  --line: rgb(8 26 47 / 0.12);
+  --line-strong: rgb(8 26 47 / 0.24);
+  --tabbar-h: 4rem;
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :lang(ar) body {
+    font-family: var(--font-arabic);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-red);
+    outline-offset: 2px;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  button:not(:disabled),
+  [role="button"],
+  label[for] {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .adm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding-inline: 1.1rem;
+    border: 1px solid transparent;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .adm-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .adm-btn-primary {
+    background: var(--color-red);
+    color: var(--color-white);
+  }
+
+  .adm-btn-primary:not(:disabled):hover {
+    background: var(--color-red-deep);
+  }
+
+  .adm-btn-dark {
+    background: var(--color-navy-900);
+    color: var(--color-white);
+  }
+
+  .adm-btn-dark:not(:disabled):hover {
+    background: var(--color-navy-700);
+  }
+
+  .adm-btn-outline {
+    background: var(--color-white);
+    border-color: var(--line-strong);
+  }
+
+  .adm-btn-outline:not(:disabled):hover {
+    border-color: var(--color-ink);
+  }
+
+  .adm-btn-ghost {
+    color: var(--color-ink-2);
+  }
+
+  .adm-btn-ghost:not(:disabled):hover {
+    background: var(--color-paper-2);
+    color: var(--color-ink);
+  }
+
+  .adm-btn-danger {
+    background: var(--color-white);
+    border-color: rgb(184 18 26 / 0.35);
+    color: var(--color-red-deep);
+  }
+
+  .adm-btn-danger:not(:disabled):hover {
+    border-color: var(--color-red-deep);
+  }
+
+  /* Square icon-only button. */
+  .adm-icon-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: none;
+    color: var(--color-ink-2);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .adm-icon-btn:not(:disabled):hover {
+    background: var(--color-paper-2);
+    color: var(--color-ink);
+  }
+
+  .adm-icon-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .adm-card {
+    background: var(--color-white);
+    border: 1px solid var(--line);
+  }
+
+  .adm-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .adm-hint {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+  }
+
+  /* 16px text so phones don't zoom into fields. */
+  .adm-input {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--line-strong);
+    background: var(--color-white);
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: border-color 0.2s ease;
+  }
+
+  .adm-input:hover {
+    border-color: rgb(8 26 47 / 0.4);
+  }
+
+  .adm-input:focus {
+    border-color: var(--color-ink);
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(215 25 32 / 0.18);
+  }
+
+  .adm-input[aria-invalid="true"] {
+    border-color: var(--color-red-deep);
+  }
+
+  textarea.adm-input {
+    min-height: 6rem;
+    resize: vertical;
+  }
+
+  .adm-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .adm-pill-new {
+    background: rgb(215 25 32 / 0.1);
+    color: var(--color-red-deep);
+  }
+
+  .adm-pill-contacted {
+    background: rgb(23 55 92 / 0.1);
+    color: var(--color-navy-600);
+  }
+
+  .adm-pill-closed,
+  .adm-pill-draft {
+    background: var(--color-paper-2);
+    color: var(--color-ink-2);
+  }
+
+  .adm-pill-live {
+    background: rgb(8 26 47 / 0.08);
+    color: var(--color-navy-900);
+  }
+
+  /* Segmented control: the status switch. */
+  .adm-segment {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    border: 1px solid var(--line-strong);
+    background: var(--color-white);
+  }
+
+  .adm-segment button {
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-ink-2);
+  }
+
+  .adm-segment button + button {
+    border-inline-start: 1px solid var(--line-strong);
+  }
+
+  .adm-segment button[aria-pressed="true"] {
+    background: var(--color-navy-900);
+    color: var(--color-white);
+  }
+
+  /* On/off switch. */
+  .adm-switch {
+    position: relative;
+    width: 2.75rem;
+    height: 1.5rem;
+    flex: none;
+    background: var(--line-strong);
+    transition: background-color 0.2s ease;
+  }
+
+  .adm-switch::after {
+    content: "";
+    position: absolute;
+    top: 0.1875rem;
+    inset-inline-start: 0.1875rem;
+    width: 1.125rem;
+    height: 1.125rem;
+    background: var(--color-white);
+    transition: translate 0.2s var(--ease-out);
+  }
+
+  .adm-switch[data-on="true"] {
+    background: var(--color-navy-900);
+  }
+
+  .adm-switch[data-on="true"]::after {
+    translate: 1.25rem 0;
+  }
+
+  [dir="rtl"] .adm-switch[data-on="true"]::after {
+    translate: -1.25rem 0;
+  }
+
+  /* Mobile bottom tab bar, clear of the iPhone home indicator. */
+  .adm-tabbar {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 30;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    border-top: 1px solid var(--line);
+    background: rgb(255 255 255 / 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .adm-tab {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-ink-2);
+  }
+
+  .adm-tab[aria-current="page"] {
+    color: var(--color-navy-900);
+  }
+
+  .adm-tab[aria-current="page"]::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    inset-inline: 30%;
+    height: 2px;
+    background: var(--color-red);
+  }
+
+  .adm-badge {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    padding-inline: 0.3rem;
+    background: var(--color-red);
+    color: var(--color-white);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+}

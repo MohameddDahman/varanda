@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { isLang, path, type L, type Lang } from "@/i18n/config";
 import { getSystem, systems, type SystemCategory } from "@/content/systems";
-import { projects, projectTypes } from "@/content/projects";
+import { projectTypes } from "@/content/projects";
+import { getSiteProjects } from "@/lib/site-projects";
 import { photos } from "@/content/photos";
 import { ui } from "@/content/site";
 import { pageMeta } from "@/lib/meta";
@@ -41,7 +42,7 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
   const system = getSystem(slug);
   if (!isLang(lang) || !system) notFound();
   const t = T(lang);
-  const related = projects.filter((p) => p.systems.includes(system.slug));
+  const related = (await getSiteProjects()).filter((p) => p.systems.includes(system.slug));
   const RELATED_MAX = 6;
   const others = systems.filter((s) => s.slug !== system.slug);
   const lists = [
@@ -138,8 +139,8 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
             <ul className="mt-10 grid gap-10 md:grid-cols-3">
               {related.slice(0, RELATED_MAX).map((p) => (
                 <li key={p.slug}>
-                  <TLink href={path(lang, `/projects/${p.slug}`)} className="group block" data-cursor={t(ui.view)}>
-                    <ShutterImage photo={photos[p.cover]} sizes={coverSizes(photos[p.cover].src, "(min-width: 768px) 30vw, 100vw", 4 / 3, DRIFT)} className="aspect-[4/3] w-full" />
+                  <TLink href={path(lang, `/projects/${p.slug}`)} label={p.title} className="group block" data-cursor={t(ui.view)}>
+                    <ShutterImage photo={p.cover} sizes={coverSizes(p.cover.src, "(min-width: 768px) 30vw, 100vw", 4 / 3, DRIFT)} className="aspect-[4/3] w-full" />
                     <h3 className="t-h3 mt-5">{t(p.title)}</h3>
                     <p className="t-label mt-2 text-ink-2">
                       {t(projectTypes[p.type])} · {p.year}

@@ -4,9 +4,8 @@ import { ConvexError, v } from "convex/values";
 const limits = { name: 120, phone: 32, email: 160, area: 160, message: 3000 } as const;
 
 /**
- * Store a site-visit request. Deliberately the only public function: there
- * is no public query, so submitted contact details can't be read back from
- * the browser. Review inquiries in the Convex dashboard.
+ * Store a site-visit request. The only function here that needs no admin token: requests are
+ * read back only through convex/admin/*, which the team reaches through /admin.
  */
 export const create = mutation({
   args: {

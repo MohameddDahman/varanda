@@ -108,17 +108,56 @@ test("the request form explains what's missing and what happens next", async ({ 
   await expect(page.locator(".form-notice, .contact-done").first()).toBeVisible({ timeout: 15_000 });
 });
 
-test("the lock demo locks, opens and tilts on request", async ({ page }) => {
+test("the lock demo opens the sash on its side hinges, tilts it on its bottom ones, and locks", async ({ page }) => {
   await open(page, "/en/systems/hardware");
   const lock = page.locator(".lock-mech");
   await lock.scrollIntoViewIfNeeded();
-  const keeperRed = () => lock.locator("rect[data-keeper]").first().evaluate((el) => getComputedStyle(el).fill);
+  const keeper = () => lock.locator("[data-keeper-3d]").first().evaluate((el) => getComputedStyle(el).backgroundColor);
+  // The sash's two movements, in degrees: turned about its side (rotateY), leaned about its bottom (rotateX).
+  const sash = () =>
+    lock.evaluate((root) => {
+      const m = (sel: string) => new DOMMatrix(getComputedStyle(root.querySelector(sel)!).transform);
+      const turn = m("[data-sash-turn]");
+      const tilt = m("[data-sash-tilt]");
+      const deg = (r: number) => Math.round((r * 180) / Math.PI) || 0; // no -0
+      return { turn: deg(Math.atan2(-turn.m13, turn.m11)), tilt: deg(Math.atan2(tilt.m23, tilt.m22)) };
+    });
+
   await lock.getByRole("button", { name: "Open" }).click();
   await expect(lock.getByRole("button", { name: "Open" })).toHaveAttribute("aria-pressed", "true");
-  await expect.poll(keeperRed).not.toBe("rgb(215, 25, 32)");
+  await expect.poll(sash).toEqual({ turn: -30, tilt: 0 });
+  expect(await keeper()).not.toBe("rgb(215, 25, 32)");
+
+  // Tilt closes the open sash first, then leans it in from the top.
+  await lock.getByRole("button", { name: "Tilt" }).click();
+  await expect.poll(sash).toEqual({ turn: 0, tilt: -13 });
+  await expect(lock.locator("[aria-live]")).toContainText("bottom hinges");
+
   await lock.getByRole("button", { name: "Locked" }).click();
-  await expect.poll(keeperRed, { timeout: 4000 }).toBe("rgb(215, 25, 32)");
+  await expect.poll(sash).toEqual({ turn: 0, tilt: 0 });
+  await expect.poll(keeper).toBe("rgb(215, 25, 32)");
   await expect(lock.locator("[aria-live]")).toContainText("four locking pins");
+});
+
+test("looping animations rest while they are off screen", async ({ page }) => {
+  await open(page, "/en/why-upvc");
+  await page.waitForTimeout(1500);
+  // At the top of the page the closing marquee and the demos' loops are all out of view: nothing
+  // should be restyled frame after frame.
+  const restyles = await page.evaluate(
+    () =>
+      new Promise<number>((resolve) => {
+        let n = 0;
+        const mo = new MutationObserver((list) => (n += list.length));
+        mo.observe(document.body, { attributes: true, attributeFilter: ["style"], subtree: true });
+        setTimeout(() => {
+          mo.disconnect();
+          resolve(n);
+        }, 800);
+      }),
+  );
+  expect(restyles).toBeLessThan(3);
+  await expect(page.locator(".demo-acoustic")).toHaveAttribute("data-offscreen", "");
 });
 
 test("the thermal demo compares an ordinary window with uPVC", async ({ page }) => {

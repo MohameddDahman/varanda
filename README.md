@@ -2,7 +2,7 @@
 
 Bilingual (English / العربية) portfolio site for **VARANDA — uPVC window & door systems. Made for life.**
 
-Built with **Next.js 16** (App Router, static generation), **GSAP 3.15** (ScrollTrigger, SplitText, Flip, CustomEase), **Lenis** smooth scrolling and **Convex** for contact requests, projects and their photos, managed in a bilingual admin dashboard at `/admin` built for phones first. The profile section on Why uPVC is a scroll-scrubbed SVG drawing (no WebGL), so it stays smooth on low-end phones.
+Built with **Next.js 16** (App Router, static generation), **GSAP 3.15** (ScrollTrigger, SplitText, Flip, CustomEase), **Lenis** smooth scrolling and **Convex** for contact requests, projects and their photos, managed in a bilingual admin dashboard at `/admin` built for phones first. The 3D pieces use no WebGL, so they stay smooth on low-end phones. On Why uPVC, the profile section is a cut sample of the frame extruded into 3D as static SVG and scrubbed by scroll. The lock demo is a CSS 3D tilt & turn window whose sash swings on its side hinges (open) or leans in on its bottom ones (tilt).
 
 ## Run it
 
@@ -21,7 +21,7 @@ npm run test:ui    # UI tests (see below)
 
 - `pages.spec.ts` — every page in both languages: status code, `lang`/`dir`, the profile fonts actually loaded, no sideways overflow, no broken images, one `h1`, no console errors or animation warnings, and an axe accessibility scan (WCAG 2.2 AA) with zero violations.
 - `layout.spec.ts` — regressions found during the build: the header blur surviving the CSS minifier, hero labels staying on their door panel, the logo not mirroring in Arabic, paragraph tracking (open in English, word-spaced in Arabic), no doubled gaps between same-colour sections, contact details linked only once real, split text readable to screen readers, opening-system cards fitting above the rail's progress line on phones, photos staying sharp when a tall frame crops them, the profile section's copy fitting short laptop screens, Arabic pages not jumping when the Arabic font arrives, phone numbers staying on one line.
-- `interactions.spec.ts` — the door transition, the phone menu, the language switch, the projects filter, the wind-sound demo and the request form.
+- `interactions.spec.ts` — the door transition, the phone menu, the language switch, the projects filter, the wind-sound demo, the request form, the lock demo (open turns the sash on its side, tilt leans it on its bottom edge, and it closes in between), and looping animations resting while off screen.
 - `admin.spec.ts` — the dashboard: locked behind the password, a request travelling from the contact form to the inbox and through its statuses, a project edit appearing on the site, a photo upload, and every screen fitting a phone and passing axe. It needs the database running and `ADMIN_PASSWORD` in `.env.local` (otherwise it skips), and cleans up after itself.
 
 Test the live site instead with `BASE_URL=https://varanda-kappa.vercel.app npm run test:ui` (PowerShell: `$env:BASE_URL="https://varanda-kappa.vercel.app"; npm run test:ui`). `npm run test:ui:report` opens the last report; failures keep a screenshot and a trace.
@@ -35,7 +35,7 @@ Test the live site instead with `BASE_URL=https://varanda-kappa.vercel.app npm r
 | `/[lang]` | Home — sliding-door hero, opening-systems rail, projects, process, warranty |
 | `/[lang]/systems` and `/systems/[slug]` | Windows & doors · Glass · Roller shutters · Fly screens · Hardware |
 | `/[lang]/projects` and `/projects/[slug]` | Filterable project index (grid/list) and project pages with a photo viewer |
-| `/[lang]/why-upvc` | Benefits with live demos (heat, sound, multi-point lock) and the scroll-driven profile cross-section |
+| `/[lang]/why-upvc` | Benefits with live demos (heat, sound, a 3D tilt & turn window and its lock) and the scroll-driven 3D profile section |
 | `/[lang]/about` | Story, process, installation, warranty |
 | `/[lang]/contact` | Direct lines (call, WhatsApp, email), site-visit request form (Convex), service-area map |
 | `/admin` | The team's dashboard (password): site-visit requests, and the projects and photos shown on the site |
@@ -107,6 +107,11 @@ At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-dom
 - Type: the company profile's fonts — **Montserrat** (English: display, text and letter-spaced labels) and **Tajawal** (Arabic), loaded with `next/font`. The profile itself is flattened images, so they were matched by eye against its lettering. Arabic text is never letter-spaced (it can break the joins between letters); it is opened up with word spacing instead.
 - Logo: `src/components/brand/logo-paths.ts` holds the exact vector paths from the client's `Varanda_Logo.pdf`; `Logo.tsx` builds the mark, the wordmark and the full stacked lock-up (used in the intro and share image) from them. Brand red is the logo's `#D71920`.
 - Motion respects `prefers-reduced-motion`: no smooth scrolling, pins or door transitions, and every animated section has a readable static state.
+- Keeping the 3D cheap:
+  - The profile section's geometry is in `src/components/why/profile-geometry.ts`. It sweeps each edge of the section into a side wall, shades it, and sorts the walls far to near, once at load. Scrolling only moves, fades or recolours a few paths. The sample sits on its own layer, so sliding it aside costs no repaint.
+  - The lock demo (`LockMechanism.tsx`) only draws the faces its fixed camera can see. Its lengths are in `cqw`, so it scales with its box.
+  - Measured at 60 fps on a phone with the CPU slowed 4x.
+- Loops must not run off screen: an off-screen animation still costs style and layer work on every frame of every other animation on the page. Pause CSS loops with `usePauseOffscreen` (see `BenefitDemos.tsx`) and GSAP loops with a ScrollTrigger `onToggle` (see `Marquee.tsx`, `ScreenDiagram`).
 - `?pin=transform` (dev only) switches ScrollTrigger pins to transforms for screenshot tools.
 - Projects reach pages only through `src/lib/site-projects.ts` (`getSiteProjects` and friends): published projects from the database, cached under the `projects` tag, which every admin save expires (`updateTag`), or the built-in list. Project pages are pre-rendered and new slugs render on their first visit (`dynamicParams`).
 - Admin code: pages in `src/app/admin/` (their own root layout, outside `[lang]`), server actions in `src/app/admin/actions.ts`, session and Convex helpers in `src/lib/admin/`, Convex functions in `convex/admin/`.

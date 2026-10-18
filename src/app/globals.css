@@ -2213,27 +2213,44 @@ button:hover > .finish-swatch {
   position: relative;
   min-height: 16rem;
   order: -1;
+  container-type: size;
 }
 
-/* 2D profile drawing */
-.profile-svg {
+/* The profile drawing: two stacked 800x600 SVGs in a 4:3 box centred in the stage. The cut
+   sample sits on its own layer so it can slide aside without a repaint. */
+.ps-frame {
   position: absolute;
   inset: 0;
+  margin: auto;
+  width: min(100cqw, 133.33cqh);
+  height: min(100cqh, 75cqw);
+}
+
+.ps-layer {
+  position: absolute;
+  inset: 0;
+}
+
+div.ps-layer {
+  will-change: transform;
+}
+
+.ps-svg {
+  display: block;
   width: 100%;
   height: 100%;
 }
 
-.ps-upvc {
-  fill: #eef1f4;
-  stroke: #9aa4b1;
-  stroke-width: 0.25;
+.ps-cut {
+  stroke: rgb(16 30 48 / 0.4);
+  stroke-width: 0.22;
+  stroke-linejoin: round;
 }
 
-.ps-glass {
-  fill: #b9cad9;
-  fill-opacity: 0.35;
-  stroke: #d8e2ec;
-  stroke-width: 0.2;
+.ps-steel {
+  fill: #aab4c0;
+  stroke: #e3e8ee;
+  stroke-width: 0.15;
 }
 
 .ps-hole {
@@ -2442,6 +2459,11 @@ button:hover > .finish-swatch {
   padding-block: 0.5rem;
 }
 
+/* Looping demo animations rest while their demo is off screen (usePauseOffscreen). */
+[data-offscreen] :is(.heat-line, .wave-bars span) {
+  animation-play-state: paused;
+}
+
 .heat-line {
   position: absolute;
   inset-inline-start: 0;
@@ -2616,16 +2638,439 @@ button:hover > .finish-swatch {
   }
 }
 
-/* Multi-point lock explainer */
+/* Multi-point lock explainer: a tilt & turn window in CSS 3D beside close-ups of the
+   gearbox and a locking point. The window's lengths are in cqw of its width; only
+   transforms and opacity animate. Planes are drawn only on the sides the fixed camera
+   (above and to the right) can see. */
 .lock-mech {
   padding: clamp(1rem, 2.5vw, 2rem);
   background: var(--color-white);
   border: 1px solid var(--line);
 }
 
-.lock-mech-svg {
+.lock-stage {
+  position: relative;
+  aspect-ratio: 600 / 420;
+}
+
+.lock-closeups {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Sized (with the frame's 100:140.74 proportions) so the sash, swung toward the camera,
+   stays inside the stage. */
+.lw {
+  position: absolute;
+  left: 6.5%;
+  top: 4%;
+  width: 41%;
+  height: 82.43%;
+  container-type: inline-size;
+}
+
+/* A soft contact shadow grounds the unit. */
+.lw::before {
+  content: "";
+  position: absolute;
+  left: 2%;
+  right: -12%;
+  bottom: -5%;
+  height: 8%;
+  background: radial-gradient(closest-side, rgb(4 12 23 / 0.18), transparent);
+}
+
+.lw-persp {
+  position: absolute;
+  inset: 0;
+  perspective: 400cqw;
+  perspective-origin: 50% 40%;
+}
+
+.lw-model {
+  --fw: 5cqw; /* frame face */
+  --fd: 7cqw; /* frame depth */
+  --sx: 5.6cqw; /* sash inset: the frame face plus a shadow gap */
+  --sw: 88.8cqw;
+  --sh: 129.54cqw;
+  --sz: 1.5cqw; /* how far the sash stands proud of the frame */
+  --sp: 7cqw; /* sash profile face */
+  --sd: 7.7cqw; /* sash depth */
+  --gz: 2.4cqw; /* glass set back in the sash */
+  --axis: max(0.5cqw, 1.4px); /* pivot lines stay visible on a phone */
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(-16deg) rotateY(-24deg);
+}
+
+.lw-model :where(span, div, svg) {
+  position: absolute;
+}
+
+.lw-plane {
+  backface-visibility: hidden;
+}
+
+/* The opening: the view at the back, boxed in by the frame's depth */
+.lw-view {
+  inset: var(--fw);
+  background: #c3cfdc;
+  transform: translateZ(calc(-1 * var(--fd)));
+}
+
+.lw-reveal-l {
+  left: var(--fw);
+  top: var(--fw);
+  bottom: var(--fw);
+  width: var(--fd);
+  background: linear-gradient(to right, #b6bec8, #d6dbe1);
+  transform-origin: 0 50%;
+  transform: rotateY(90deg);
+}
+
+.lw-reveal-b {
+  left: var(--fw);
+  right: var(--fw);
+  bottom: var(--fw);
+  height: var(--fd);
+  background: linear-gradient(to top, #dce1e7, #eff2f5);
+  transform-origin: 50% 100%;
+  transform: rotateX(90deg);
+}
+
+/* The frame */
+.lw-frame-t {
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: var(--fd);
+  background: linear-gradient(to top, #f7f8fa, #dfe3e8);
+  transform-origin: 50% 100%;
+  transform: rotateX(90deg);
+}
+
+.lw-frame-r {
+  left: 100%;
+  top: 0;
+  bottom: 0;
+  width: var(--fd);
+  background: linear-gradient(to right, #c6cdd5, #a9b2bd);
+  transform-origin: 0 50%;
+  transform: rotateY(90deg);
+}
+
+.lw-frame {
+  inset: 0;
+  border: var(--fw) solid;
+  border-color: #f2f4f7 #dce1e6 #e3e7eb #eaedf1;
+  box-shadow:
+    inset 0 0 0 0.45cqw #2a2f36,
+    0 0 0 1px rgb(8 26 47 / 0.06);
+}
+
+.lw-keepers {
+  /* Lined up with the rod's cams in the locked position: its top (6cqw) plus its travel (4cqw). */
+  left: calc(var(--sx) + var(--sw) + 0.15cqw);
+  top: calc(var(--sx) + 10cqw);
+  width: 3.6cqw;
+  height: calc(var(--sh) - 12cqw);
+  transform: translateZ(1px);
+}
+
+.lw-keeper {
+  left: 0;
+  width: 100%;
+  height: 4.6cqw;
+  translate: 0 -50%;
+  border-radius: 0.5cqw;
+  background: #8a939f;
+  box-shadow:
+    inset 0 0 0 0.35cqw rgb(255 255 255 / 0.18),
+    0 0.2cqw 0.5cqw rgb(4 12 23 / 0.25);
+}
+
+.lw-hinge {
+  left: 0.9cqw;
+  width: 3.2cqw;
+  height: 9cqw;
+  border-radius: 1.6cqw;
+  background: linear-gradient(90deg, #f8f9fb, #d8dde3);
+  box-shadow:
+    0 0 0 1px rgb(8 26 47 / 0.08),
+    0.3cqw 0.5cqw 0.9cqw rgb(4 12 23 / 0.2);
+  transform: translateZ(0.8cqw);
+}
+
+.lw-hinge-t {
+  top: 9cqw;
+}
+
+.lw-hinge-b {
+  bottom: 9cqw;
+}
+
+/* The sash: turned on its left edge, tilted on its bottom one */
+.lw-sash-z {
+  left: var(--sx);
+  top: var(--sx);
+  width: var(--sw);
+  height: var(--sh);
+  transform-style: preserve-3d;
+  transform: translateZ(var(--sz));
+}
+
+.lw-sash {
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.lw-turn {
+  transform-origin: 0 50%;
+}
+
+.lw-tilt {
+  transform-origin: 50% 100%;
+}
+
+.lw-edge-t {
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: var(--sd);
+  background: linear-gradient(to top, #fbfcfd, #e3e7eb 48%, #aeb7c1 56%, #d5dae0 64%);
+  transform-origin: 50% 100%;
+  transform: rotateX(90deg);
+}
+
+/* The hardware side: the espagnolette's faceplate runs along the edge, then the gasket. */
+.lw-edge-r {
+  left: 100%;
+  top: 0;
+  bottom: 0;
+  width: var(--sd);
+  background: linear-gradient(
+    to right,
+    #d5dbe1 0 22%,
+    #98a2ae 22% 25%,
+    #bac2cc 25% 47%,
+    #98a2ae 47% 50%,
+    #cbd1d8 50% 76%,
+    #3a414b 76% 83%,
+    #c3cad2 83%
+  );
+  transform-origin: 0 50%;
+  transform: rotateY(90deg);
+}
+
+/* The stay arm holds the tilted sash: it spans the gap from the sash's top back to the frame. */
+.lw-stay {
+  left: 6cqw;
+  width: 1.8cqw;
+  bottom: calc(100% + 0.3cqw);
+  height: 31.5cqw; /* reaches the frame at a 13° lean */
+  transform-origin: 50% 100%;
+  transform: rotateX(90deg);
+}
+
+.lw-stay-arm {
+  inset: 0;
+  border-radius: 0.6cqw;
+  background: linear-gradient(90deg, #c4cbd4, #8d97a3);
+  box-shadow: 0 0 0 1px rgb(4 12 23 / 0.15);
+  transform-origin: 50% 100%;
+  transform: scaleY(0);
+}
+
+.lw-glass {
+  inset: var(--sp);
+  background:
+    linear-gradient(
+      118deg,
+      rgb(255 255 255 / 0.55) 0%,
+      rgb(255 255 255 / 0.14) 26%,
+      transparent 44%,
+      transparent 64%,
+      rgb(255 255 255 / 0.16) 80%,
+      rgb(255 255 255 / 0.32) 100%
+    ),
+    rgb(140 172 198 / 0.2);
+  box-shadow: inset 0 0 0 0.5cqw rgb(58 68 80 / 0.45);
+  transform: translateZ(calc(-1 * var(--gz)));
+}
+
+.lw-bead-l {
+  left: var(--sp);
+  top: var(--sp);
+  bottom: var(--sp);
+  width: var(--gz);
+  background: linear-gradient(to right, #d4dae0, #b3bcc6);
+  transform-origin: 0 50%;
+  transform: rotateY(90deg);
+}
+
+.lw-bead-b {
+  left: var(--sp);
+  right: var(--sp);
+  bottom: var(--sp);
+  height: var(--gz);
+  background: linear-gradient(to top, #f0f2f5, #d8dde3);
+  transform-origin: 50% 100%;
+  transform: rotateX(90deg);
+}
+
+.lw-ring {
+  inset: 0;
+  border: var(--sp) solid;
+  border-color: #fafbfc #e5e8ec #eceff2 #f4f6f8;
+  box-shadow:
+    inset 0 0 0 0.5cqw #e1e5ea,
+    0 0 0 1px rgb(8 26 47 / 0.07);
+}
+
+/* Turned away from the light, the sash's face darkens a little. */
+.lw-dim {
+  inset: 0;
+  border: var(--sp) solid rgb(8 22 38 / 0.1);
+  opacity: 0;
+  transform: translateZ(0.5px);
+}
+
+.lw-channel {
+  left: calc(100% - 2.6cqw);
+  width: 1.5cqw;
+  top: 2cqw;
+  bottom: 2cqw;
+  border: 1px solid rgb(77 85 98 / 0.22);
+  border-radius: 0.75cqw;
+  background: rgb(77 85 98 / 0.08);
+  transform: translateZ(1px);
+}
+
+.lw-rod {
+  left: 50%;
+  width: 0.7cqw;
+  margin-left: -0.35cqw;
+  top: 4cqw;
+  bottom: 4cqw;
+  border-radius: 0.35cqw;
+  background: linear-gradient(90deg, #c9d0d8, #8f99a5);
+  will-change: transform;
+}
+
+.lw-cam {
+  left: -0.2cqw;
+  width: 3.9cqw;
+  height: 1.7cqw;
+  translate: 0 -50%;
+  border-radius: 0.85cqw;
+  background: linear-gradient(180deg, #6c7684, #434b56);
+  box-shadow: 0 0.15cqw 0.4cqw rgb(4 12 23 / 0.3);
+}
+
+/* The handle stands off the sash: its rose, then the lever on its spindle. */
+.lw-handle {
+  left: calc(100% - var(--sp) / 2);
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+.lw-rose {
+  left: -1.45cqw;
+  top: -5.2cqw;
+  width: 2.9cqw;
+  height: 10.4cqw;
+  border-radius: 1.45cqw;
+  background: linear-gradient(90deg, #ffffff, #dfe4ea);
+  box-shadow:
+    0 0 0 1px rgb(8 26 47 / 0.1),
+    0.35cqw 0.5cqw 0.9cqw rgb(4 12 23 / 0.2);
+  transform: translateZ(0.5cqw);
+}
+
+.lw-lever-z {
+  left: 0;
+  top: 0;
+  transform: translateZ(1.6cqw);
+}
+
+.lw-lever {
+  left: -1.05cqw;
+  top: -1.05cqw;
+  width: 2.1cqw;
+  height: 13cqw;
+  border-radius: 1.05cqw;
+  background: linear-gradient(90deg, #ffffff, #d2d8df);
+  box-shadow:
+    0 0 0 1px rgb(8 26 47 / 0.12),
+    0 0.6cqw 1cqw rgb(4 12 23 / 0.28);
+  transform-origin: 1.05cqw 1.05cqw;
+  will-change: transform;
+}
+
+/* Pivot lines, and the path the sash's top corner takes (shown while it moves) */
+.lw-axis {
+  opacity: 0;
+  transform: translateZ(1.5px);
+}
+
+.lw-axis-turn {
+  left: calc(var(--axis) / -2);
+  width: var(--axis);
+  top: -7cqw;
+  bottom: -7cqw;
+  background: repeating-linear-gradient(to bottom, #d71920 0 2.6cqw, transparent 0 4.4cqw);
+}
+
+.lw-axis-tilt {
+  top: calc(100% - var(--axis) / 2);
+  height: var(--axis);
+  left: -7cqw;
+  right: -7cqw;
+  background: repeating-linear-gradient(to right, #d71920 0 2.6cqw, transparent 0 4.4cqw);
+}
+
+.lw-arc {
+  overflow: visible;
+  opacity: 0;
+  fill: none;
+  stroke: #d71920;
+  stroke-width: 0.6;
+  stroke-dasharray: 1.8 1.2;
+}
+
+/* Flat above the sash's top: the corner's sweep as it turns into the room */
+.lw-arc-turn {
+  left: 64cqw;
+  width: 26cqw;
+  top: -0.4cqw;
+  height: 52cqw;
+  transform-origin: 50% 0;
+  transform: rotateX(90deg);
+}
+
+/* On a phone the window is ~140px wide: draw the paths heavier so they still read. */
+@container (max-width: 220px) {
+  .lw-arc {
+    stroke-width: 1.1;
+    stroke-dasharray: 2.6 1.8;
+  }
+}
+
+/* Upright beside the sash's right edge: the corner's lean as it tilts */
+.lw-arc-tilt {
+  left: calc(100% + 0.4cqw - 32cqw);
+  width: 32cqw;
+  top: -2cqw;
+  height: 12cqw;
+  transform-origin: 100% 50%;
+  transform: rotateY(90deg);
 }
 
 .lock-mech-caption {

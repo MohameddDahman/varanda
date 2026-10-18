@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, useGSAP, reducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP, reducedMotion } from "@/lib/gsap";
 import { useLang } from "@/components/providers/LangProvider";
 
 /**
@@ -111,14 +111,20 @@ export function ScreenDiagram({ kind }: { kind: "fixed" | "sliding" | "pleated" 
   const root = useRef<HTMLDivElement>(null);
   useGSAP(
     () => {
-      if (reducedMotion()) return;
+      if (reducedMotion() || kind === "fixed") return;
       const q = gsap.utils.selector(root);
-      if (kind === "sliding") {
-        gsap.fromTo(q("[data-mesh]"), { xPercent: 0 }, { xPercent: 96, duration: 2.2, ease: "power2.inOut", repeat: -1, yoyo: true, repeatDelay: 0.8 });
-      }
-      if (kind === "pleated") {
-        gsap.fromTo(q("[data-pleats]"), { scaleX: 1 }, { scaleX: 0.08, duration: 2.2, ease: "power2.inOut", repeat: -1, yoyo: true, repeatDelay: 0.8 });
-      }
+      const loop = { duration: 2.2, ease: "power2.inOut", repeat: -1, yoyo: true, repeatDelay: 0.8, paused: true };
+      const tween =
+        kind === "sliding"
+          ? gsap.fromTo(q("[data-mesh]"), { xPercent: 0 }, { xPercent: 96, ...loop })
+          : gsap.fromTo(q("[data-pleats]"), { scaleX: 1 }, { scaleX: 0.08, ...loop });
+      // Loops only while on screen.
+      ScrollTrigger.create({
+        trigger: root.current,
+        start: "top bottom",
+        end: "bottom top",
+        onToggle: (self) => (self.isActive ? tween.play() : tween.pause()),
+      });
     },
     { scope: root },
   );

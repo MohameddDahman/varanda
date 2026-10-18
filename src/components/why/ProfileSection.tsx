@@ -7,22 +7,17 @@ import { scroller } from "@/components/transition/store";
 import { anatomy } from "@/content/company";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { cn } from "@/lib/cn";
+import { allGradients, channelPts, D, extrude, face, H, rectPath, rectPts, type R, type Shape, type Solid } from "./profile-geometry";
 
 /*
- * A 2D technical drawing of a real 70 mm uPVC casement, scrubbed by scroll. It replaces a
- * WebGL scene: plain SVG, only transform / opacity / fill tweens, and nothing runs unless
- * the visitor is scrolling through it, so it stays smooth on low-end phones and quiet on
- * powerful machines.
+ * A cut sample of a real 70 mm uPVC casement, scrubbed by scroll. It replaces a WebGL scene:
+ * the section is extruded into 3D once, as static SVG (see profile-geometry.ts), scroll only
+ * tweens transforms, opacity and a few flat fills, and nothing runs unless the visitor is
+ * scrolling through it, so it stays smooth on low-end phones and quiet on powerful machines.
  *
  * Steps: 1 chambers · 2 steel core · 3 gaskets · 4 glass unit · 5 multi-point locking.
  */
 
-type R = [number, number, number, number]; // x1, y1, x2, y2 in mm, y measured up
-const H = 180; // drawing height in mm; SVG y runs down, so y' = H - y
-const rect = ([x1, y1, x2, y2]: R) => `M${x1} ${H - y2}H${x2}V${H - y1}H${x1}Z`;
-const poly = (pts: [number, number][]) => `M${pts.map(([x, y]) => `${x} ${H - y}`).join("L")}Z`;
-
-const FRAME_OUTLINE = poly([[0, 0], [70, 0], [70, 56], [62, 56], [62, 48], [6, 48], [6, 60], [0, 60]]);
 const FRAME_CHAMBERS: R[] = [
   [2.5, 2.5, 11, 22.5],
   [2.5, 24.5, 11, 45.5],
@@ -32,10 +27,6 @@ const FRAME_CHAMBERS: R[] = [
   [59, 2.5, 67.5, 22.5],
   [59, 24.5, 67.5, 45.5],
 ];
-const SASH_OUTLINE = poly([
-  [9, 50], [60, 50], [60, 61], [58, 61], [58, 59.5], [56, 59.5], [56, 75.5], [58, 75.5], [58, 74], [60, 74],
-  [60, 92], [17, 92], [17, 112], [9, 112],
-]);
 const SASH_CHAMBERS: R[] = [
   [11.5, 52.5, 20, 70],
   [11.5, 72, 20, 89.5],
@@ -43,9 +34,6 @@ const SASH_CHAMBERS: R[] = [
   [34, 52.5, 54, 89.5],
   [11.4, 95, 14.6, 108],
 ];
-const BEAD = poly([[43, 92], [56, 92], [56, 103], [47, 108], [43, 108]]) + rect([45.5, 94.5, 53.5, 100.5]);
-const channel = ([x1, y1, x2, y2]: R, t = 1.6) =>
-  poly([[x1, y1], [x2, y1], [x2, y2], [x2 - t, y2], [x2 - t, y1 + t], [x1 + t, y1 + t], [x1 + t, y2], [x1, y2]]);
 const GASKETS: R[] = [
   [17, 104, 18.4, 111],
   [41.6, 99, 43, 106],
@@ -54,6 +42,67 @@ const GASKETS: R[] = [
   [6, 53, 9, 58],
   [60, 50, 62.2, 54],
 ];
+
+const FRAME: Solid = {
+  outline: [[0, 0], [70, 0], [70, 56], [62, 56], [62, 48], [6, 48], [6, 60], [0, 60]],
+  holes: FRAME_CHAMBERS.map(rectPts),
+  mat: "upvc",
+};
+const SASH: Solid = {
+  outline: [
+    [9, 50], [60, 50], [60, 61], [58, 61], [58, 59.5], [56, 59.5], [56, 75.5], [58, 75.5], [58, 74], [60, 74],
+    [60, 92], [17, 92], [17, 112], [9, 112],
+  ],
+  holes: SASH_CHAMBERS.map(rectPts),
+  mat: "upvc",
+};
+const BEAD: Solid = { outline: [[43, 92], [56, 92], [56, 103], [47, 108], [43, 108]], holes: [rectPts([45.5, 94.5, 53.5, 100.5])], mat: "upvc" };
+const PANES: Solid[] = [
+  { outline: rectPts([18.4, 94, 22.6, 172]), mat: "glass", attrs: { "data-pane": "out" } },
+  { outline: rectPts([37.4, 94, 41.6, 172]), mat: "glass", attrs: { "data-pane": "in" } },
+];
+// The glass unit's edge: secondary seal, butyl, and the spacer (its desiccant is a face only).
+const IGU: Solid[] = [
+  { outline: rectPts([18, 92, 42, 93.4]), mat: "seal", attrs: { "data-igu": "" }, hot: true },
+  { outline: rectPts([22.6, 93.4, 37.4, 95]), mat: "seal", attrs: { "data-igu": "" }, hot: true },
+  { outline: rectPts([23.4, 95, 36.6, 101]), mat: "spacer", attrs: { "data-igu": "" }, hot: true },
+];
+const SEALS: Solid[] = GASKETS.map((g, i) => ({ outline: rectPts(g), mat: "gasket", attrs: { "data-gasket": String(i) }, hot: true }));
+// Lock hardware in the section: the espagnolette, which runs along the sash's groove, and a
+// keeper, a short block screwed to the frame.
+const LOCK: Solid[] = [
+  { outline: rectPts([56.4, 60.4, 57.8, 74.6]), mat: "steel", attrs: { "data-sec-lock": "" }, hot: true },
+  { outline: rectPts([62.8, 56, 64.4, 70]), mat: "steel", attrs: { "data-sec-lock": "" }, hot: true, depth: 0.3 },
+];
+// Steel reinforcement, each in its chamber: drawn inside the chamber's opening only.
+const STEEL: { solid: Solid; chamber: R }[] = [
+  { solid: { outline: channelPts([22.6, 4.1, 47.4, 43.9]), mat: "steel" }, chamber: FRAME_CHAMBERS[3] },
+  { solid: { outline: channelPts([35.4, 54, 52.6, 88]), mat: "steel" }, chamber: SASH_CHAMBERS[3] },
+];
+
+// Glass is cut off at the top of the drawing, so its top edge gets no wall.
+const WALLS = extrude([FRAME, SASH, BEAD, ...PANES, ...IGU, ...SEALS, ...LOCK], (w) => w.solid.mat !== "glass" || Math.abs(w.n[0]) > 0.5);
+const STEEL_WALLS = STEEL.map((s) => extrude([s.solid]));
+const FACES: Shape[] = [
+  ...PANES.map((s) => face(s, "url(#ps-glass-edge)")),
+  face(IGU[0], "#3b4250"),
+  face(IGU[1], "#26292e"),
+  face(IGU[2], "#a7b0ba"),
+  { d: rectPath([24.6, 96.2, 35.4, 99.8]), fill: "#d8cdb4", attrs: { "data-igu": "" }, base: "#d8cdb4", hot: "#d71920" },
+  ...SEALS.map((s) => face(s, "#2a2f37")),
+  face(LOCK[0], "#9aa4b1"),
+  face(LOCK[1], "#5f6874"),
+];
+const CUT_FACES = [FRAME, SASH, BEAD].map((s) => face(s, "url(#ps-face)"));
+const GRADIENTS = allGradients();
+/** Steel starts beyond the back of its chamber and slides forward into place. */
+const STEEL_FROM = { x: D[0] * 1.3, y: -D[1] * 1.3 };
+
+/** One shape, with what the timeline needs to recolour it. */
+function ShapePath({ s, className }: { s: Shape; className?: string }) {
+  return <path d={s.d} fill={s.fill} fillRule="evenodd" className={className} data-base={s.base} data-hot={s.hot} {...s.attrs} />;
+}
+
 const CAMS = [86, 156, 264, 334];
 
 /** A spur gear outline centred on (cx, cy). */
@@ -69,19 +118,8 @@ function gearPath(cx: number, cy: number, r: number, teeth: number, depth: numbe
 }
 
 const RED = "#d71920";
-
-// Depth: the profile is extruded backwards as a stack of offset layers (up and to the right),
-// shaded darker with distance. Static SVG, so it costs nothing while scrolling.
-const DEPTH = 18;
-const STEP_X = 0.55;
-const STEP_Y = 0.42;
-const shade = (k: number) => {
-  const t = k / DEPTH; // 0 = just behind the face, 1 = far end
-  const mix = (a: number, b: number) => Math.round(a + (b - a) * t);
-  return `rgb(${mix(198, 92)} ${mix(205, 103)} ${mix(214, 118)})`;
-};
-const LAYERS = Array.from({ length: DEPTH }, (_, i) => DEPTH - i); // back to front
-const PROFILE = [FRAME_OUTLINE + FRAME_CHAMBERS.map(rect).join(""), SASH_OUTLINE + SASH_CHAMBERS.map(rect).join(""), BEAD];
+const hot = (_: number, el: Element) => el.getAttribute("data-hot") ?? RED;
+const base = (_: number, el: Element) => el.getAttribute("data-base") ?? "#8a95a3";
 
 export function ProfileSection() {
   const { t, lang } = useLang();
@@ -98,30 +136,31 @@ export function ProfileSection() {
       const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.inOut", duration: 0.45 } });
 
       // 1 · Chambers fill red one after another: the air pockets that slow heat and sound.
-      tl.to(q("[data-chamber]"), { opacity: 0.9, stagger: 0.035 }, 1)
+      tl.to(q("[data-chamber]"), { opacity: 0.8, stagger: 0.035 }, 1)
         .to(q("[data-chamber]"), { opacity: 0, duration: 0.3 }, 1.85)
-        // 2 · The steel slides into the main chambers.
-        .fromTo(q("[data-steel]"), { y: 40, opacity: 0 }, { y: 0, opacity: 1, fill: RED, stagger: 0.12 }, 2.05)
-        .to(q("[data-steel]"), { fill: "#8a95a3", duration: 0.3 }, 2.85)
-        // 3 · Gaskets light up and swell slightly.
-        .to(q("[data-gasket]"), { fill: RED, scale: 1.25, transformOrigin: "50% 50%", stagger: 0.04 }, 3.05)
-        .to(q("[data-gasket]"), { fill: "#2a2f37", scale: 1, duration: 0.3 }, 3.85)
+        // 2 · The steel slides along the chambers from the back, glowing, then cools to steel.
+        .fromTo(q("[data-steel]"), { ...STEEL_FROM, opacity: 0 }, { x: 0, y: 0, opacity: 1, stagger: 0.12, duration: 0.55 }, 2.05)
+        .fromTo(q("[data-steel-hot]"), { opacity: 0.85 }, { opacity: 0, duration: 0.3 }, 2.85)
+        // 3 · Gaskets light up, faces and sides together, one after another.
+        .to(q("[data-gasket]"), { fill: hot, stagger: (_: number, el: Element) => Number(el.getAttribute("data-gasket")) * 0.04 }, 3.05)
+        .to(q("[data-gasket]"), { fill: base, duration: 0.3 }, 3.85)
         // 4 · The glass unit opens up to show the spacer and seals between the panes.
         .to(q("[data-pane=out]"), { x: -5 }, 4.05)
         .to(q("[data-pane=in]"), { x: 5 }, 4.05)
-        .to(q("[data-igu]"), { fill: RED, stagger: 0.05 }, 4.15)
+        .to(q("[data-igu]"), { fill: hot, stagger: 0.03 }, 4.15)
         .to(q("[data-pane]"), { x: 0, duration: 0.3 }, 4.85)
-        .to(q("[data-igu]"), { fill: (i: number, el: Element) => el.getAttribute("data-base") ?? "#8a95a3", duration: 0.3 }, 4.85)
-        // 5 · Locking: the section steps aside and the lock edge of the window appears.
-        .to(q("[data-section]"), { x: -250, duration: 0.5 }, 5.0)
-        .fromTo(q("[data-elevation]"), { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.5 }, 5.05)
+        .to(q("[data-igu]"), { fill: base, duration: 0.3 }, 4.85)
+        // 5 · Locking: the section steps aside (its own layer, so this costs no repaint) and the
+        // lock edge of the window appears.
+        .to(q("[data-section]"), { xPercent: -31.25, duration: 0.5 }, 5.0)
+        .fromTo(q("[data-elevation]"), { opacity: 0, xPercent: 5 }, { opacity: 1, xPercent: 0, duration: 0.5 }, 5.05)
         .fromTo(q("[data-handle]"), { rotation: 90, transformOrigin: "50% 14px" }, { rotation: 0, transformOrigin: "50% 14px", duration: 0.5 }, 5.35)
         .fromTo(q("[data-pinion]"), { rotation: 90, transformOrigin: "50% 50%" }, { rotation: 0, transformOrigin: "50% 50%", duration: 0.5 }, 5.35)
         .fromTo(q("[data-rack]"), { y: 0 }, { y: -40, duration: 0.5 }, 5.35)
         .fromTo(q("[data-rod]"), { y: 0 }, { y: 18, duration: 0.5 }, 5.35)
         .fromTo(q("[data-icam]"), { y: -60 }, { y: 0, duration: 0.5 }, 5.35)
         .to(q("[data-keeper]"), { fill: RED, duration: 0.2 }, 5.75)
-        .to(q("[data-sec-lock]"), { fill: RED, opacity: 1, duration: 0.3 }, 5.75)
+        .to(q("[data-sec-lock]"), { fill: hot, opacity: 1, duration: 0.3 }, 5.75)
         .to({}, { duration: 0.25 });
       tlRef.current = tl;
 
@@ -202,63 +241,91 @@ export function ProfileSection() {
         </div>
 
         <div className="anatomy-stage">
-          <svg viewBox="0 0 800 600" className="profile-svg" style={{ direction: "ltr" }} aria-hidden="true">
-            {/* ── Cross-section of the frame, sash and glass ── */}
-            <g data-section>
-              <g transform="translate(270 34) scale(3)">
-                {/* Back end of the glass and the extruded body */}
-                <rect x={18.4 + DEPTH * STEP_X} y={H - 172 - DEPTH * STEP_Y} width="4.2" height="78" className="ps-glass" />
-                <rect x={37.4 + DEPTH * STEP_X} y={H - 172 - DEPTH * STEP_Y} width="4.2" height="78" className="ps-glass" />
-                {LAYERS.map((k) => (
-                  <g key={k} transform={`translate(${k * STEP_X} ${-k * STEP_Y})`} fill={shade(k)}>
-                    {PROFILE.map((d, i) => (
-                      <path key={i} d={d} fillRule="evenodd" />
-                    ))}
+          <div className="ps-frame" style={{ direction: "ltr" }} aria-hidden="true">
+            {/* ── The cut sample: frame, sash and glass. Its own layer, so it slides aside in step 5
+                without being repainted. ── */}
+            <div data-section className="ps-layer">
+              <svg viewBox="0 0 800 600" className="ps-svg">
+                <defs>
+                  <linearGradient id="ps-face" gradientUnits="userSpaceOnUse" x1="0" y1={H - 112} x2="70" y2={H}>
+                    <stop offset="0" stopColor="#fbfcfd" />
+                    <stop offset="1" stopColor="#d9dfe6" />
+                  </linearGradient>
+                  {/* Glass carries on above the cut: its edge and face fade out upward */}
+                  <linearGradient id="ps-glass-edge" gradientUnits="userSpaceOnUse" x1="0" y1={H - 94} x2="0" y2={H - 172}>
+                    <stop offset="0" stopColor="#8fd0cc" stopOpacity="0.95" />
+                    <stop offset="0.55" stopColor="#8fd0cc" stopOpacity="0.55" />
+                    <stop offset="1" stopColor="#8fd0cc" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="ps-glass-side" gradientUnits="userSpaceOnUse" x1="0" y1={H - 94} x2="0" y2={H - 172 - D[1]}>
+                    <stop offset="0" stopColor="#a9d4e2" stopOpacity="0.38" />
+                    <stop offset="0.6" stopColor="#a9d4e2" stopOpacity="0.14" />
+                    <stop offset="1" stopColor="#a9d4e2" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="ps-glass-streak" x1="0" y1="1" x2="1" y2="0">
+                    <stop offset="0.18" stopColor="#ffffff" stopOpacity="0" />
+                    <stop offset="0.27" stopColor="#ffffff" stopOpacity="0.32" />
+                    <stop offset="0.33" stopColor="#ffffff" stopOpacity="0" />
+                    <stop offset="0.4" stopColor="#ffffff" stopOpacity="0.14" />
+                    <stop offset="0.44" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  {GRADIENTS.map((g) => (
+                    <linearGradient key={g.id} id={g.id} x1="0" y1={g.y1} x2={g.x2} y2={g.y2}>
+                      {g.stops.map(([o, c]) => (
+                        <stop key={o} offset={o} stopColor={c} />
+                      ))}
+                    </linearGradient>
+                  ))}
+                  {STEEL.map((s, i) => (
+                    <clipPath key={i} id={`ps-steel-${i}`}>
+                      <path d={rectPath(s.chamber)} />
+                    </clipPath>
+                  ))}
+                </defs>
+
+                <g transform="translate(270 34) scale(3)">
+                  {/* Side walls, far to near */}
+                  {WALLS.map((s, i) => (
+                    <ShapePath key={i} s={s} />
+                  ))}
+                  {/* Steel reinforcement: seen only through its chamber's opening */}
+                  {STEEL.map((s, i) => (
+                    <g key={i} clipPath={`url(#ps-steel-${i})`}>
+                      <g data-steel opacity="0">
+                        {STEEL_WALLS[i].map((w, j) => (
+                          <ShapePath key={j} s={w} />
+                        ))}
+                        <path d={face(s.solid, "").d} className="ps-steel" />
+                        <path data-steel-hot d={face(s.solid, "").d} fill={RED} opacity="0" />
+                      </g>
+                    </g>
+                  ))}
+                  {/* Cut faces: glass, the glass unit's edge, gaskets, hardware, then the profiles */}
+                  {FACES.map((s, i) => (
+                    <ShapePath key={i} s={s} />
+                  ))}
+                  {CUT_FACES.map((s, i) => (
+                    <ShapePath key={i} s={s} className="ps-cut" />
+                  ))}
+                  <circle cx="49.5" cy={H - 103.2} r="1.1" className="ps-hole" />
+                  <circle data-sec-lock cx="61.2" cy={H - 67.5} r="1.6" fill="#7f8894" opacity="0" />
+                  {[...FRAME_CHAMBERS, ...SASH_CHAMBERS.slice(0, 4)].map((r, i) => (
+                    <path key={i} data-chamber d={rectPath(r)} fill={RED} opacity="0" />
+                  ))}
+
+                  {/* Width dimension */}
+                  <g className="ps-dim">
+                    <path d={`M0 ${H + 6}H70M0 ${H + 3}V${H + 9}M70 ${H + 3}V${H + 9}`} />
                   </g>
-                ))}
-                {/* Glass unit (drawn first: the profile overlaps its edge) */}
-                <rect data-pane="out" x="18.4" y={H - 172} width="4.2" height="78" className="ps-glass" />
-                <rect data-pane="in" x="37.4" y={H - 172} width="4.2" height="78" className="ps-glass" />
-                <path data-igu data-base="#a7b0ba" d={rect([23.4, 95, 36.6, 101])} fill="#a7b0ba" />
-                <path data-igu data-base="#d8cdb4" d={rect([24.6, 96.2, 35.4, 99.8])} fill="#d8cdb4" />
-                <path data-igu data-base="#26292e" d={rect([22.6, 93.4, 37.4, 95])} fill="#26292e" />
-                <path data-igu data-base="#3b4250" d={rect([18, 92, 42, 93.4])} fill="#3b4250" />
-
-                {/* Frame and sash: holes are the insulating chambers */}
-                <path d={FRAME_OUTLINE + FRAME_CHAMBERS.map(rect).join("")} fillRule="evenodd" className="ps-upvc" />
-                <path d={SASH_OUTLINE + SASH_CHAMBERS.map(rect).join("")} fillRule="evenodd" className="ps-upvc" />
-                <path d={BEAD} fillRule="evenodd" className="ps-upvc" />
-                <circle cx="49.5" cy={H - 103.2} r="1.1" className="ps-hole" />
-                {[...FRAME_CHAMBERS, ...SASH_CHAMBERS.slice(0, 4)].map((r, i) => (
-                  <path key={i} data-chamber d={rect(r)} fill={RED} opacity="0" />
-                ))}
-
-                {/* Steel reinforcement */}
-                <path data-steel d={channel([22.6, 4.1, 47.4, 43.9])} fill="#8a95a3" opacity="0" />
-                <path data-steel d={channel([35.4, 54, 52.6, 88])} fill="#8a95a3" opacity="0" />
-
-                {/* Gaskets */}
-                {GASKETS.map((g, i) => (
-                  <path key={i} data-gasket d={rect(g)} fill="#2a2f37" />
-                ))}
-
-                {/* Lock hardware: espagnolette rod in the groove, cam and frame keeper */}
-                <path data-sec-lock d={rect([56.4, 60.4, 57.8, 74.6])} fill="#9aa4b1" />
-                <path data-sec-lock d={rect([62.8, 56, 64.4, 70])} fill="#7f8894" opacity="0.6" />
-                <circle data-sec-lock cx="61.2" cy={H - 67.5} r="1.6" fill="#7f8894" opacity="0" />
-
-                {/* Width dimension */}
-                <g className="ps-dim">
-                  <path d={`M0 ${H + 6}H70M0 ${H + 3}V${H + 9}M70 ${H + 3}V${H + 9}`} />
                 </g>
-              </g>
-              <text x="375" y="594" textAnchor="middle" className="ps-dim-text">
-                70 mm
-              </text>
-            </g>
+                <text x="375" y="594" textAnchor="middle" className="ps-dim-text">
+                  70 mm
+                </text>
+              </svg>
+            </div>
 
             {/* ── Lock edge of the window, shown in step 5 ── */}
-            <g data-elevation opacity="0">
+            <svg data-elevation viewBox="0 0 800 600" className="ps-svg ps-layer" style={{ opacity: 0 }}>
               <g transform="translate(300 60) scale(0.95)">
                 <rect x="40" y="20" width="270" height="380" rx="2" fill="#16243a" stroke="#3a4a60" />
                 {CAMS.map((y) => (
@@ -313,8 +380,8 @@ export function ProfileSection() {
                   {lang === "ar" ? "نقطة الغلق" : "Locking point"}
                 </text>
               </g>
-            </g>
-          </svg>
+            </svg>
+          </div>
           <p className="anatomy-hint t-label text-mist" aria-hidden="true">
             {lang === "ar" ? "مقطع توضيحي" : "Illustrative section"}
           </p>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP, reducedMotion } from "@/lib/gsap";
 import { useLang } from "@/components/providers/LangProvider";
 import { cn } from "@/lib/cn";
+import { usePauseOffscreen } from "@/components/motion/usePauseOffscreen";
 import { startWind, type Wind } from "./wind";
 
 /**
@@ -14,9 +15,11 @@ export function ThermalDemo() {
   const { lang } = useLang();
   const ar = lang === "ar";
   const [upvc, setUpvc] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  usePauseOffscreen(root);
   const lines = [0, 1, 2, 3, 4];
   return (
-    <div className={cn("demo-thermal-wrap", upvc && "is-upvc")}>
+    <div ref={root} className={cn("demo-thermal-wrap", upvc && "is-upvc")}>
       <div className="demo demo-thermal" aria-hidden="true">
         <div className="demo-side demo-hot">
           <span className="t-label">{ar ? "الخارج" : "Outside"}</span>
@@ -80,6 +83,7 @@ export function AcousticDemo() {
   const [closed, setClosed] = useState(false);
   const [sound, setSound] = useState(false);
   const root = useRef<HTMLDivElement>(null);
+  usePauseOffscreen(root);
   const outsideRow = useRef<HTMLDivElement>(null);
   const insideRow = useRef<HTMLDivElement>(null);
   const wind = useRef<Wind | null>(null);

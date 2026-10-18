@@ -16,33 +16,41 @@ export function Marquee({ children, className, speed = 60 }: { children: React.R
       const el = ref.current;
       if (!el || reducedMotion()) return;
       const track = el.querySelector<HTMLElement>("[data-track]")!;
+      const setX = gsap.quickSetter(track, "x", "px");
       const rtl = document.documentElement.dir === "rtl";
       const sign = rtl ? 1 : -1;
       let x = 0;
       let boost = 0;
       let direction = 1;
+      // Measured on refresh: reading layout in the ticker would force a reflow every frame.
+      let half = track.scrollWidth / 2;
 
+      const tick = (_time: number, dt: number) => {
+        if (!half) return;
+        boost *= 0.94;
+        x += (sign * direction * (speed + boost * speed) * dt) / 1000;
+        if (sign * x > half) x -= sign * half;
+        if (sign * x < 0) x += sign * half;
+        setX(x);
+      };
+
+      // It only drifts while on screen; off screen it would still cost a style and layer
+      // update on every frame of every animation on the page.
       const st = ScrollTrigger.create({
         trigger: el,
         start: "top bottom",
         end: "bottom top",
+        onRefresh: () => {
+          half = track.scrollWidth / 2;
+        },
+        onToggle: (self) => (self.isActive ? gsap.ticker.add(tick) : gsap.ticker.remove(tick)),
         onUpdate(self) {
           const v = self.getVelocity();
           direction = self.direction;
           boost = Math.min(Math.abs(v) / 120, 14);
         },
       });
-
-      const tick = (_time: number, dt: number) => {
-        const half = track.scrollWidth / 2;
-        if (!half) return;
-        boost *= 0.94;
-        x += (sign * direction * (speed + boost * speed) * dt) / 1000;
-        if (sign * x > half) x -= sign * half;
-        if (sign * x < 0) x += sign * half;
-        gsap.set(track, { x });
-      };
-      gsap.ticker.add(tick);
+      if (st.isActive) gsap.ticker.add(tick);
       return () => {
         gsap.ticker.remove(tick);
         st.kill();

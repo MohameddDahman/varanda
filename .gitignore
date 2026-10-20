@@ -52,3 +52,6 @@ next-env.d.ts
 # UI test output
 /tests/ui/report/
 /tests/ui/results/
+
+# seed script scratch output
+.seed-content.mjs

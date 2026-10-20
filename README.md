@@ -74,7 +74,7 @@ Sign-in is one shared password (`ADMIN_PASSWORD`) with a signed 14-day session c
 node scripts/convex-local.mjs env set ADMIN_TOKEN <the same token>
 ```
 
-Sign in at http://localhost:3000/admin, open Projects and press **Import the site's projects** to copy the 17 built-in projects and their photos in.
+Sign in at http://localhost:3000/admin, open Projects and press **Import the site's projects** to copy the 17 built-in projects and their photos in. Or, from the command line, `node scripts/seed-projects.mjs` does the same for the deployment in `.env.local` (`--env <file>` for another one, with that deployment's `NEXT_PUBLIC_CONVEX_URL` and `ADMIN_TOKEN`); projects already there are skipped.
 
 **Connecting the client's Convex account (production)**
 

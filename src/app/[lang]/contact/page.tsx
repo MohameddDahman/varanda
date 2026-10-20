@@ -12,6 +12,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ContactLines, SampleTag } from "@/components/contact/ContactLines";
+import { ensureContent } from "@/lib/site-content";
 
 const copy = {
   title: { en: "Book a site visit", ar: "احجز معاينة" },
@@ -22,12 +23,14 @@ const copy = {
 };
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/contact">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) return {};
   return pageMeta(lang, "/contact", copy.title[lang], copy.intro[lang]);
 }
 
 export default async function ContactPage({ params }: PageProps<"/[lang]/contact">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) notFound();
   const t = (s: { en: string; ar: string }) => s[lang];

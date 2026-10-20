@@ -65,6 +65,8 @@ Convex stores the site-visit requests from the contact form, and the projects an
 
 - **Requests** — new ones counted on the tab bar, filters by status, search, one tap to call or WhatsApp (the message is pre-written in the visitor's language), a status (new → contacted → closed) and a private team note.
 - **Projects** — the site's order (move up/down), shown on the site or kept as a draft, featured on the home page (the first four), and an editor for both languages with photo uploads. Photos are resized in the browser to 2400px and lose their metadata (including a phone's GPS location) before upload. Saving updates the site at once.
+- **Contact** — the people to call (name, job title, phone, WhatsApp), the main line, the email, and the branch (address, opening hours, Google Maps link). Anything left empty is hidden on the site.
+- **Texts** — every English and Arabic text on the site, grouped by page, with search. Each changed text can be restored to the original. Ids, links, photos and page structure stay in code.
 
 Sign-in is one shared password (`ADMIN_PASSWORD`) with a signed 14-day session cookie; wrong passwords are rate-limited (8 per 15 minutes per address). Browsers never talk to the database with admin rights: the Next server checks the session and calls Convex with `ADMIN_TOKEN`, which every admin function checks. Changing either secret signs everyone out.
 
@@ -113,6 +115,11 @@ At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-dom
   - Measured at 60 fps on a phone with the CPU slowed 4x.
 - Loops must not run off screen: an off-screen animation still costs style and layer work on every frame of every other animation on the page. Pause CSS loops with `usePauseOffscreen` (see `BenefitDemos.tsx`) and GSAP loops with a ScrollTrigger `onToggle` (see `Marquee.tsx`, `ScreenDiagram`).
 - `?pin=transform` (dev only) switches ScrollTrigger pins to transforms for screenshot tools.
+- Texts and contact details: `src/content` stays the source of every word. The database keeps only what the dashboard changed, as a list of content paths and values (`about.title`, `site.contact.address`).
+  - `src/content/editable.ts` lists what can be edited, checks values, and writes the changes into the content objects.
+  - Every `[lang]` page, layout and metadata function awaits `ensureContent()` (`src/lib/site-content.ts`, cached under the `content` tag) before it renders. The layout's `ContentSync` gives the browser the same changes, so pages hydrate cleanly.
+  - New pages or metadata functions under `[lang]` must await `ensureContent()` too.
+  - Read content inside components, not into module-level constants: a copy taken when the module loads won't see later changes.
 - Projects reach pages only through `src/lib/site-projects.ts` (`getSiteProjects` and friends): published projects from the database, cached under the `projects` tag, which every admin save expires (`updateTag`), or the built-in list. Project pages are pre-rendered and new slugs render on their first visit (`dynamicParams`).
 - Admin code: pages in `src/app/admin/` (their own root layout, outside `[lang]`), server actions in `src/app/admin/actions.ts`, session and Convex helpers in `src/lib/admin/`, Convex functions in `convex/admin/`.
 - Image `sizes`: the browser picks a file by width alone, but `object-fit: cover` scales a photo to its frame's height when the photo is wider than the frame. Use `coverSizes` (fixed-shape frames) or `screenSizes` (full-screen frames) from `src/lib/sizes.ts` for cropped photos, or phones get a file half the size they need.

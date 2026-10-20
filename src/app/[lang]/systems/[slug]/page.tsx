@@ -21,6 +21,7 @@ import { ProductPhoto } from "@/components/systems/ProductPhoto";
 import { LockMechanism } from "@/components/why/LockMechanism";
 import { HomeCTA } from "@/components/home/HomeCTA";
 import { Arrow, Button } from "@/components/ui/Button";
+import { ensureContent } from "@/lib/site-content";
 
 export const dynamicParams = false;
 
@@ -29,6 +30,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/systems/[slug]">) {
+  await ensureContent();
   const { lang, slug } = await params;
   const system = getSystem(slug);
   if (!isLang(lang) || !system) return {};
@@ -38,6 +40,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/systems/[s
 const T = (lang: Lang) => (s: { en: string; ar: string }) => s[lang];
 
 export default async function SystemPage({ params }: PageProps<"/[lang]/systems/[slug]">) {
+  await ensureContent();
   const { lang, slug } = await params;
   const system = getSystem(slug);
   if (!isLang(lang) || !system) notFound();

@@ -10,6 +10,7 @@ import { DragStrip } from "@/components/projects/DragStrip";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
 import { HomeCTA } from "@/components/home/HomeCTA";
+import { ensureContent } from "@/lib/site-content";
 
 const copy = {
   title: { en: "Projects", ar: "المشروعات" },
@@ -20,12 +21,14 @@ const copy = {
 };
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/projects">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) return {};
   return pageMeta(lang, "/projects", copy.title[lang], copy.intro[lang]);
 }
 
 export default async function ProjectsPage({ params }: PageProps<"/[lang]/projects">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) notFound();
   // Only what the index shows, so the client bundle doesn't carry every project's text.

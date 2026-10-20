@@ -11,7 +11,8 @@ import { contactIsLive, whatsappHref } from "@/lib/contact";
 import { Arrow, Button } from "@/components/ui/Button";
 
 // Fallback channel while online requests are off — never a sample number.
-const whatsapp = contactIsLive ? site.contact.whatsapp : null;
+/** The main WhatsApp line, read at render time (the dashboard can change it). */
+const mainWhatsapp = () => (contactIsLive ? site.contact.whatsapp : null);
 
 const projectTypes: { id: string; label: L }[] = [
   { id: "villa", label: { en: "Villa", ar: "فيلا" } },
@@ -248,7 +249,7 @@ export function ContactForm() {
         </div>
       </fieldset>
 
-      {state.status === "unavailable" && whatsapp ? (
+      {state.status === "unavailable" && mainWhatsapp() ? (
         // Until the inquiry store is connected, hand the same details over to WhatsApp.
         <div className="form-notice mt-10" role="alert">
           <p>
@@ -257,7 +258,7 @@ export function ContactForm() {
               : "Online requests aren't switched on yet. Send the same details on WhatsApp instead."}
           </p>
           <a
-            href={whatsappHref(whatsapp, summary())}
+            href={whatsappHref(mainWhatsapp()!, summary())}
             target="_blank"
             rel="noopener noreferrer"
             className="t-label mt-4 inline-flex items-center gap-3 underline-offset-4 hover:underline"

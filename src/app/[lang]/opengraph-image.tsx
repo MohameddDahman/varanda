@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { locales } from "@/i18n/config";
 import { MARK, TAGLINE, WORDMARK } from "@/components/brand/logo-paths";
+import { ensureContent } from "@/lib/site-content";
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -16,6 +17,7 @@ export const contentType = "image/png";
 const TAGLINE_VIEWBOX = "688 764 1134 62";
 
 export default async function OpengraphImage() {
+  await ensureContent();
   // The home hero's photo.
   const photo = await readFile(join(process.cwd(), "src/assets/photos/garden-villa-window.jpg"));
   const src = `data:image/jpeg;base64,${photo.toString("base64")}`;

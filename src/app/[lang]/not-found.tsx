@@ -3,8 +3,10 @@ import { isLang, path } from "@/i18n/config";
 import { OpeningDrawing } from "@/components/systems/OpeningDrawing";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { ensureContent } from "@/lib/site-content";
 
 export default async function NotFound() {
+  await ensureContent();
   const value = await rootLang();
   const lang = isLang(value) ? value : "en";
   return (

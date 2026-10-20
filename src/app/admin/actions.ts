@@ -4,12 +4,15 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath, updateTag } from "next/cache";
 import { ConvexError } from "convex/values";
+import { fetchQuery } from "convex/nextjs";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { isLang, LANG_COOKIE, type L } from "@/i18n/config";
 import { featuredProjects, projects as codeProjects, type ProjectType } from "@/content/projects";
 import { photos as codePhotos } from "@/content/photos";
 import { PROJECTS_TAG } from "@/lib/site-projects";
+import { CONTENT_TAG } from "@/lib/site-content";
+import { isOriginal, validContent } from "@/content/editable";
 import { ADMIN_COOKIE, adminConfigured, createSessionValue, passwordMatches, SESSION_SECONDS } from "@/lib/admin/session";
 import { adminMutation, adminQuery, requireAdmin } from "@/lib/admin/server";
 
@@ -226,5 +229,31 @@ export async function importSiteProject(slug: string) {
     return "imported" as const;
   });
   if (result.ok) projectsChanged();
+  return result;
+}
+
+// ─── Texts and contact details ────────────────────────────────────────────
+
+export type ContentChange = { path: string; value: unknown };
+
+/**
+ * Saves changed texts or contact details. Each is checked against what that spot of the site
+ * accepts; a value equal to the original drops the change, so the site shows the code's text.
+ */
+export async function saveContent(changes: ContentChange[]) {
+  const result = await attempt(async () => {
+    if (!Array.isArray(changes) || changes.length > 3000) throw new ConvexError("invalid-content");
+    const next: Record<string, unknown> = { ...(await fetchQuery(api.content.get, {})) };
+    for (const { path, value } of changes) {
+      if (typeof path !== "string" || !validContent(path, value)) throw new ConvexError("invalid-content");
+      if (isOriginal(path, value)) delete next[path];
+      else next[path] = value;
+    }
+    await adminMutation(api.admin.content.save, { values: Object.entries(next).map(([path, value]) => ({ path, value })) });
+  });
+  if (result.ok) {
+    updateTag(CONTENT_TAG);
+    revalidatePath("/admin", "layout");
+  }
   return result;
 }

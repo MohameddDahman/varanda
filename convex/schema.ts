@@ -55,6 +55,16 @@ export default defineSchema({
     .index("by_slug", ["slug"])
     .index("by_order", ["order"]),
 
+  /**
+   * The site's texts and contact details as changed in the dashboard: one document, a list of
+   * content path and value (see src/content/editable.ts). Checked by the Next server before saving.
+   */
+  content: defineTable({
+    key: v.literal("site"),
+    values: v.array(v.object({ path: v.string(), value: v.any() })),
+    updatedAt: v.number(),
+  }).index("by_key", ["key"]),
+
   /** Failed admin sign-ins per client, to slow down password guessing. */
   loginAttempts: defineTable({
     key: v.string(),

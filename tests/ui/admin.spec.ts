@@ -98,9 +98,35 @@ test.describe("admin dashboard", () => {
     await expect(site.locator("h1")).not.toContainText("(test)");
   });
 
+  test("a text edited in the dashboard shows on the site, and can be restored", async ({ page, isMobile }) => {
+    test.skip(isMobile, "one pass is enough for the data flow");
+    await signIn(page);
+    await page.goto("/admin/texts");
+    await page.locator('input[type="search"]').fill("Inside every frame");
+    const en = page.locator('[lang="en"]').filter({ hasNot: page.locator("*") }).first();
+    await en.fill("Inside every frame (test)");
+    await page.getByRole("button", { name: "Save", exact: true }).click();
+    await expect(page.getByRole("status").filter({ hasText: "Saved" })).toBeVisible();
+    const site = await page.context().newPage();
+    // The page regenerates after a save; the first visit may still get the previous copy.
+    await expect(async () => {
+      await site.goto("/en/why-upvc");
+      await expect(site.locator("#anatomy-title")).toContainText("(test)", { timeout: 1000 });
+    }).toPass({ timeout: 30_000 });
+
+    await page.getByRole("button", { name: "Restore the original" }).first().click();
+    await page.getByRole("button", { name: "Save", exact: true }).click();
+    await expect(page.getByText("Saved", { exact: true }).first()).toBeVisible();
+    await expect(page.getByRole("button", { name: "Restore the original" })).toHaveCount(0);
+    await expect(async () => {
+      await site.reload();
+      await expect(site.locator("#anatomy-title")).not.toContainText("(test)", { timeout: 1000 });
+    }).toPass({ timeout: 30_000 });
+  });
+
   test("every screen fits the device and passes accessibility checks", async ({ page, isMobile }) => {
     await signIn(page);
-    const screens = ["/admin", "/admin/requests", "/admin/projects", "/admin/projects/new"];
+    const screens = ["/admin", "/admin/requests", "/admin/projects", "/admin/projects/new", "/admin/contact", "/admin/texts"];
     await page.goto("/admin/projects");
     const firstProject = await page.locator("ol > li a").first().getAttribute("href");
     if (firstProject) screens.push(firstProject);

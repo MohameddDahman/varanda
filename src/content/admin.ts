@@ -7,6 +7,8 @@ export const a = {
     overview: { en: "Overview", ar: "نظرة عامة" },
     requests: { en: "Requests", ar: "الطلبات" },
     projects: { en: "Projects", ar: "المشروعات" },
+    contact: { en: "Contact", ar: "التواصل" },
+    texts: { en: "Texts", ar: "النصوص" },
   },
   viewSite: { en: "View site", ar: "عرض الموقع" },
   signOut: { en: "Sign out", ar: "تسجيل الخروج" },
@@ -26,7 +28,7 @@ export const a = {
 
   login: {
     heading: { en: "Team sign-in", ar: "دخول فريق العمل" },
-    intro: { en: "Site-visit requests and the projects on the site.", ar: "طلبات المعاينة والمشروعات المعروضة على الموقع." },
+    intro: { en: "Requests, projects, contact details and the texts on the site.", ar: "الطلبات والمشروعات وبيانات التواصل ونصوص الموقع." },
     password: { en: "Password", ar: "كلمة المرور" },
     show: { en: "Show password", ar: "إظهار كلمة المرور" },
     hide: { en: "Hide password", ar: "إخفاء كلمة المرور" },
@@ -155,6 +157,50 @@ export const a = {
     notFound: { en: "This project no longer exists.", ar: "هذا المشروع لم يعد موجودًا." },
   },
 
+  contact: {
+    heading: { en: "Contact details", ar: "بيانات التواصل" },
+    intro: {
+      en: "Shown on the contact page, in the footer and on the request form. Anything left empty is hidden on the site.",
+      ar: "تظهر في صفحة التواصل وأسفل الموقع وفي نموذج الطلب. أي خانة فارغة لا تظهر على الموقع.",
+    },
+    people: { en: "People to call", ar: "أشخاص للتواصل" },
+    peopleHint: { en: "Each gets a call button and, with a WhatsApp number, a WhatsApp button.", ar: "لكل شخص زر اتصال، وزر واتساب إذا أضفت رقم واتساب." },
+    name: { en: "Name", ar: "الاسم" },
+    role: { en: "Job title", ar: "المسمى الوظيفي" },
+    phone: { en: "Phone", ar: "الهاتف" },
+    whatsapp: { en: "WhatsApp number", ar: "رقم واتساب" },
+    whatsappHint: { en: "With the country code, digits only: 201061166677.", ar: "مع كود الدولة وأرقام فقط: 201061166677." },
+    addPerson: { en: "Add a person", ar: "إضافة شخص" },
+    removePerson: { en: "Remove", ar: "حذف" },
+    moveUp: { en: "Move up", ar: "تحريك لأعلى" },
+    main: { en: "Main line", ar: "الخط الرئيسي" },
+    mainHint: { en: "Used in the footer and when online requests can't be sent.", ar: "يُستخدم أسفل الموقع وعند تعذّر إرسال الطلب أونلاين." },
+    email: { en: "Email", ar: "البريد الإلكتروني" },
+    branch: { en: "Branch", ar: "الفرع" },
+    branchHint: { en: "Fill in the address to show the branch and its map on the contact page.", ar: "أضف العنوان لإظهار الفرع والخريطة في صفحة التواصل." },
+    address: { en: "Address", ar: "العنوان" },
+    hours: { en: "Opening hours", ar: "مواعيد العمل" },
+    mapsUrl: { en: "Google Maps link", ar: "رابط خرائط جوجل" },
+    mapsUrlHint: { en: "From Google Maps: Share, then Copy link.", ar: "من خرائط جوجل: مشاركة ثم نسخ الرابط." },
+    mapQuery: { en: "What the map shows", ar: "ما تعرضه الخريطة" },
+    mapQueryHint: { en: "The branch address or its name on Google Maps.", ar: "عنوان الفرع أو اسمه على خرائط جوجل." },
+  },
+
+  texts: {
+    heading: { en: "Texts", ar: "النصوص" },
+    intro: {
+      en: "Every text on the site, in both languages. Open a section, edit, and save: the site updates at once.",
+      ar: "كل نصوص الموقع باللغتين. افتح القسم وعدّل ثم احفظ: يتحدث الموقع فورًا.",
+    },
+    search: { en: "Search the texts", ar: "ابحث في النصوص" },
+    count: { en: "{n} texts", ar: "{n} نص" },
+    changed: { en: "changed", ar: "معدّل" },
+    restore: { en: "Restore the original", ar: "استرجاع النص الأصلي" },
+    noMatch: { en: "No text matches that search.", ar: "لا يوجد نص يطابق البحث." },
+    unsaved: { en: "{n} unsaved changes", ar: "{n} تعديلات غير محفوظة" },
+    figure: { en: "Figure", ar: "الرقم" },
+  },
+
   /** Short error codes from the server, in words. */
   errors: {
     "invalid-slug": { en: "Use lowercase letters, numbers and dashes for the web address.", ar: "استخدم حروفًا إنجليزية صغيرة وأرقامًا وشرطات في رابط الصفحة." },
@@ -168,6 +214,11 @@ export const a = {
     "not-found": { en: "It was deleted in the meantime.", ar: "تم حذفه في هذه الأثناء." },
     "not-an-image": { en: "That file isn't an image.", ar: "هذا الملف ليس صورة." },
     unauthorized: { en: "Your session ended. Sign in again.", ar: "انتهت الجلسة. سجّل الدخول مرة أخرى." },
+    "invalid-content": {
+      en: "Check the fields: something is empty or not in the right form.",
+      ar: "راجع الخانات: هناك خانة فارغة أو بصيغة غير صحيحة.",
+    },
+    "too-large": { en: "That's more text than the site can hold.", ar: "النصوص أطول مما يتسع له الموقع." },
   } satisfies Record<string, L>,
 };
 

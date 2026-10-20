@@ -12,14 +12,17 @@ import { AcousticDemo, ThermalDemo } from "@/components/why/BenefitDemos";
 import { LockMechanism } from "@/components/why/LockMechanism";
 import { ProfileSection } from "@/components/why/ProfileSection";
 import { HomeCTA } from "@/components/home/HomeCTA";
+import { ensureContent } from "@/lib/site-content";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/why-upvc">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) return {};
   return pageMeta(lang, "/why-upvc", benefits.title[lang], benefits.intro[lang]);
 }
 
 export default async function WhyPage({ params }: PageProps<"/[lang]/why-upvc">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) notFound();
   const t = (s: { en: string; ar: string }) => s[lang];

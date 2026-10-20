@@ -10,6 +10,7 @@ import { FinishPicker } from "@/components/systems/FinishPicker";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
 import { HomeCTA } from "@/components/home/HomeCTA";
+import { ensureContent } from "@/lib/site-content";
 
 const copy = {
   title: { en: "Systems", ar: "أنظمتنا" },
@@ -46,12 +47,14 @@ const strengths = [
 ];
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/systems">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) return {};
   return pageMeta(lang, "/systems", copy.title[lang], copy.intro[lang]);
 }
 
 export default async function SystemsPage({ params }: PageProps<"/[lang]/systems">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) notFound();
   const t = (s: { en: string; ar: string }) => s[lang];

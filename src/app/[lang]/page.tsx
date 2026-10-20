@@ -11,8 +11,10 @@ import { HomeProjects, type FeaturedProject } from "@/components/home/HomeProjec
 import { HomeProcess } from "@/components/home/HomeProcess";
 import { HomeWarranty } from "@/components/home/HomeWarranty";
 import { HomeCTA } from "@/components/home/HomeCTA";
+import { ensureContent } from "@/lib/site-content";
 
 export default async function Home({ params }: PageProps<"/[lang]">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) notFound();
 

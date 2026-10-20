@@ -14,14 +14,17 @@ import { CountUp } from "@/components/motion/CountUp";
 import { HomeProcess } from "@/components/home/HomeProcess";
 import { HomeWarranty } from "@/components/home/HomeWarranty";
 import { HomeCTA } from "@/components/home/HomeCTA";
+import { ensureContent } from "@/lib/site-content";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/about">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) return {};
   return pageMeta(lang, "/about", lang === "ar" ? "من نحن" : "About", about.body[0][lang]);
 }
 
 export default async function AboutPage({ params }: PageProps<"/[lang]/about">) {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) notFound();
   const t = (s: { en: string; ar: string }) => s[lang];

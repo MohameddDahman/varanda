@@ -11,12 +11,17 @@ import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { TransitionProvider } from "@/components/transition/TransitionProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { ensureContent } from "@/lib/site-content";
+import { ContentSync } from "@/components/providers/ContentSync";
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: LayoutProps<"/[lang]">): Promise<Metadata> {
+  await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) return {};
   const title = `VARANDA — ${site.descriptorFull[lang]}`;
@@ -27,7 +32,10 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
     applicationName: "VARANDA",
     // Previews (no real domain yet) stay out of search results.
     robots: site.launched ? undefined : { index: false, follow: false },
-    alternates: { canonical: `/${lang}`, languages: { en: "/en", ar: "/ar", "x-default": "/en" } },
+    alternates: {
+      canonical: `/${lang}`,
+      languages: { en: "/en", ar: "/ar", "x-default": "/en" },
+    },
     openGraph: {
       type: "website",
       siteName: "VARANDA",
@@ -35,7 +43,11 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
       description: site.description[lang],
       locale: lang === "ar" ? "ar_EG" : "en_US",
     },
-    twitter: { card: "summary_large_image", title, description: site.description[lang] },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: site.description[lang],
+    },
   };
 }
 
@@ -45,29 +57,39 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
+export default async function RootLayout({
+  children,
+  params,
+}: LayoutProps<"/[lang]">) {
+  const content = await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) notFound();
 
   return (
-    <html lang={lang} dir={dirOf(lang)} className={cn(montserrat.variable, tajawal.variable)}>
+    <html
+      lang={lang}
+      dir={dirOf(lang)}
+      className={cn(montserrat.variable, tajawal.variable)}
+    >
       <body>
         <noscript>
           <style>{`[data-doors],[data-slat]{display:none!important}`}</style>
         </noscript>
-        <LangProvider lang={lang}>
-          <SmoothScroll />
-          <TransitionProvider>
-            <a href="#main" className="skip-link">
-              {ui.skip[lang]}
-            </a>
-            <Header />
-            <main id="main" tabIndex={-1} className="site-main">
-              {children}
-            </main>
-            <Footer lang={lang} />
-          </TransitionProvider>
-        </LangProvider>
+        <ContentSync value={content}>
+          <LangProvider lang={lang}>
+            <SmoothScroll />
+            <TransitionProvider>
+              <a href="#main" className="skip-link">
+                {ui.skip[lang]}
+              </a>
+              <Header />
+              <main id="main" tabIndex={-1} className="site-main">
+                {children}
+              </main>
+              <Footer lang={lang} />
+            </TransitionProvider>
+          </LangProvider>
+        </ContentSync>
       </body>
     </html>
   );

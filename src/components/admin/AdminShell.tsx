@@ -24,6 +24,8 @@ export function AdminShell({ newRequests, children }: { newRequests: number; chi
     { href: "/admin", icon: "overview", label: a.nav.overview },
     { href: "/admin/requests", icon: "requests", label: a.nav.requests, badge: newRequests },
     { href: "/admin/projects", icon: "projects", label: a.nav.projects },
+    { href: "/admin/contact", icon: "contact", label: a.nav.contact },
+    { href: "/admin/texts", icon: "texts", label: a.nav.texts },
   ];
   const active = (href: string) => (href === "/admin" ? pathname === "/admin" : pathname.startsWith(href));
   const otherLang = lang === "ar" ? "en" : "ar";

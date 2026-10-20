@@ -13,6 +13,7 @@ import { Gallery } from "@/components/projects/Gallery";
 import { NextProject } from "@/components/projects/NextProject";
 import { DRIFT, screenSizes } from "@/lib/sizes";
 import { getSiteProject, getSiteProjects } from "@/lib/site-projects";
+import { ensureContent } from "@/lib/site-content";
 
 // Projects added in the admin after a build are rendered on their first visit, then cached.
 export const dynamicParams = true;
@@ -22,6 +23,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/projects/[slug]">) {
+  await ensureContent();
   const { lang, slug } = await params;
   const project = await getSiteProject(slug);
   if (!isLang(lang) || !project) return {};
@@ -29,6 +31,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/projects/[
 }
 
 export default async function ProjectPage({ params }: PageProps<"/[lang]/projects/[slug]">) {
+  await ensureContent();
   const { lang, slug } = await params;
   const all = await getSiteProjects();
   const project = all.find((p) => p.slug === slug);

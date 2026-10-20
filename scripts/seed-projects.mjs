@@ -9,18 +9,11 @@ import { build } from "esbuild";
 import sharp from "sharp";
 import { ConvexHttpClient } from "convex/browser";
 import { readFileSync, rmSync } from "node:fs";
+import { convexEnv, encodePhoto, root } from "./lib/photos.mjs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-const root = path.resolve(import.meta.dirname, "..");
-const envFile = process.argv.includes("--env") ? process.argv[process.argv.indexOf("--env") + 1] : ".env.local";
-const env = Object.fromEntries(
-  readFileSync(path.resolve(root, envFile), "utf8")
-    .split(/\r?\n/)
-    .filter((l) => /^[A-Z_]+=/.test(l))
-    .map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]),
-);
-if (!env.NEXT_PUBLIC_CONVEX_URL || !env.ADMIN_TOKEN) throw new Error(`${envFile} needs NEXT_PUBLIC_CONVEX_URL and ADMIN_TOKEN`);
+const { url, token } = convexEnv();
 
 // Bundle the content modules; image imports become { file, width, height, blurDataURL } like
 // Next's static imports (file instead of a URL).
@@ -55,10 +48,9 @@ await build({
 const { projects, featuredProjects, photos } = await import(pathToFileURL(out).href);
 rmSync(out);
 
-const client = new ConvexHttpClient(env.NEXT_PUBLIC_CONVEX_URL);
-const token = env.ADMIN_TOKEN;
+const client = new ConvexHttpClient(url);
 const existing = new Set((await client.query("admin/projects:list", { token })).map((p) => p.slug));
-console.log(`${env.NEXT_PUBLIC_CONVEX_URL}: ${existing.size} projects already there`);
+console.log(`${url}: ${existing.size} projects already there`);
 
 for (const project of projects) {
   if (existing.has(project.slug)) {
@@ -69,15 +61,16 @@ for (const project of projects) {
   for (const key of [project.cover, ...project.gallery]) {
     const photo = photos[key];
     const uploadUrl = await client.mutation("admin/photos:generateUploadUrl", { token });
-    const res = await fetch(uploadUrl, { method: "POST", headers: { "Content-Type": "image/jpeg" }, body: readFileSync(photo.src.file) });
+    const file = await encodePhoto(readFileSync(photo.src.file));
+    const res = await fetch(uploadUrl, { method: "POST", headers: { "Content-Type": file.type }, body: file.data });
     if (!res.ok) throw new Error(`upload failed for ${key}: ${res.status}`);
     const { storageId } = await res.json();
     ids.push(
       await client.mutation("admin/photos:create", {
         token,
         storageId,
-        width: photo.src.width,
-        height: photo.src.height,
+        width: file.width,
+        height: file.height,
         blurDataURL: photo.src.blurDataURL,
         alt: photo.alt,
         ...(photo.focus ? { focus: photo.focus } : {}),

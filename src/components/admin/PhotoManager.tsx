@@ -61,7 +61,7 @@ export function PhotoManager({
         const photo = await preparePhoto(file);
         const target = await getUploadUrl();
         if (!target.ok) throw new Error(target.error);
-        const sent = await fetch(target.value, { method: "POST", headers: { "Content-Type": "image/jpeg" }, body: photo.blob });
+        const sent = await fetch(target.value, { method: "POST", headers: { "Content-Type": photo.blob.type }, body: photo.blob });
         if (!sent.ok) throw new Error(`upload ${sent.status}`);
         const { storageId } = (await sent.json()) as { storageId: Id<"_storage"> };
         const alt = { en: "", ar: "" };

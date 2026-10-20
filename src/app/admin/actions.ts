@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath, updateTag } from "next/cache";
 import { ConvexError } from "convex/values";
 import { fetchQuery } from "convex/nextjs";
+import sharp from "sharp";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { isLang, LANG_COOKIE, type L } from "@/i18n/config";
@@ -194,19 +195,21 @@ export async function importSiteProject(slug: string) {
       const photo = codePhotos[key];
       const file = await fetch(new URL(photo.src.src, origin));
       if (!file.ok) throw new Error(`Couldn't read ${photo.src.src}: ${file.status}`);
+      // The site's photo format, as in scripts/lib/photos.mjs: WebP at 82, visually the same.
+      const encoded = await sharp(Buffer.from(await file.arrayBuffer()))
+        .rotate()
+        .resize({ width: 2400, height: 2400, fit: "inside", withoutEnlargement: true })
+        .webp({ quality: 82, effort: 6, smartSubsample: true })
+        .toBuffer({ resolveWithObject: true });
       const uploadUrl = await adminMutation(api.admin.photos.generateUploadUrl, {});
-      const upload = await fetch(uploadUrl, {
-        method: "POST",
-        headers: { "Content-Type": file.headers.get("content-type") ?? "image/jpeg" },
-        body: await file.arrayBuffer(),
-      });
+      const upload = await fetch(uploadUrl, { method: "POST", headers: { "Content-Type": "image/webp" }, body: new Uint8Array(encoded.data) });
       if (!upload.ok) throw new Error(`Upload failed: ${upload.status}`);
       const { storageId } = (await upload.json()) as { storageId: Id<"_storage"> };
       ids.push(
         await adminMutation(api.admin.photos.create, {
           storageId,
-          width: photo.src.width,
-          height: photo.src.height,
+          width: encoded.info.width,
+          height: encoded.info.height,
           blurDataURL: photo.src.blurDataURL ?? "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
           alt: photo.alt,
           ...(photo.focus ? { focus: photo.focus } : {}),

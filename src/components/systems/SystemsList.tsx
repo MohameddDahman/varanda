@@ -35,7 +35,6 @@ export function SystemsList() {
                 <h2 className={cn("t-h1 transition-colors duration-300", active === i ? "lg:text-[var(--fg)]" : "lg:text-[var(--fg-2)]")}>
                   {t(s.name)}
                 </h2>
-                <span className="t-label shrink-0 text-[var(--fg-2)]">{t(s.count)}</span>
               </div>
               <div className="mt-4 flex items-end justify-between gap-6">
                 <p className="t-body max-w-[46ch] text-[var(--fg-2)]">{t(s.short)}</p>

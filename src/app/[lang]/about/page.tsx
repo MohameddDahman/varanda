@@ -1,13 +1,11 @@
 import { notFound } from "next/navigation";
 import { isLang } from "@/i18n/config";
-import { about, warranty } from "@/content/company";
-import { photos } from "@/content/photos";
+import { about, process, warranty } from "@/content/company";
 import { pageMeta } from "@/lib/meta";
-import { coverSizes, DRIFT } from "@/lib/sizes";
 import { PageHero } from "@/components/ui/PageHero";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Icon } from "@/components/ui/Icon";
-import { ShutterImage } from "@/components/motion/ShutterImage";
+import { LogoLockup } from "@/components/brand/Logo";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
@@ -36,7 +34,10 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
       <section className="theme-light pb-[var(--section-y)]" data-header="light" aria-label={t(about.title)}>
         <div className="wrap grid gap-y-16 lg:grid-cols-12 lg:gap-x-8">
           <div className="lg:col-span-5">
-            <ShutterImage photo={photos.frenchDoorsWindow} sizes={coverSizes(photos.frenchDoorsWindow.src, "(min-width: 1024px) 40vw, 100vw", 4 / 5, DRIFT)} trigger="enter" className="aspect-[4/5] w-full" />
+            {/* The company's logo, as the client asked, in place of a photo */}
+            <Reveal trigger="enter" className="about-logo">
+              <LogoLockup className="about-logo-mark" />
+            </Reveal>
           </div>
           <div className="lg:col-span-6 lg:col-start-7">
             <Reveal items="p" className="space-y-6">
@@ -95,10 +96,14 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
                 : "Our own specialised team fits every door and window to our quality and finishing standards, then checks everything runs perfectly before handover."}
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-4 lg:col-span-6 lg:col-start-7">
-            <ShutterImage photo={photos.archedDoorsOpen} sizes={coverSizes(photos.archedDoorsOpen.src, "(min-width: 1024px) 25vw, 50vw", 3 / 4, DRIFT)} className="aspect-[3/4] w-full" />
-            <ShutterImage photo={photos.entranceDoor} sizes={coverSizes(photos.entranceDoor.src, "(min-width: 1024px) 25vw, 50vw", 3 / 4, DRIFT)} className="mt-16 aspect-[3/4] w-full" />
-          </div>
+          <Reveal as="ul" items="li" className="lg:col-span-6 lg:col-start-7 lg:self-end">
+            {process.commitments.map((c) => (
+              <li key={c.en} className="t-h3 flex items-center gap-5 border-b border-[var(--line)] py-6 first:border-t">
+                <span className="h-2 w-2 shrink-0 bg-red" aria-hidden="true" />
+                {t(c)}
+              </li>
+            ))}
+          </Reveal>
         </div>
       </section>
 

@@ -105,17 +105,6 @@ function ShapePath({ s, className }: { s: Shape; className?: string }) {
 
 const CAMS = [86, 156, 264, 334];
 
-/** A spur gear outline centred on (cx, cy). */
-function gearPath(cx: number, cy: number, r: number, teeth: number, depth: number) {
-  const step = (Math.PI * 2) / teeth;
-  const at = (a: number, rad: number) => `${(cx + Math.cos(a) * rad).toFixed(1)} ${(cy + Math.sin(a) * rad).toFixed(1)}`;
-  const pts: string[] = [];
-  for (let i = 0; i < teeth; i++) {
-    const a = i * step;
-    pts.push(at(a, r - depth), at(a + step * 0.15, r), at(a + step * 0.5, r), at(a + step * 0.65, r - depth));
-  }
-  return `M${pts.join("L")}Z`;
-}
 
 const RED = "#d71920";
 const hot = (_: number, el: Element) => el.getAttribute("data-hot") ?? RED;
@@ -155,8 +144,6 @@ export function ProfileSection() {
         .to(q("[data-section]"), { xPercent: -31.25, duration: 0.5 }, 5.0)
         .fromTo(q("[data-elevation]"), { opacity: 0, xPercent: 5 }, { opacity: 1, xPercent: 0, duration: 0.5 }, 5.05)
         .fromTo(q("[data-handle]"), { rotation: 90, transformOrigin: "50% 14px" }, { rotation: 0, transformOrigin: "50% 14px", duration: 0.5 }, 5.35)
-        .fromTo(q("[data-pinion]"), { rotation: 90, transformOrigin: "50% 50%" }, { rotation: 0, transformOrigin: "50% 50%", duration: 0.5 }, 5.35)
-        .fromTo(q("[data-rack]"), { y: 0 }, { y: -40, duration: 0.5 }, 5.35)
         .fromTo(q("[data-rod]"), { y: 0 }, { y: 18, duration: 0.5 }, 5.35)
         .fromTo(q("[data-icam]"), { y: -60 }, { y: 0, duration: 0.5 }, 5.35)
         .to(q("[data-keeper]"), { fill: RED, duration: 0.2 }, 5.75)
@@ -345,38 +332,22 @@ export function ProfileSection() {
                   <rect x="258" y="205" width="8" height="64" rx="4" fill="#ffffff" stroke="#9aa4b1" />
                 </g>
               </g>
-              {/* Close-ups: the gearbox and one locking point */}
+              {/* Close-up: one locking point dropping into its striker */}
               <g>
-                <circle cx="700" cy="170" r="76" fill="#0b1626" stroke="#3a4a60" />
-                <clipPath id="ps-gear">
-                  <circle cx="700" cy="170" r="75" />
-                </clipPath>
-                <g clipPath="url(#ps-gear)">
-                  <g data-rack>
-                    <rect x="645" y="40" width="20" height="320" fill="#5c6878" />
-                    {Array.from({ length: 22 }, (_, i) => (
-                      <rect key={i} x="665" y={42 + i * 14} width="6" height="7" fill="#5c6878" />
-                    ))}
-                  </g>
-                  <path data-pinion d={gearPath(700, 170, 30, 12, 6)} fill="#9aa4b1" />
-                  <circle cx="700" cy="170" r="8" fill="#0b1626" stroke="#9aa4b1" />
-                </g>
-                <text x="700" y="268" textAnchor="middle" className="ps-caption">
-                  {lang === "ar" ? "علبة التروس" : "Gearbox"}
-                </text>
-
-                <circle cx="700" cy="420" r="76" fill="#0b1626" stroke="#3a4a60" />
+                <circle cx="700" cy="300" r="76" fill="#0b1626" stroke="#3a4a60" />
                 <clipPath id="ps-pin">
-                  <circle cx="700" cy="420" r="75" />
+                  <circle cx="700" cy="300" r="75" />
                 </clipPath>
                 <g clipPath="url(#ps-pin)">
+                  <g transform="translate(0 -120)">
                   <g data-icam>
                     <rect x="693" y="250" width="14" height="190" fill="#9aa4b1" />
                     <circle cx="700" cy="432" r="11" fill="#cdd4dc" />
                   </g>
                   <path data-keeper fillRule="evenodd" d="M662 392 H738 V500 H662 Z M689 392 V442 A11 11 0 0 0 711 442 V392 Z" fill="#7f8894" />
+                  </g>
                 </g>
-                <text x="700" y="518" textAnchor="middle" className="ps-caption">
+                <text x="700" y="398" textAnchor="middle" className="ps-caption">
                   {lang === "ar" ? "نقطة الغلق" : "Locking point"}
                 </text>
               </g>

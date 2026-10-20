@@ -38,6 +38,13 @@ import accConcealedRollers from "@/assets/profile/acc-concealed-rollers.jpg";
 import accEspagnolette from "@/assets/profile/acc-espagnolette.jpg";
 import accStrikers from "@/assets/profile/acc-strikers.jpg";
 import accExtras from "@/assets/profile/acc-extras.jpg";
+// The client's own hardware (photographed in the workshop, 2026-10-21).
+import accWindowHandles from "@/assets/photos/acc-window-handles.jpg";
+import accFlushHandle from "@/assets/photos/acc-flush-handle.jpg";
+import acc3dHinge from "@/assets/photos/acc-3d-hinge.jpg";
+import accRollers from "@/assets/photos/acc-rollers.jpg";
+import accDoorEspagnolette from "@/assets/photos/acc-door-espagnolette.jpg";
+import accSlidingEspagnolette from "@/assets/photos/acc-sliding-espagnolette.jpg";
 import glassClear from "@/assets/profile/glass-clear.jpg";
 import glassReflective from "@/assets/profile/glass-reflective.jpg";
 import glassFume from "@/assets/profile/glass-fume.jpg";
@@ -191,6 +198,12 @@ export const photos = {
   accConcealedRollers: p(accConcealedRollers, "Large concealed rollers for heavy sliding systems", "عجل دفن كبير للأنظمة الثقيلة"),
   accEspagnolette: p(accEspagnolette, "Espagnolette multi-point lock fitted along a sash", "سبليونة غلق متعدد النقاط على الضلفة"),
   accStrikers: p(accStrikers, "Strikers for sliding, hinged and door systems", "مقابلات للسلايد والمفصلي والأبواب"),
+  accWindowHandles: p(accWindowHandles, "Two white window handles", "مقبضان أبيضان للشبابيك"),
+  accFlushHandle: p(accFlushHandle, "A white flush handle", "مقبض غاطس أبيض"),
+  acc3dHinge: p(acc3dHinge, "Box of a 3D adjustable door hinge, rated to 130 kg", "علبة مفصلة باب 3D قابلة للضبط، تتحمل حتى 130 كجم"),
+  accRollers: p(accRollers, "Sliding rollers: a flat track roller and two concealed twin-wheel rollers", "عجل الجرار: عجل مسطرة وعجل دفن بعجلتين"),
+  accDoorEspagnolette: p(accDoorEspagnolette, "Hinged-door espagnolette with its lock case", "سبليونة باب مفصلي بعلبة الكالون"),
+  accSlidingEspagnolette: p(accSlidingEspagnolette, "Sliding espagnolette bar with its locking points", "سبليونة جرار بنقاط الغلق"),
   accExtras: p(accExtras, "Dust brush, connectors and an opening restrictor", "فرشة مانعة للأتربة وفوالع ومحدد فتح"),
   glassClear: p(glassClear, "Clear glass with an open city view", "زجاج شفاف بإطلالة واضحة على المدينة"),
   glassReflective: p(glassReflective, "Reflective glass catching the sunset", "زجاج عاكس يعكس ضوء الغروب"),

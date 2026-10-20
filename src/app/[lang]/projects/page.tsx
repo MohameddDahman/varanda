@@ -60,7 +60,7 @@ export default async function ProjectsPage({ params }: PageProps<"/[lang]/projec
           <Reveal className="lg:col-span-5 lg:col-start-8 lg:pt-4">
             <p className="t-lead text-mist">
               {lang === "ar"
-                ? "لقطات من مواقع التركيب: شبابيك بغلافها الواقي، وشاتر بمقاسات خاصة، وأبواب في انتظار التسليم."
+                ? "لقطات من مواقع التركيب: شبابيك بغلافها الواقي، وشاتر (شيش الحصيرة) بمقاسات خاصة، وأبواب في انتظار التسليم."
                 : "Shots from installation days: windows still in their protective film, made-to-measure shutters and doors waiting for handover."}
             </p>
           </Reveal>

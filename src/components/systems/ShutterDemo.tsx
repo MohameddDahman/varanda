@@ -52,7 +52,7 @@ export function ShutterDemo() {
             </div>
           </div>
           <div className="lg:col-span-5 lg:col-start-8">
-            <p className="t-label text-[var(--fg-2)]">{lang === "ar" ? "مرّر لإنزال الشاتر" : "Scroll to lower the shutter"}</p>
+            <p className="t-label text-[var(--fg-2)]">{lang === "ar" ? "مرّر لإنزال الشاتر (شيش الحصيرة)" : "Scroll to lower the shutter"}</p>
             <h2 id="shutter-title" className="t-h1 mt-5 max-w-[14ch]">
               {lang === "ar" ? "الضوء والخصوصية بيدك." : "Light and privacy, in your hands."}
             </h2>

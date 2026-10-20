@@ -136,7 +136,7 @@ test("the lock demo opens the sash on its side hinges, tilts it on its bottom on
   await lock.getByRole("button", { name: "Locked" }).click();
   await expect.poll(sash).toEqual({ turn: 0, tilt: 0 });
   await expect.poll(keeper).toBe("rgb(215, 25, 32)");
-  await expect(lock.locator("[aria-live]")).toContainText("four locking pins");
+  await expect(lock.locator("[aria-live]")).toContainText("locking points hook into the strikers");
 });
 
 test("looping animations rest while they are off screen", async ({ page }) => {

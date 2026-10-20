@@ -29,16 +29,16 @@ const MODES: { id: Mode; label: L; text: L }[] = [
     id: "locked",
     label: { en: "Locked", ar: "مغلق" },
     text: {
-      en: "Handle down: the gearbox drives the rod down and four locking pins hook into the keepers on the frame.",
-      ar: "المقبض لأسفل: علبة التروس تدفع الذراع لأسفل فتدخل أربع نقاط غلق في المقابلات المثبتة على الإطار.",
+      en: "Handle down: the espagnolette rod slides down and its locking points hook into the strikers on the frame.",
+      ar: "المقبض لأسفل: تنزل ذراع السبليونة فتدخل نقاط الغلق في السكاكات المثبتة على الإطار.",
     },
   },
   {
     id: "turn",
     label: { en: "Open", ar: "فتح" },
     text: {
-      en: "Handle across: the pins slide out of the keepers and the whole sash swings into the room on its side hinges, like a door.",
-      ar: "المقبض أفقي: تخرج نقاط الغلق من المقابلات وتُفتح الضلفة بالكامل للداخل على مفصلاتها الجانبية مثل الباب.",
+      en: "Handle across: the locking points slide out of the strikers and the whole sash swings into the room on its side hinges, like a door.",
+      ar: "المقبض أفقي: تخرج نقاط الغلق من السكاكات وتُفتح الضلفة بالكامل للداخل على مفصلاتها الجانبية مثل الباب.",
     },
   },
   {
@@ -51,23 +51,12 @@ const MODES: { id: Mode; label: L; text: L }[] = [
   },
 ];
 
-/** A spur gear outline centred on (cx, cy). */
-function gearPath(cx: number, cy: number, r: number, teeth: number, depth: number) {
-  const pts: string[] = [];
-  const step = (Math.PI * 2) / teeth;
-  for (let i = 0; i < teeth; i++) {
-    const a = i * step;
-    const at = (ang: number, rad: number) => `${(cx + Math.cos(ang) * rad).toFixed(1)} ${(cy + Math.sin(ang) * rad).toFixed(1)}`;
-    pts.push(at(a, r - depth), at(a + step * 0.15, r), at(a + step * 0.5, r), at(a + step * 0.65, r - depth));
-  }
-  return `M${pts.join(" L")} Z`;
-}
 
 /**
  * How a tilt & turn window works. The window is a small CSS 3D model seen from above and to
  * the right: a frame with depth and a sash with thickness that swings on its side hinges
  * (open) or leans in on its bottom ones (tilt), closing in between, with its pivot line and
- * the path of its corner drawn in. Close-ups show the gearbox and a locking point. Only
+ * the path of its corner drawn in. A close-up shows a locking point. Only
  * transforms and opacity animate, and it plays itself while on screen until the visitor
  * picks a position.
  */
@@ -102,12 +91,10 @@ export function LockMechanism({ className }: { className?: string }) {
         .to(q("[data-dim]"), { opacity: 0, duration: close }, 0)
         .to(q("[data-axis]"), { opacity: 0, duration: quick ? 0 : 0.3 }, 0);
 
-      // 2 · The handle turns the gearbox, which slides the rod and its locking cams.
+      // 2 · The handle slides the espagnolette rod and its locking cams.
       const locked = mode === "locked";
       tl.addLabel("mech", close)
         .to(q("[data-handle]"), { rotation: angle, duration: d, ease }, "mech")
-        .to(q("[data-pinion]"), { rotation: angle, transformOrigin: "50% 50%", duration: d, ease }, "mech")
-        .to(q("[data-rack]"), { y: rod * 43, duration: d, ease }, "mech")
         .to(q("[data-rod]"), { yPercent: rod * ROD_TRAVEL, duration: d, ease }, "mech")
         // The close-up magnifies the travel into the keeper; upward travel is shown shorter so the pin stays in view.
         .to(q("[data-icam]"), { y: rod >= 0 ? rod * 65 : rod * 14, duration: d, ease }, "mech")
@@ -228,39 +215,17 @@ export function LockMechanism({ className }: { className?: string }) {
             <marker id={`${uid}-arrow`} viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
               <path d="M0 0 L10 5 L0 10 Z" fill="#d71920" />
             </marker>
-            <clipPath id={`${uid}-gear`}>
-              <circle cx="430" cy="118" r="88" />
-            </clipPath>
             <clipPath id={`${uid}-pin`}>
               <circle cx="480" cy="306" r="88" />
             </clipPath>
           </defs>
-          {/* From the handle and a keeper (where the 3D window projects them) to their close-ups */}
+          {/* From a keeper on the frame (where the 3D window projects it) to its close-up */}
           <g data-leader>
-            <path d="M264 205 C302 205 318 172 338 159" fill="none" stroke="#7f8894" strokeDasharray="3 4" />
-            <path d="M276 266 C326 266 374 290 412 293" fill="none" stroke="#7f8894" strokeDasharray="3 4" />
+            <path d="M276 266 C310 266 330 250 360 236" fill="none" stroke="#7f8894" strokeDasharray="3 4" />
           </g>
 
-          {/* The gearbox turns the handle's rotation into rod travel */}
-          <g transform="translate(-16 -6)">
-            <circle cx="430" cy="118" r="90" fill="#ffffff" stroke="#aab4c0" />
-            <g clipPath={`url(#${uid}-gear)`}>
-              <g data-rack>
-                <rect x="372" y="-80" width="22" height="400" fill="#b9c2cd" />
-                {Array.from({ length: 26 }, (_, i) => (
-                  <rect key={i} x="394" y={-78 + i * 15.4} width="7" height="8" fill="#b9c2cd" />
-                ))}
-              </g>
-              <path data-pinion d={gearPath(430, 118, 34, 12, 7)} fill="#7f8894" />
-              <circle cx="430" cy="118" r="9" fill="#eef0f3" stroke="#4d5562" />
-            </g>
-            <text x="430" y="228" textAnchor="middle" className="lock-mech-caption">
-              {lang === "ar" ? "علبة التروس" : "Gearbox"}
-            </text>
-          </g>
-
-          {/* A locking pin dropping into its keeper */}
-          <g transform="translate(20 4)">
+          {/* A locking point dropping into its striker */}
+          <g transform="translate(470 196) scale(1.3) translate(-480 -306)">
             <circle cx="480" cy="306" r="90" fill="#ffffff" stroke="#aab4c0" />
             <g clipPath={`url(#${uid}-pin)`}>
               <g data-icam>

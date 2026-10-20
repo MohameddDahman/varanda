@@ -75,7 +75,7 @@ export function HomeOpenings() {
         <div className="rail-intro">
           <Eyebrow>{lang === "ar" ? "أنظمة الفتح" : "Opening systems"}</Eyebrow>
           <h2 id="openings-title" className="t-display mt-6">
-            {lang === "ar" ? "ست طرق لفتح المساحة." : "Six ways to open a room."}
+            {lang === "ar" ? "طرق ذكية لفتح المساحات." : "Smart ways to open a space."}
           </h2>
           <p className="t-lead mt-6 max-w-[34ch] text-mist">
             {lang === "ar"

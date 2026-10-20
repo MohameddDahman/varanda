@@ -18,7 +18,7 @@ export const site = {
   descriptorFull: { en: "uPVC window & door systems", ar: "أنظمة الأبواب والشبابيك uPVC" } satisfies L,
   description: {
     en: "Varanda designs, manufactures and installs uPVC windows, doors, roller shutters and fly screens — built for comfort, quiet rooms and a long life.",
-    ar: "فاراندا تصمم وتصنّع وتركّب أنظمة الأبواب والشبابيك uPVC والشاتر وسلك الحشرات — لراحة أكبر وهدوء أكثر وعمر أطول.",
+    ar: "فاراندا تصمم وتصنّع وتركّب أنظمة الأبواب والشبابيك uPVC والشاتر (شيش الحصيرة) وسلك الحشرات — لراحة أكبر وهدوء أكثر وعمر أطول.",
   } satisfies L,
   contact: {
     // Real details from the client (2026-10-16). Address, opening hours and the map are
@@ -34,7 +34,7 @@ export const site = {
       },
       {
         name: { en: "Haitham Mohamed El-Halawany", ar: "هيثم محمد الحلواني" },
-        role: { en: "Supervisor", ar: "المشرف" },
+        role: { en: "Sales supervisor", ar: "مشرف مبيعات" },
         phone: "+20 111 001 8160",
         whatsapp: "201110018160",
       },

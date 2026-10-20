@@ -40,12 +40,11 @@ function SashSymbol({ point }: { point: "right" | "left" | "top" | "both" }) {
   );
 }
 
-/** The sliding arrow belongs to the whole frame. */
-function FrameSymbol({ kind }: { kind: OpeningKind }) {
-  if (kind !== "sliding") return null;
+/** A sliding sash moves both ways: a double-headed arrow, carried by the sash as it slides. */
+function SlideSymbol() {
   return (
     <svg viewBox="0 0 80 100" preserveAspectRatio="none" className="od-symbol" aria-hidden="true">
-      {kind === "sliding" && <path data-sym d="M48 50 H22 M28 44 L22 50 L28 56" {...stroke} strokeWidth={0.8} />}
+      <path data-sym d="M18 50 H62 M25 43 L18 50 L25 57 M55 43 L62 50 L55 57" {...stroke} strokeWidth={0.9} />
     </svg>
   );
 }
@@ -76,23 +75,23 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
         case "sliding":
           t.to(q("[data-front]"), { xPercent: -86, duration: 2 }, 0.2);
           break;
-        // Sashes swing away from the viewer so the open sash reads as a clean
-        // trapezoid inside its frame (toward the viewer it balloons past it).
+        // Every sash opens inward, into the room, toward the viewer (as the client's
+        // windows do); the angle stays modest so the sash stays inside its frame.
         case "hinged":
-          t.to(q("[data-swing]"), { rotateY: 60, duration: 2 }, 0.2);
+          t.to(q("[data-swing]"), { rotateY: -48, duration: 2 }, 0.2);
           break;
         case "hinged-double":
-          t.to(q("[data-swing]"), { rotateY: (i: number) => (i === 0 ? 60 : -60), duration: 2 }, 0.2);
+          t.to(q("[data-swing]"), { rotateY: (i: number) => (i === 0 ? -48 : 48), duration: 2 }, 0.2);
           break;
         case "tilt-turn": {
           // Tilt pivots on the bottom rail, turn on the hinge side: swap the
           // origin while the sash is square so the change is invisible.
           const sash = q("[data-swing]");
           t.set(sash, { transformOrigin: "50% 100%" }, 0)
-            .to(sash, { rotateX: 15, duration: 0.9 }, 0.2)
+            .to(sash, { rotateX: -14, duration: 0.9 }, 0.2)
             .to(sash, { rotateX: 0, duration: 0.5 })
             .set(sash, { transformOrigin: "0% 50%" })
-            .to(sash, { rotateY: 56, duration: 1.1 });
+            .to(sash, { rotateY: -48, duration: 1.1 });
           break;
         }
         case "fixed":
@@ -104,10 +103,15 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
           );
           break;
         case "tilt":
-          t.to(q("[data-swing]"), { rotateX: 17, duration: 2 }, 0.2);
+          t.to(q("[data-swing]"), { rotateX: -16, duration: 2 }, 0.2);
           break;
+        // One sash opens on its own hinges; the rest fold together against the other jamb.
         case "folding":
-          t.to(q("[data-fold]"), { rotateY: (i: number) => (i === 0 ? 70 : i % 2 ? -140 : 140), duration: 2 }, 0.2);
+          t.to(q("[data-swing]"), { rotateY: -55, duration: 1.4 }, 0.2).to(
+            q("[data-fold]"),
+            { rotateY: (i: number) => (i === 0 ? 62 : i % 2 ? -124 : 124), duration: 2 },
+            0.9,
+          );
           break;
       }
       if (sym.length) t.to(sym, { opacity: 0.75, duration: 0.6 }, ">-0.6");
@@ -150,6 +154,7 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
               </div>
               <div data-front className="od-sash od-slide-front">
                 <Glass />
+                <SlideSymbol />
                 <span className="od-handle od-handle-start" />
               </div>
             </>
@@ -189,25 +194,29 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
             </div>
           )}
           {kind === "folding" && (
-            <div data-fold className="od-fold">
-              <Glass />
-              <SashSymbol point="right" />
-              <div data-fold className="od-fold od-fold-next">
+            <>
+              {/* The hinged sash */}
+              <div data-swing className="od-sash od-fold-door od-origin-left">
+                <Glass />
+                <SashSymbol point="right" />
+                <span className="od-handle" />
+              </div>
+              {/* The folding sashes, hinged to the right jamb and to each other */}
+              <div data-fold className="od-fold od-fold-r">
                 <Glass />
                 <SashSymbol point="left" />
-                <div data-fold className="od-fold od-fold-next">
+                <div data-fold className="od-fold od-fold-r od-fold-r-next">
                   <Glass />
                   <SashSymbol point="right" />
-                  <div data-fold className="od-fold od-fold-next">
+                  <div data-fold className="od-fold od-fold-r od-fold-r-next">
                     <Glass />
                     <SashSymbol point="left" />
                   </div>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </div>
-        <FrameSymbol kind={kind} />
       </div>
     </div>
   );

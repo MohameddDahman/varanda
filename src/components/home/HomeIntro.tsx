@@ -31,8 +31,8 @@ export function HomeIntro({ lang }: { lang: Lang }) {
           </h2>
           <ScrubText className="t-h1 max-w-[22ch]">
             {lang === "ar"
-              ? "خبرة راسخة ورؤية جديدة. نستشير ونقيس ونصنّع ونركّب — ونبقى معك لسنوات بعد التسليم."
-              : "Experienced hands, a new vision. We consult, measure, make and install — and stay with you for the years after handover."}
+              ? "خبرة راسخة ورؤية جديدة، من القياس حتى التركيب."
+              : "Experienced hands, a new vision — from measuring to installation."}
           </ScrubText>
 
           <Reveal as="ul" items="li" className="intro-pillars mt-16 lg:mt-24">

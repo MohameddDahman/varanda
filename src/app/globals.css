@@ -2638,6 +2638,59 @@ div.ps-layer {
   }
 }
 
+/* Roller-shutter slats drawn in section (SlatSection). */
+.slat-section {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 6 / 5;
+  background: var(--color-paper);
+}
+
+.slat-section-svg {
+  height: 78%;
+  width: auto;
+  overflow: visible;
+}
+
+.slat-shell {
+  fill: #dfe4ea;
+  stroke: var(--color-navy-700);
+  stroke-width: 0.45;
+  stroke-linejoin: round;
+}
+
+.slat-foam {
+  fill: #f2e8cf;
+}
+
+.slat-dim {
+  fill: none;
+  stroke: var(--color-red);
+  stroke-width: 0.35;
+}
+
+.slat-dim-text {
+  font-family: var(--font-label);
+  font-size: 3.4px;
+  font-weight: 600;
+  fill: var(--color-ink);
+}
+
+/* About: the company's logo in place of a photo (client's request). */
+.about-logo {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  padding: 12%;
+  background: var(--color-white);
+  border: 1px solid var(--line);
+}
+
+.about-logo-mark {
+  width: 100%;
+  height: auto;
+}
+
 /* Multi-point lock explainer: a tilt & turn window in CSS 3D beside close-ups of the
    gearbox and a locking point. The window's lengths are in cqw of its width; only
    transforms and opacity animate. Planes are drawn only on the sides the fixed camera
@@ -3158,14 +3211,15 @@ div.ps-layer {
   isolation: isolate;
 }
 
+/* The frame sits inset: sashes open inward, toward the viewer, and grow into this margin. */
 .od-view {
   position: absolute;
-  inset: 0;
+  inset: 8%;
 }
 
 .od-frame {
   position: absolute;
-  inset: 0;
+  inset: 8%;
   border: 3.4cqi solid var(--od-frame);
   box-shadow:
     inset 0 0 0 1px rgb(0 0 0 / 0.1),
@@ -3175,7 +3229,7 @@ div.ps-layer {
 .od-stage {
   position: absolute;
   inset: 0;
-  perspective: 230cqi;
+  perspective: 320cqi;
   transform-style: preserve-3d;
 }
 
@@ -3292,6 +3346,35 @@ div.ps-layer {
 
 .od-fold-next {
   left: 100%;
+  width: 100%;
+}
+
+/* Folding: one hinged sash at the left, and a chain of sashes folding from the right jamb. */
+.od-fold-door {
+  inset: 0 75% 0 0;
+  box-shadow:
+    inset 0 0 0 1.8cqi var(--od-frame),
+    inset 0 0 0 calc(1.8cqi + 1px) rgb(0 0 0 / 0.08);
+}
+
+.od-fold-door .od-glass {
+  inset: 1.8cqi;
+}
+
+.od-fold-door > .od-symbol {
+  inset: 1.8cqi;
+  width: calc(100% - 3.6cqi);
+  height: calc(100% - 3.6cqi);
+}
+
+.od-fold-r {
+  left: auto;
+  right: 0;
+  transform-origin: 100% 50%;
+}
+
+.od-fold-r-next {
+  right: 100%;
   width: 100%;
 }
 

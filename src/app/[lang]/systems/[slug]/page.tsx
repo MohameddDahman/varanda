@@ -17,6 +17,7 @@ import { CountUp } from "@/components/motion/CountUp";
 import { OpeningShowcase } from "@/components/systems/OpeningShowcase";
 import { GlassSwitcher } from "@/components/systems/GlassSwitcher";
 import { ScreenDiagram, ShutterDemo } from "@/components/systems/ShutterDemo";
+import { SlatSection } from "@/components/systems/SlatSection";
 import { ProductPhoto } from "@/components/systems/ProductPhoto";
 import { LockMechanism } from "@/components/why/LockMechanism";
 import { HomeCTA } from "@/components/home/HomeCTA";
@@ -57,8 +58,9 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
     <>
       {/* Hero */}
       <section className="theme-dark relative pt-[calc(var(--header-h)+clamp(3rem,9vh,7rem))] pb-[var(--section-y)]" data-header="dark">
+        {/* Words only: the client preferred no photo here; the drawings below show each system. */}
         <div className="wrap grid gap-y-12 lg:grid-cols-12 lg:gap-x-8">
-          <div className="lg:col-span-6">
+          <div className="lg:col-span-9">
             <Reveal trigger="enter" delay={0.15}>
               <TLink href={path(lang, "/systems")} className="t-label inline-flex items-center gap-2 text-mist hover:text-white">
                 <span aria-hidden="true" className="inline-block rtl:-scale-x-100">
@@ -77,17 +79,7 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
             )}
             <Reveal trigger="enter" delay={0.45} className="mt-8 max-w-[44ch]">
               <p className="t-lead text-mist">{t(system.intro)}</p>
-              <p className="t-label mt-8 text-white/80">{t(system.count)}</p>
             </Reveal>
-          </div>
-          <div className="lg:col-span-5 lg:col-start-8">
-            <ShutterImage
-              photo={photos[system.cover]}
-              sizes={coverSizes(photos[system.cover].src, "(min-width: 1024px) 40vw, 100vw", 4 / 5, DRIFT)}
-              trigger="enter"
-              preload
-              className="aspect-[4/5] w-full"
-            />
           </div>
         </div>
       </section>
@@ -175,7 +167,6 @@ export default async function SystemPage({ params }: PageProps<"/[lang]/systems/
                     {t(s.name)}
                   </span>
                   <span className="flex items-center gap-6 text-ink-2">
-                    <span className="t-label hidden sm:inline">{t(s.count)}</span>
                     <Arrow className="h-4 w-8" />
                   </span>
                 </TLink>
@@ -245,7 +236,7 @@ function Showcase({ system, lang }: { system: SystemCategory; lang: Lang }) {
     return (
       <section className="theme-white section" data-header="light" aria-labelledby="range-title">
         <div className="wrap">
-          <RangeTitle>{t(system.count)}</RangeTitle>
+          <RangeTitle>{t(system.name)}</RangeTitle>
           <OpeningShowcase />
         </div>
       </section>
@@ -276,14 +267,23 @@ function Showcase({ system, lang }: { system: SystemCategory; lang: Lang }) {
           <div className="wrap">
             <Eyebrow>{lang === "ar" ? "أنواع الشرائح" : "Slat types"}</Eyebrow>
             <SplitReveal as="h2" id="slats-title" className="t-h1 mt-6 max-w-[16ch]">
-              {lang === "ar" ? "ثلاث شرائح لثلاثة احتياجات." : "Three slats for three needs."}
+              {lang === "ar" ? "شريحة لكل احتياج." : "A slat for every need."}
             </SplitReveal>
             <Reveal as="ul" items="li" className="mt-14 grid gap-px border-t border-[var(--line)] md:grid-cols-3">
               {system.items.map((s) => (
                 <li key={s.id} className="border-b border-[var(--line)] py-10 md:pe-10">
-                  {s.image && <ProductPhoto photo={photos[s.image]} lang={lang} fit="cover" className="aspect-[6/5] bg-paper" />}
+                  {s.slatHeight && <SlatSection height={s.slatHeight} />}
                   <h3 className="t-h2 mt-8">{t(s.name)}</h3>
                   <p className="t-body mt-3 max-w-[32ch] text-ink-2">{t(s.text)}</p>
+                  {s.points && (
+                    <ul className="mt-5">
+                      {s.points.map((pt) => (
+                        <li key={pt.en} className="t-small border-t border-[var(--line)] py-2.5 text-ink-2">
+                          {t(pt)}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </Reveal>
@@ -297,7 +297,7 @@ function Showcase({ system, lang }: { system: SystemCategory; lang: Lang }) {
     return (
       <section className="theme-white section" data-header="light" aria-labelledby="range-title">
         <div className="wrap">
-          <RangeTitle>{t(system.count)}</RangeTitle>
+          <RangeTitle>{t(system.name)}</RangeTitle>
           <ul className="grid gap-16 md:grid-cols-3 md:gap-8">
             {system.items.map((s) => (
               <li key={s.id}>
@@ -327,7 +327,7 @@ function Showcase({ system, lang }: { system: SystemCategory; lang: Lang }) {
   return (
     <section className="theme-white section" data-header="light" aria-labelledby="range-title">
       <div className="wrap">
-        <RangeTitle>{t(system.count)}</RangeTitle>
+        <RangeTitle>{t(system.name)}</RangeTitle>
         <Reveal as="ul" items="li" className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {system.items.map((h) => (
             <li key={h.id}>
@@ -349,11 +349,11 @@ function Showcase({ system, lang }: { system: SystemCategory; lang: Lang }) {
         <div className="mt-24 grid gap-y-10 border-t border-[var(--line)] pt-16 lg:grid-cols-12 lg:gap-x-8">
           <div className="lg:col-span-4">
             <Eyebrow>{lang === "ar" ? "كيف يعمل الغلق" : "How the lock works"}</Eyebrow>
-            <h3 className="t-h1 mt-6 max-w-[12ch]">{lang === "ar" ? "حركة واحدة، أربع نقاط غلق" : "One turn, four locking points"}<span className="dot">.</span></h3>
+            <h3 className="t-h1 mt-6 max-w-[12ch]">{lang === "ar" ? "حركة واحدة، من 2 إلى 5 نقاط غلق" : "One turn, two to five locking points"}<span className="dot">.</span></h3>
             <p className="t-body mt-6 max-w-[38ch] text-ink-2">
               {lang === "ar"
-                ? "اختر وضع المقبض وشاهد كيف تحرّك علبة التروس ذراع السبليونة لتُدخل نقاط الغلق في المقابلات."
-                : "Pick a handle position and watch the gearbox move the espagnolette rod and drive the locking pins into their keepers."}
+                ? "اختر وضع المقبض وشاهد كيف تتحرك ذراع السبليونة لتُدخل نقاط الغلق في السكاكات."
+                : "Pick a handle position and watch the espagnolette rod drive the locking points into their strikers."}
             </p>
           </div>
           <LockMechanism className="lg:col-span-8" />

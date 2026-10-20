@@ -4,7 +4,7 @@ import type { PhotoKey } from "./photos";
 export type OpeningKind = "sliding" | "hinged" | "hinged-double" | "tilt-turn" | "fixed" | "tilt" | "folding";
 export type GlassKind = "clear" | "reflective" | "fume" | "double";
 export type ScreenKind = "fixed" | "sliding" | "pleated";
-export type SlatKind = "perforated" | "ngs" | "bk";
+export type SlatKind = "tera" | "bk" | "zinc" | "safe" | "ngss" | "ngs";
 
 export type SystemItem = {
   id: string;
@@ -14,6 +14,8 @@ export type SystemItem = {
   points?: L[];
   /** Product photo for the item. */
   image?: PhotoKey;
+  /** Roller-shutter slats: the slat's height in mm, for its drawn section. */
+  slatHeight?: number;
 };
 
 export type SystemSlug = "windows-doors" | "glass" | "roller-shutters" | "fly-screens" | "hardware";
@@ -25,8 +27,6 @@ export type SystemCategory = {
   short: L;
   /** Paragraph that opens the system page. */
   intro: L;
-  /** Short count shown next to the name, e.g. "6 opening systems". */
-  count: L;
   tagline?: L;
   cover: PhotoKey;
   gallery: PhotoKey[];
@@ -43,16 +43,15 @@ export const systems: SystemCategory[] = [
     slug: "windows-doors",
     name: { en: "Windows & doors", ar: "الأبواب والشبابيك" },
     short: {
-      en: "Six opening systems for every room, view and use.",
-      ar: "ستة أنظمة فتح تناسب كل مساحة وكل استخدام.",
+      en: "Opening systems for every room, view and use.",
+      ar: "أنظمة فتح تناسب كل مساحة وكل استخدام.",
     },
     intro: {
       en: "A range of opening systems that suit different architectural needs and give the highest level of comfort and flexibility in everyday use.",
       ar: "مجموعة متنوعة من أنظمة الفتح لتناسب مختلف الاحتياجات المعمارية، وتوفر أعلى درجات الراحة والمرونة في الاستخدام.",
     },
-    count: { en: "6 opening systems", ar: "6 أنظمة فتح" },
-    cover: "frenchDoors",
-    gallery: ["apartmentLiving", "classicFrenchDoor", "homeWindow1", "tiltTurn", "slidingDoor2020", "classicTilt"],
+    cover: "apartmentLiving",
+    gallery: ["classicFrenchDoor", "homeWindow1", "tiltTurn", "slidingDoor2020", "classicTilt"],
     items: [
       {
         id: "sliding",
@@ -78,7 +77,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "tilt-turn",
-        name: { en: "Tilt & turn", ar: "القلاب والمفصلي" },
+        name: { en: "Tilt & turn", ar: "المفصلي قلاب" },
         text: {
           en: "Full flexibility: a secure ventilation position and a full opening, both with a tight seal.",
           ar: "مرونة كاملة في الاستخدام، يوفر وضعية تهوية آمنة وإمكانية الفتح الكامل مع إحكام عالٍ.",
@@ -124,7 +123,7 @@ export const systems: SystemCategory[] = [
         tag("Modern handles", "مقابض بتصميم عصري"),
         tag("Strong, durable hinges", "مفصلات قوية ومتينة"),
         tag("High-quality rollers", "عجلات عالية الجودة"),
-        tag("High-insulation glass", "زجاج عالي العزل"),
+        tag("High-quality, high-insulation glass", "زجاج عالي الجودة والعزل"),
       ],
     },
   },
@@ -139,9 +138,8 @@ export const systems: SystemCategory[] = [
       en: "A range of glass to suit different needs, adding thermal and acoustic insulation with a high degree of clarity and privacy.",
       ar: "مجموعة متنوعة من أنظمة الزجاج لتناسب مختلف الاحتياجات، وتوفر العزل الحراري والصوتي مع درجات عالية من الوضوح والخصوصية.",
     },
-    count: { en: "4 glass options", ar: "4 خيارات للزجاج" },
-    cover: "seaViewFacade",
-    gallery: ["heroRiverSliding", "apartmentBedroom", "homeWindow2"],
+    cover: "heroRiverSliding",
+    gallery: ["apartmentBedroom", "homeWindow2"],
     items: [
       {
         id: "clear",
@@ -184,7 +182,7 @@ export const systems: SystemCategory[] = [
     details: {
       title: { en: "Glass details", ar: "تفاصيل الزجاج" },
       items: [
-        tag("A choice of glass thickness — single or double", "سُمك زجاج متعدد الخيارات (مفرد - مزدوج)"),
+        tag("A choice of glass thickness — single, double or triple", "سُمك زجاج متعدد الخيارات (مفرد - مزدوج - ثلاثي)"),
         tag("Insulating layers can be added", "إمكانية إضافة طبقات عازلة"),
         tag("Works with all our opening systems", "مناسب لجميع أنظمة الفتح لدينا"),
         tag("High quality and a long service life", "جودة عالية وطول عمر افتراضي"),
@@ -193,7 +191,7 @@ export const systems: SystemCategory[] = [
   },
   {
     slug: "roller-shutters",
-    name: { en: "Roller shutters", ar: "الشاتر" },
+    name: { en: "Roller shutters", ar: "الشاتر (شيش الحصيرة)" },
     short: {
       en: "Protection, privacy and insulation — operated by switch, remote or phone.",
       ar: "حماية وخصوصية وعزل — بالمفتاح أو الريموت أو الهاتف.",
@@ -202,37 +200,90 @@ export const systems: SystemCategory[] = [
       en: "An ideal solution for protection and privacy that adds thermal insulation and cuts noise, with a choice of designs, materials and operating systems.",
       ar: "حل مثالي للحماية والخصوصية وتوفير العزل الحراري وتقليل الضوضاء، مع خيارات متعددة من التصميمات والخامات وأنظمة التشغيل.",
     },
-    count: { en: "3 slat types", ar: "3 أنواع شرائح" },
-    cover: "villaShutter",
-    gallery: ["villaShuttersFacade", "archedShutter"],
+    cover: "villaShuttersFacade",
+    gallery: ["archedShutter"],
     items: [
       {
-        id: "perforated",
-        image: "slatPerforated",
-        name: { en: "Perforated slat", ar: "شريحة مثقّبة (بفراغات)" },
+        id: "tera",
+        slatHeight: 58,
+        name: { en: "TERA", ar: "شيش TERA" },
         text: {
-          en: "Lets light and air through while keeping your privacy.",
-          ar: "تسمح بمرور الضوء والهواء مع الحفاظ على الخصوصية.",
+          en: "A 58 mm slat.",
+          ar: "شريحة بارتفاع 58 مم.",
         },
-      },
-      {
-        id: "ngs",
-        image: "slatNgs",
-        name: { en: "NGS slat", ar: "شريحة NGS" },
-        text: {
-          en: "Higher thermal insulation and greater strength, with a modern design.",
-          ar: "عزل حراري أعلى ومتانة أكبر مع تصميم عصري.",
-        },
+        points: [
+          tag("Maximum width: 4.5 m (5 m with high-density foam)", "أقصى عرض: 4.5 م (5 م بالفوم عالي الكثافة)"),
+          tag("Weight: 2.85 kg/m² (4.1 kg/m² high density)", "الوزن: 2.85 كجم/م² (4.1 كجم/م² عالي الكثافة)"),
+        ],
       },
       {
         id: "bk",
-        image: "slatBk",
-        name: { en: "BK slat", ar: "شريحة BK" },
-        text: { en: "The economical, widely used option.", ar: "الخيار الاقتصادي والشائع الاستخدام." },
+        slatHeight: 50,
+        name: { en: "BK", ar: "شيش BK" },
+        text: {
+          en: "A 50 mm slat.",
+          ar: "شريحة بارتفاع 50 مم.",
+        },
+        points: [
+          tag("Maximum width: 3.5 m (4.5 m with high-density foam)", "أقصى عرض: 3.5 م (4.5 م بالفوم عالي الكثافة)"),
+          tag("Weight: 2.5 kg/m² (3.3 kg/m² high density)", "الوزن: 2.5 كجم/م² (3.3 كجم/م² عالي الكثافة)"),
+        ],
+      },
+      {
+        id: "zinc",
+        slatHeight: 55,
+        name: { en: "ZINC protection", ar: "شيش حماية ZINC" },
+        text: {
+          en: "A 55 mm protection slat.",
+          ar: "شريحة حماية بارتفاع 55 مم.",
+        },
+        points: [
+          tag("Maximum width: 4 m (5 m with high-density foam)", "أقصى عرض: 4 م (5 م بالفوم عالي الكثافة)"),
+          tag("Weight: 8.6 kg/m² (9.33 kg/m² high density)", "الوزن: 8.6 كجم/م² (9.33 كجم/م² عالي الكثافة)"),
+        ],
+      },
+      {
+        id: "safe",
+        slatHeight: 55,
+        name: { en: "SAFE", ar: "شيش SAFE" },
+        text: {
+          en: "A 55 mm slat.",
+          ar: "شريحة بارتفاع 55 مم.",
+        },
+        points: [
+          tag("Maximum width: 5 m", "أقصى عرض: 5 م"),
+          tag("Weight: 8.5 kg/m²", "الوزن: 8.5 كجم/م²"),
+        ],
+      },
+      {
+        id: "ngss",
+        slatHeight: 50,
+        name: { en: "NGSS", ar: "شيش NGSS" },
+        text: {
+          en: "A 50 mm slat.",
+          ar: "شريحة بارتفاع 50 مم.",
+        },
+        points: [
+          tag("Maximum width: 5 m with high-density foam", "أقصى عرض: 5 م بالفوم عالي الكثافة"),
+          tag("Weight: 10.8 kg/m² (high density)", "الوزن: 10.8 كجم/م² (عالي الكثافة)"),
+        ],
+      },
+      {
+        id: "ngs",
+        slatHeight: 50,
+        name: { en: "NGS", ar: "شيش NGS" },
+        text: {
+          en: "A 50 mm slat.",
+          ar: "شريحة بارتفاع 50 مم.",
+        },
+        points: [
+          tag("Maximum width: 4 m (5 m with high-density foam)", "أقصى عرض: 4 م (5 م بالفوم عالي الكثافة)"),
+          tag("Weight: 5 kg/m² (5.6 kg/m² high density)", "الوزن: 5 كجم/م² (5.6 كجم/م² عالي الكثافة)"),
+        ],
       },
     ],
     features: {
-      title: { en: "Why fit a shutter", ar: "مميزات الشاتر" },
+      title: { en: "Why fit a shutter", ar: "مميزات الشاتر (شيش الحصيرة)" },
       items: [
         tag("Thermal insulation that saves energy", "عزل حراري يوفر في استهلاك الطاقة"),
         tag("Less noise from outside", "تقليل الضوضاء من الخارج"),
@@ -253,7 +304,7 @@ export const systems: SystemCategory[] = [
       ],
     },
     warranty: [
-      { value: { en: "10 years", ar: "10 سنوات" }, label: { en: "Warranty on the shutter", ar: "ضمان على الشاتر" } },
+      { value: { en: "3 years", ar: "3 سنوات" }, label: { en: "Warranty on the shutter", ar: "ضمان على الشاتر (شيش الحصيرة)" } },
       {
         value: { en: "3–5 years", ar: "3–5 سنوات" },
         label: { en: "Warranty on the motor, by type", ar: "ضمان على الموتور حسب النوع" },
@@ -272,9 +323,8 @@ export const systems: SystemCategory[] = [
       en: "Fly screen systems that fit all our window and door systems — practical, durable and easy to use.",
       ar: "مجموعة متنوعة من أنظمة سلك الحشرات لتناسب جميع أنظمة الشبابيك والأبواب بتصميم عملي ومتانة عالية وسهولة في الاستخدام.",
     },
-    count: { en: "3 screen types", ar: "3 أنواع سلك" },
-    cover: "classicWindow",
-    gallery: ["apartmentBedroom"],
+    cover: "apartmentBedroom",
+    gallery: [],
     items: [
       {
         id: "fixed",
@@ -337,13 +387,12 @@ export const systems: SystemCategory[] = [
       en: "A complete range of high-quality hardware for smooth operation, a tight seal, strength and long-term use.",
       ar: "مجموعة متكاملة من الإكسسوارات عالية الجودة لضمان سهولة التشغيل والإحكام والمتانة والاستخدام طويل الأمد.",
     },
-    count: { en: "7 component groups", ar: "7 مجموعات" },
-    cover: "accHandles",
-    gallery: ["entranceDoor", "tiltTurn"],
+    cover: "accWindowHandles",
+    gallery: ["tiltTurn"],
     items: [
       {
         id: "handles",
-        image: "accHandles",
+        image: "accWindowHandles",
         name: { en: "Handles", ar: "المقابض" },
         text: {
           en: "For doors and windows, in white, beige, grey, black, wood, gold and silver.",
@@ -351,53 +400,57 @@ export const systems: SystemCategory[] = [
         },
       },
       {
+        id: "flush-handle",
+        image: "accFlushHandle",
+        name: { en: "Flush handle", ar: "مقبض غاطس" },
+        text: { en: "A flat handle that sits within the sash.", ar: "مقبض مسطح يُركّب داخل الضلفة." },
+      },
+      {
         id: "hinges",
-        image: "accHinges",
+        image: "acc3dHinge",
         name: { en: "Hinges", ar: "المفصلات" },
         text: {
-          en: "Sizes for every use: 7.5 cm standard, 10 cm heavy-duty and adjustable 3D hinges.",
-          ar: "مقاسات تناسب جميع الاستخدامات: مفصلة 7.5 سم (قياسية)، ومفصلة 10 سم (كبيرة التحمل)، ومفصلة 3D.",
+          en: "uPVC door and window hinges, including the 3D adjustable door hinge rated to 130 kg.",
+          ar: "مفصلات PVC للأبواب والشبابيك، منها مفصلة الباب 3D القابلة للضبط وتتحمل حتى 130 كجم.",
         },
       },
       {
         id: "rollers",
-        image: "accSlidingRollers",
-        name: { en: "Sliding rollers", ar: "عجل السلايد" },
+        image: "accRollers",
+        name: { en: "Sliding rollers", ar: "عجل الجرار" },
         text: {
-          en: "Roller carriages with twin Teflon wheels for smooth, quiet movement.",
-          ar: "عجل بعجلتين من التفلون لضمان حركة سلسة وهادئة.",
+          en: "Flat track rollers and concealed rollers for sliding sashes, for smooth, quiet movement.",
+          ar: "عجل مسطرة وعجل دفن للضلف الجرار، لحركة سلسة وهادئة.",
         },
       },
       {
-        id: "concealed",
-        image: "accConcealedRollers",
-        name: { en: "Concealed heavy rollers", ar: "عجل دفن كبير" },
+        id: "door-espagnolette",
+        image: "accDoorEspagnolette",
+        name: { en: "Hinged-door espagnolette", ar: "سبليونة باب مفصلي" },
         text: {
-          en: "Large concealed rollers used in some heavy systems.",
-          ar: "عجل كبير (دفن) يُستخدم في بعض الأنظمة الثقيلة.",
+          en: "Multi-point locking with a lock cylinder to open and lock the door.",
+          ar: "غلق متعدد النقاط بكالون فتح وقفل للباب.",
         },
       },
       {
-        id: "espagnolette",
-        image: "accEspagnolette",
-        name: { en: "Espagnolette", ar: "السبليونة" },
+        id: "sliding-espagnolette",
+        image: "accSlidingEspagnolette",
+        name: { en: "Sliding espagnolette", ar: "سبليونة جرار" },
         text: {
-          en: "A multi-point locking system for security and a tight seal.",
-          ar: "نظام غلق متعدد النقاط للأمان والإحكام.",
+          en: "Locks the sliding sash at several points along its edge.",
+          ar: "تُحكم غلق الضلفة الجرار من أكثر من نقطة على طول حافتها.",
         },
       },
       {
         id: "strikers",
-        image: "accStrikers",
-        name: { en: "Strikers", ar: "المقابلات" },
+        name: { en: "Strikers", ar: "السكاكات" },
         text: {
-          en: "Strikers for sliding, hinged and door systems, for a secure close.",
-          ar: "مقابلات متنوعة للسلايد والمفصلي والأبواب لضمان غلق محكم.",
+          en: "uPVC strikers for sliding sashes, single hinged sashes and double hinged sashes, for a tight close.",
+          ar: "سكاكات PVC للجرار، وللمفصلي ضلفة واحدة، وللمفصلي ضلفتين، لغلق محكم.",
         },
       },
       {
         id: "extras",
-        image: "accExtras",
         name: { en: "Extra accessories", ar: "إكسسوارات إضافية" },
         text: {
           en: "Dust brushes, opening restrictors and the small parts that keep everything working.",

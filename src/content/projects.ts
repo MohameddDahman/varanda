@@ -51,7 +51,7 @@ export const projects: Project[] = [
     location: null,
     summary: {
       en: "Wide glazed sliding doors onto the lawn, with roller shutters that close the ground floor completely.",
-      ar: "أبواب سحاب زجاجية عريضة على الحديقة، مع شاتر يُغلق الدور الأرضي بالكامل.",
+      ar: "أبواب سحاب زجاجية عريضة على الحديقة، مع شاتر (شيش الحصيرة) يُغلق الدور الأرضي بالكامل.",
     },
     body: [
       {
@@ -71,7 +71,7 @@ export const projects: Project[] = [
     location: null,
     summary: {
       en: "Roller shutters and an awning over the garden doors, and tall windows with glazing bars inside.",
-      ar: "شاتر وتندة فوق أبواب الحديقة، وشبابيك طويلة بتقسيمات من الداخل.",
+      ar: "شاتر (شيش الحصيرة) وتندة فوق أبواب الحديقة، وشبابيك طويلة بتقسيمات من الداخل.",
     },
     body: [
       {
@@ -240,8 +240,8 @@ export const projects: Project[] = [
     },
     body: [
       {
-        en: "Glazing bars carry the same pattern from the French doors to the dining-room window, so the rooms share one classic detail.",
-        ar: "تتكرر التقسيمات نفسها من الباب الفرنسي إلى شباك غرفة الطعام، فتتشارك الغرف تفصيلة كلاسيكية واحدة.",
+        en: "Glazing bars carry the same pattern from the French doors to the dining-room window, so the rooms share one classic detail: clear double glazing with Georgian bars.",
+        ar: "تتكرر التقسيمات نفسها من الباب الفرنسي إلى شباك غرفة الطعام، فتتشارك الغرف تفصيلة كلاسيكية واحدة: زجاج دبل شفاف بحورجيا.",
       },
     ],
     systems: ["windows-doors"],
@@ -275,13 +275,13 @@ export const projects: Project[] = [
     year: 2020,
     location: null,
     summary: {
-      en: "Arched double windows made to fit a stone-clad tower.",
-      ar: "شبابيك مقوسة بضلفتين مصنوعة بمقاس برج مكسو بالحجر.",
+      en: "Arched double windows, made to measure.",
+      ar: "شبابيك مقوسة بضلفتين مصنوعة بالمقاس.",
     },
     body: [
       {
-        en: "Outside, an arched window sits in the stone-clad tower; inside, an arched double window opens above built-in drawers.",
-        ar: "من الخارج يستقر شباك مقوس في البرج المكسو بالحجر، ومن الداخل يُفتح شباك مقوس بضلفتين فوق أدراج مدمجة.",
+        en: "Outside, an arched window; inside, an arched double window opens above built-in drawers.",
+        ar: "من الخارج شباك مقوس، ومن الداخل يُفتح شباك مقوس بضلفتين فوق أدراج مدمجة.",
       },
     ],
     systems: ["windows-doors"],
@@ -290,7 +290,7 @@ export const projects: Project[] = [
   },
   {
     slug: "villa-roller-shutters",
-    title: { en: "Villa roller shutters", ar: "شاتر لفيلا سكنية" },
+    title: { en: "Villa roller shutters", ar: "شاتر (شيش الحصيرة) لفيلا سكنية" },
     type: "residential",
     year: 2026,
     location: null,
@@ -346,7 +346,7 @@ export const projects: Project[] = [
     ],
     systems: [],
     cover: "fence2",
-    gallery: ["fence1", "fence5", "fence3", "fence4", "fence6"],
+    gallery: ["fence1", "fence5", "fence4", "fence6"],
   },
   {
     slug: "classic-apartment",

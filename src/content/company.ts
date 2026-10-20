@@ -113,9 +113,9 @@ export const warranty = {
     "نؤمن بجودة منتجاتنا، لذلك نقدم لك ضمانًا حقيقيًا وخدمات ما بعد البيع لضمان استمرار الأداء والكفاءة لفترات طويلة.",
   ),
   figures: [
-    { value: 5, suffix: t("years", "سنوات"), label: t("Warranty of up to 5 years", "ضمان يصل إلى 5 سنوات") },
-    { value: 10, suffix: t("years", "سنوات"), label: t("On roller shutters", "على الشاتر") },
+    { value: 10, suffix: t("years", "سنوات"), label: t("On the profiles", "على القطاعات") },
     { value: 5, suffix: t("years", "سنوات"), label: t("On accessories", "على الإكسسوارات") },
+    { value: 3, suffix: t("years", "سنوات"), label: t("On roller shutters", "على الشاتر (شيش الحصيرة)") },
   ],
   services: [
     t("Original spare parts", "توفير قطع غيار أصلية"),
@@ -227,8 +227,8 @@ export const anatomy = {
       id: "lock",
       title: t("Multi-point locking", "غلق متعدد النقاط"),
       text: t(
-        "An espagnolette in the sash groove drives locking cams into keepers on the frame, holding the sash shut at several points.",
-        "سبليونة داخل مجرى الضلفة تُدخل نقاط الغلق في المقابلات المثبتة على الإطار، فتُحكم غلق الضلفة من أكثر من نقطة.",
+        "An espagnolette in the sash groove drives two to five locking points into strikers on the frame, holding the sash shut at several points.",
+        "سبليونة داخل مجرى الضلفة تُدخل من 2 إلى 5 نقاط غلق في السكاكات المثبتة على الإطار، فتُحكم غلق الضلفة من أكثر من نقطة.",
       ),
     },
   ],
@@ -241,7 +241,7 @@ export const anatomy = {
 export const counters: { value: string | null; label: L }[] = [
   { value: null, label: t("Clients who trusted our work", "عميل وثقوا في عملنا") },
   { value: null, label: t("Projects delivered", "مشروعًا تم تسليمه") },
-  { value: "6", label: t("Opening systems", "أنظمة فتح") },
-  { value: "10", label: t("Years of warranty on shutters", "سنوات ضمان على الشاتر") },
+  { value: "10", label: t("Years of warranty on the profiles", "سنوات ضمان على القطاعات") },
   { value: "5", label: t("Years of warranty on accessories", "سنوات ضمان على الإكسسوارات") },
+  { value: "3", label: t("Years of warranty on shutters", "سنوات ضمان على الشاتر (شيش الحصيرة)") },
 ];

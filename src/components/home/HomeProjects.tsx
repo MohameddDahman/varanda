@@ -52,7 +52,7 @@ export function HomeProjects({ items }: { items: FeaturedProject[] }) {
           <div>
             <Eyebrow>{lang === "ar" ? "أعمال مختارة" : "Selected work"}</Eyebrow>
             <SplitReveal as="h2" id="work-title" className="t-display mt-6 max-w-[12ch]">
-              {lang === "ar" ? "مقاسة ومركّبة ومُسلَّمة." : "Measured, made, delivered."}
+              {lang === "ar" ? "مشاريعنا." : "Our projects."}
             </SplitReveal>
           </div>
           <Button href={href("/projects")} variant="outline">

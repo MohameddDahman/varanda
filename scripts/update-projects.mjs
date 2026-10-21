@@ -2,6 +2,7 @@
 // that already holds them, without touching anything else the team changed in the dashboard.
 //
 //   --text slug,slug          copy title, summary, body and location from the code
+//   --alts slug,slug          copy the photos' alt texts from the code (by position: cover first)
 //   --drop-photo slug:key     remove that photo (a key from src/content/photos.ts) from the project
 //   --site <origin>           the site using this database, refreshed afterwards (/api/revalidate)
 //   --env <file>              another deployment than the one in .env.local
@@ -16,6 +17,7 @@ const { url, token } = convexEnv();
 const site = arg("--site");
 if (!site) throw new Error("Pass --site <origin> so the site is refreshed after the change.");
 const textSlugs = (arg("--text") ?? "").split(",").filter(Boolean);
+const altSlugs = (arg("--alts") ?? "").split(",").filter(Boolean);
 const drops = (arg("--drop-photo") ?? "").split(",").filter(Boolean).map((d) => d.split(":"));
 
 const { projects, photos } = await loadContent();
@@ -47,6 +49,16 @@ for (const slug of textSlugs) {
     featured: p.featured,
   });
   console.log(`  text   ${slug}`);
+}
+
+for (const slug of altSlugs) {
+  const code = projects.find((p) => p.slug === slug);
+  const p = await client.query("admin/projects:get", { token, id: bySlug(slug)._id });
+  const keys = [code.cover, ...code.gallery];
+  for (const [i, photo] of p.photos.entries()) {
+    if (keys[i]) await client.mutation("admin/photos:update", { token, id: photo._id, alt: photos[keys[i]].alt });
+  }
+  console.log(`  alts   ${slug}`);
 }
 
 for (const [slug, key] of drops) {

@@ -38,6 +38,9 @@ import accConcealedRollers from "@/assets/profile/acc-concealed-rollers.jpg";
 import accEspagnolette from "@/assets/profile/acc-espagnolette.jpg";
 import accStrikers from "@/assets/profile/acc-strikers.jpg";
 import accExtras from "@/assets/profile/acc-extras.jpg";
+// Profile cutaways from the profile brochure the client sent (2026-10-21).
+import profileSliding from "@/assets/photos/profile-sliding.jpg";
+import profileHinged from "@/assets/photos/profile-hinged.jpg";
 // The client's own hardware (photographed in the workshop, 2026-10-21).
 import accWindowHandles from "@/assets/photos/acc-window-handles.jpg";
 import accFlushHandle from "@/assets/photos/acc-flush-handle.jpg";
@@ -198,6 +201,8 @@ export const photos = {
   accConcealedRollers: p(accConcealedRollers, "Large concealed rollers for heavy sliding systems", "عجل دفن كبير للأنظمة الثقيلة"),
   accEspagnolette: p(accEspagnolette, "Espagnolette multi-point lock fitted along a sash", "سبليونة غلق متعدد النقاط على الضلفة"),
   accStrikers: p(accStrikers, "Strikers for sliding, hinged and door systems", "مقابلات للسلايد والمفصلي والأبواب"),
+  profileSliding: p(profileSliding, "Sliding uPVC profile cut open to show its chambers and double glazing", "قطاع uPVC جرار مقطوع يظهر غرفه الداخلية والزجاج المزدوج"),
+  profileHinged: p(profileHinged, "Hinged uPVC profile cut open to show its chambers and double glazing", "قطاع uPVC مفصلي مقطوع يظهر غرفه الداخلية والزجاج المزدوج"),
   accWindowHandles: p(accWindowHandles, "Two white window handles", "مقبضان أبيضان للشبابيك"),
   accFlushHandle: p(accFlushHandle, "A white flush handle", "مقبض غاطس أبيض"),
   acc3dHinge: p(acc3dHinge, "Box of a 3D adjustable door hinge, rated to 130 kg", "علبة مفصلة باب 3D قابلة للضبط، تتحمل حتى 130 كجم"),

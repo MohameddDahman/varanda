@@ -239,6 +239,23 @@ function Showcase({ system, lang }: { system: SystemCategory; lang: Lang }) {
           <RangeTitle>{t(system.name)}</RangeTitle>
           <OpeningShowcase />
         </div>
+        {system.profiles && (
+          <div className="wrap mt-[var(--section-y)]">
+            <Eyebrow>{lang === "ar" ? "القطاعات" : "Profiles"}</Eyebrow>
+            <SplitReveal as="h2" className="t-h1 mt-6 max-w-[16ch]">
+              {t(system.profiles.title)}
+            </SplitReveal>
+            <Reveal as="ul" items="li" className="mt-14 grid gap-10 md:grid-cols-2 md:gap-8">
+              {system.profiles.items.map((p) => (
+                <li key={p.image}>
+                  <ProductPhoto photo={photos[p.image]} lang={lang} fit="cover" className="aspect-[4/3] bg-navy-950" />
+                  <h3 className="t-h2 mt-8">{t(p.name)}</h3>
+                  <p className="t-body mt-3 max-w-[40ch] text-ink-2">{t(p.text)}</p>
+                </li>
+              ))}
+            </Reveal>
+          </div>
+        )}
       </section>
     );
   }

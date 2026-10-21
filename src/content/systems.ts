@@ -31,6 +31,8 @@ export type SystemCategory = {
   cover: PhotoKey;
   gallery: PhotoKey[];
   items: SystemItem[];
+  /** The profiles cut open, to show what's inside. */
+  profiles?: { title: L; items: { image: PhotoKey; name: L; text: L }[] };
   features?: { title: L; items: L[] };
   details?: { title: L; items: L[] };
   warranty?: { value: L; label: L }[];
@@ -116,6 +118,27 @@ export const systems: SystemCategory[] = [
         tags: [tag("Modern design", "تصميم عصري"), tag("Smooth movement", "انسيابية عالية"), tag("Wide spaces", "مساحات واسعة")],
       },
     ],
+    profiles: {
+      title: { en: "The profile, from the inside", ar: "شكل القطاع من الداخل" },
+      items: [
+        {
+          image: "profileHinged",
+          name: { en: "Hinged profile", ar: "القطاع المفصلي" },
+          text: {
+            en: "Several insulating chambers inside the frame and sash, holding double glazing.",
+            ar: "عدة غرف عازلة داخل الحلق والضلفة، مع زجاج مزدوج.",
+          },
+        },
+        {
+          image: "profileSliding",
+          name: { en: "Sliding profile", ar: "القطاع الجرار" },
+          text: {
+            en: "Two sashes running on their own tracks in one frame, each with insulating chambers.",
+            ar: "ضلفتان تتحركان على مسارين في حلق واحد، ولكل منهما غرف عازلة.",
+          },
+        },
+      ],
+    },
     details: {
       title: { en: "Details that make the difference", ar: "تفاصيل تصنع الفرق" },
       items: [

@@ -78,10 +78,10 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
         // Every sash opens inward, into the room, toward the viewer (as the client's
         // windows do); the angle stays modest so the sash stays inside its frame.
         case "hinged":
-          t.to(q("[data-swing]"), { rotateY: -48, duration: 2 }, 0.2);
+          t.to(q("[data-swing]"), { rotateY: -42, duration: 2 }, 0.2);
           break;
         case "hinged-double":
-          t.to(q("[data-swing]"), { rotateY: (i: number) => (i === 0 ? -48 : 48), duration: 2 }, 0.2);
+          t.to(q("[data-swing]"), { rotateY: (i: number) => (i === 0 ? -42 : 42), duration: 2 }, 0.2);
           break;
         case "tilt-turn": {
           // Tilt pivots on the bottom rail, turn on the hinge side: swap the
@@ -91,7 +91,7 @@ export const OpeningDrawing = forwardRef<OpeningHandle, Props>(function OpeningD
             .to(sash, { rotateX: -14, duration: 0.9 }, 0.2)
             .to(sash, { rotateX: 0, duration: 0.5 })
             .set(sash, { transformOrigin: "0% 50%" })
-            .to(sash, { rotateY: -48, duration: 1.1 });
+            .to(sash, { rotateY: -42, duration: 1.1 });
           break;
         }
         case "fixed":

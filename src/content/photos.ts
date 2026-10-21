@@ -45,16 +45,21 @@ import profileHinged from "@/assets/photos/profile-hinged.jpg";
 import accWindowHandles from "@/assets/photos/acc-window-handles.jpg";
 import accFlushHandle from "@/assets/photos/acc-flush-handle.jpg";
 import acc3dHinge from "@/assets/photos/acc-3d-hinge.jpg";
-import accRollers from "@/assets/photos/acc-rollers.jpg";
+import accRollerFlat from "@/assets/photos/acc-roller-flat.jpg";
+import accRollerConcealed from "@/assets/photos/acc-roller-concealed.jpg";
+import accStrikerSet from "@/assets/photos/acc-strikers.jpg";
+import slatTera from "@/assets/photos/slat-tera.jpg";
+import slatBk from "@/assets/photos/slat-bk.jpg";
+import slatZinc from "@/assets/photos/slat-zinc.jpg";
+import slatSafe from "@/assets/photos/slat-safe.jpg";
+import slatNgss from "@/assets/photos/slat-ngss.jpg";
+import slatNgs from "@/assets/photos/slat-ngs.jpg";
 import accDoorEspagnolette from "@/assets/photos/acc-door-espagnolette.jpg";
 import accSlidingEspagnolette from "@/assets/photos/acc-sliding-espagnolette.jpg";
 import glassClear from "@/assets/profile/glass-clear.jpg";
 import glassReflective from "@/assets/profile/glass-reflective.jpg";
 import glassFume from "@/assets/profile/glass-fume.jpg";
 import glassDouble from "@/assets/profile/glass-double.jpg";
-import slatPerforated from "@/assets/profile/slat-perforated.jpg";
-import slatNgs from "@/assets/profile/slat-ngs.jpg";
-import slatBk from "@/assets/profile/slat-bk.jpg";
 import installTeam from "@/assets/profile/install-team.jpg";
 // From the client's photo archive (2017–2025), enhanced: small WhatsApp copies AI-upscaled,
 // dark interiors lifted, colour corrected and given the same grade as the rest of the site.
@@ -101,12 +106,12 @@ export const photos = {
   heroRiverSliding: p(
     heroRiverSliding,
     "White uPVC sliding doors opening onto a balcony above the Nile",
-    "أبواب سحاب uPVC بيضاء تطل على شرفة فوق النيل",
+    "أبواب جرار uPVC بيضاء تطل على شرفة فوق النيل",
   ),
   apartmentLiving: p(
     apartmentLiving,
     "Living room with a four-panel uPVC sliding window",
-    "غرفة معيشة بشباك سحاب uPVC من أربع ضلف",
+    "غرفة معيشة بشباك جرار uPVC من أربع ضلف",
   ),
   apartmentBedroom: p(
     apartmentBedroom,
@@ -190,37 +195,42 @@ export const photos = {
   slidingDoor2020: p(
     slidingDoor2020,
     "Wide four-panel sliding door between two living spaces",
-    "باب سحاب عريض من أربع ضلف بين مساحتين",
+    "باب جرار عريض من أربع ضلف بين مساحتين",
   ),
   homeWindow1: p(homeWindow1, "Open hinged uPVC window in a finished room", "شباك uPVC مفصلي مفتوح في غرفة مشطبة"),
   homeWindow2: p(homeWindow2, "Finished room with a two-panel uPVC window", "غرفة مشطبة بشباك uPVC من ضلفتين"),
   homeWindow3: p(homeWindow3, "uPVC window in a bedroom, finished and furnished", "شباك uPVC في غرفة نوم بعد التشطيب والفرش"),
   accHandles: p(accHandles, "Window and door handles in white, beige, grey, black and wood", "مقابض للأبواب والشبابيك بالأبيض والبيج والرمادي والأسود والخشبي"),
   accHinges: p(accHinges, "Standard, heavy-duty and 3D hinges on uPVC frames", "مفصلات قياسية وكبيرة التحمل و3D على قطاعات uPVC"),
-  accSlidingRollers: p(accSlidingRollers, "Sliding roller carriage with twin Teflon wheels", "عجل سلايد بعجلتين من التفلون"),
+  accSlidingRollers: p(accSlidingRollers, "Sliding roller carriage with twin Teflon wheels", "عجل جرار بعجلتين من التفلون"),
   accConcealedRollers: p(accConcealedRollers, "Large concealed rollers for heavy sliding systems", "عجل دفن كبير للأنظمة الثقيلة"),
   accEspagnolette: p(accEspagnolette, "Espagnolette multi-point lock fitted along a sash", "سبليونة غلق متعدد النقاط على الضلفة"),
-  accStrikers: p(accStrikers, "Strikers for sliding, hinged and door systems", "مقابلات للسلايد والمفصلي والأبواب"),
+  accStrikers: p(accStrikers, "Strikers for sliding, hinged and door systems", "سكاكات للجرار والمفصلي والأبواب"),
   profileSliding: p(profileSliding, "Sliding uPVC profile cut open to show its chambers and double glazing", "قطاع uPVC جرار مقطوع يظهر غرفه الداخلية والزجاج المزدوج"),
   profileHinged: p(profileHinged, "Hinged uPVC profile cut open to show its chambers and double glazing", "قطاع uPVC مفصلي مقطوع يظهر غرفه الداخلية والزجاج المزدوج"),
   accWindowHandles: p(accWindowHandles, "Two white window handles", "مقبضان أبيضان للشبابيك"),
   accFlushHandle: p(accFlushHandle, "A white flush handle", "مقبض غاطس أبيض"),
   acc3dHinge: p(acc3dHinge, "Box of a 3D adjustable door hinge, rated to 130 kg", "علبة مفصلة باب 3D قابلة للضبط، تتحمل حتى 130 كجم"),
-  accRollers: p(accRollers, "Sliding rollers: a flat track roller and two concealed twin-wheel rollers", "عجل الجرار: عجل مسطرة وعجل دفن بعجلتين"),
+  accRollerFlat: p(accRollerFlat, "Flat track roller for sliding sashes", "عجل مسطرة للجرار"),
+  accRollerConcealed: p(accRollerConcealed, "Concealed twin-wheel roller for sliding sashes", "عجل دفن للجرار بعجلتين"),
+  accStrikerSet: p(accStrikerSet, "uPVC strikers for sliding and hinged sashes", "سكاكات PVC للجرار والمفصلي"),
+  slatTera: p(slatTera, "TERA roller-shutter slat", "شريحة شيش TERA"),
+  slatBk: p(slatBk, "BK roller-shutter slat", "شريحة شيش BK"),
+  slatZinc: p(slatZinc, "ZINC roller-shutter slat", "شريحة شيش ZINC"),
+  slatSafe: p(slatSafe, "SAFE roller-shutter slat", "شريحة شيش SAFE"),
+  slatNgss: p(slatNgss, "NGSS roller-shutter slat", "شريحة شيش NGSS"),
+  slatNgs: p(slatNgs, "NGS roller-shutter slat", "شريحة شيش NGS"),
   accDoorEspagnolette: p(accDoorEspagnolette, "Hinged-door espagnolette with its lock case", "سبليونة باب مفصلي بعلبة الكالون"),
   accSlidingEspagnolette: p(accSlidingEspagnolette, "Sliding espagnolette bar with its locking points", "سبليونة جرار بنقاط الغلق"),
   accExtras: p(accExtras, "Dust brush, connectors and an opening restrictor", "فرشة مانعة للأتربة وفوالع ومحدد فتح"),
   glassClear: p(glassClear, "Clear glass with an open city view", "زجاج شفاف بإطلالة واضحة على المدينة"),
   glassReflective: p(glassReflective, "Reflective glass catching the sunset", "زجاج عاكس يعكس ضوء الغروب"),
-  glassFume: p(glassFume, "Fumé tinted glass in a sliding window", "زجاج فاميه داكن في شباك سحاب"),
+  glassFume: p(glassFume, "Fumé tinted glass in a sliding window", "زجاج فاميه داكن في شباك جرار"),
   glassDouble: p(glassDouble, "Cross-section of a double-glazed unit", "مقطع في وحدة زجاج مزدوج"),
-  slatPerforated: p(slatPerforated, "Perforated roller-shutter slats that let light and air through", "شرائح شاتر مثقبة تسمح بمرور الضوء والهواء"),
-  slatNgs: p(slatNgs, "NGS roller-shutter slats with extra insulation", "شرائح شاتر NGS بعزل أعلى"),
-  slatBk: p(slatBk, "BK roller-shutter slats, the everyday economical choice", "شرائح شاتر BK الاقتصادية الشائعة"),
-  installTeam: p(installTeam, "A VARANDA installer fitting a uPVC sliding window", "فني من VARANDA يركّب شباك uPVC سحاب"),
+  installTeam: p(installTeam, "A VARANDA installer fitting a uPVC sliding window", "فني من VARANDA يركّب شباك uPVC جرار"),
   modernVilla: p(modernVilla, "Modern villa with its ground-floor roller shutters down", "فيلا مودرن والشاتر مُغلق على الدور الأرضي"),
   modernVillaFront: p(modernVillaFront, "Garden side of the modern villa with large glazed doors on the ground floor", "واجهة الفيلا المودرن من ناحية الحديقة بأبواب زجاجية كبيرة في الدور الأرضي"),
-  modernVillaWindow: p(modernVillaWindow, "Wide sliding window above a built-in window seat", "شباك سحاب عريض فوق مقعد مدمج"),
+  modernVillaWindow: p(modernVillaWindow, "Wide sliding window above a built-in window seat", "شباك جرار عريض فوق مقعد مدمج"),
   frenchDoors: p(frenchDoors, "White French doors opening onto a balcony, in a room with blue walls and a marble floor", "باب فرنسي أبيض على الشرفة في غرفة بحوائط زرقاء وأرضية رخام"),
   frenchDoorsKitchen: p(frenchDoorsKitchen, "Kitchen with two white uPVC windows above the counter", "مطبخ بشباكين uPVC أبيض فوق الرخامة"),
   frenchDoorsWindow: p(frenchDoorsWindow, "White uPVC window with glazing bars in a blue dining room", "شباك uPVC أبيض بتقسيمات في غرفة طعام زرقاء"),
@@ -228,13 +238,13 @@ export const photos = {
   gardenVillaWindow: p(gardenVillaWindow, "Tall window with glazing bars and a decorative grille, looking onto the garden", "شباك طويل بتقسيمات وحماية زخرفية يطل على الحديقة"),
   stoneVilla: p(stoneVilla, "Arched window in a stone-clad tower, with a window below", "شباك مقوس في برج مكسو بالحجر وأسفله شباك آخر", "50% 8%"),
   stoneVillaWindow: p(stoneVillaWindow, "Arched double window above built-in drawers", "شباك مقوس بضلفتين فوق أدراج مدمجة"),
-  redVilla: p(redVilla, "Villa with sliding doors on the ground floor and wide windows above", "فيلا بأبواب سحاب في الدور الأرضي وشبابيك عريضة بالأعلى"),
+  redVilla: p(redVilla, "Villa with sliding doors on the ground floor and wide windows above", "فيلا بأبواب جرار في الدور الأرضي وشبابيك عريضة بالأعلى"),
   redVillaTower: p(redVillaTower, "Tall window set into a round tower", "شباك طويل في برج دائري"),
   redVillaEntrance: p(redVillaEntrance, "Entrance of the villa behind flowering trees", "مدخل الفيلا خلف أشجار مزهرة"),
-  seaView: p(seaView, "Sliding window framing the sea", "شباك سحاب يطل على البحر"),
-  seaView2: p(seaView2, "Wide sliding window looking out to the beach", "شباك سحاب عريض يطل على الشاطئ"),
-  seaViewFacade: p(seaViewFacade, "Stone-clad facade with cream sliding windows reflecting the sea", "واجهة مكسوة بالحجر بشبابيك سحاب كريمي تعكس البحر"),
-  seaViewDoor: p(seaViewDoor, "Cream sliding door opening onto the terrace", "باب سحاب كريمي على التراس"),
+  seaView: p(seaView, "Sliding window framing the sea", "شباك جرار يطل على البحر"),
+  seaView2: p(seaView2, "Wide sliding window looking out to the beach", "شباك جرار عريض يطل على الشاطئ"),
+  seaViewFacade: p(seaViewFacade, "Stone-clad facade with cream sliding windows reflecting the sea", "واجهة مكسوة بالحجر بشبابيك جرار كريمي تعكس البحر"),
+  seaViewDoor: p(seaViewDoor, "Cream sliding door opening onto the terrace", "باب جرار كريمي على التراس"),
   poolVilla: p(poolVilla, "Villa with a curved bay of windows facing the pool", "فيلا بواجهة شبابيك منحنية تطل على حمام السباحة"),
   poolVillaBay: p(poolVillaBay, "The curved bay of windows from inside, looking out to the pool", "واجهة الشبابيك المنحنية من الداخل وتطل على حمام السباحة"),
   pergolaPool: p(pergolaPool, "Wood-effect pergola beside a pool, with sun loungers", "برجولة بمظهر الخشب بجوار حمام سباحة مع كراسي استلقاء"),

@@ -289,7 +289,11 @@ function Showcase({ system, lang }: { system: SystemCategory; lang: Lang }) {
             <Reveal as="ul" items="li" className="mt-14 grid gap-px border-t border-[var(--line)] md:grid-cols-3">
               {system.items.map((s) => (
                 <li key={s.id} className="border-b border-[var(--line)] py-10 md:pe-10">
-                  {s.slatHeight && <SlatSection height={s.slatHeight} />}
+                  {s.image ? (
+                    <ProductPhoto photo={photos[s.image]} lang={lang} className="aspect-[6/5] bg-white" />
+                  ) : (
+                    s.slatHeight && <SlatSection height={s.slatHeight} />
+                  )}
                   <h3 className="t-h2 mt-8">{t(s.name)}</h3>
                   <p className="t-body mt-3 max-w-[32ch] text-ink-2">{t(s.text)}</p>
                   {s.points && (

@@ -51,12 +51,12 @@ export const projects: Project[] = [
     location: null,
     summary: {
       en: "Wide glazed sliding doors onto the lawn, with roller shutters that close the ground floor completely.",
-      ar: "أبواب سحاب زجاجية عريضة على الحديقة، مع شاتر (شيش الحصيرة) يُغلق الدور الأرضي بالكامل.",
+      ar: "أبواب جرار زجاجية عريضة على الحديقة، مع شاتر (شيش الحصيرة) يُغلق الدور الأرضي بالكامل.",
     },
     body: [
       {
         en: "With the roller shutters down, the ground floor closes up completely; with them up, wide glazed sliding doors open the rooms onto the lawn. Inside, a wide sliding window sits above a built-in window seat.",
-        ar: "عند إنزال الشاتر يُغلق الدور الأرضي بالكامل، وعند رفعه تفتح الأبواب السحاب الزجاجية العريضة الغرف على الحديقة. ومن الداخل يعلو شباك سحاب عريض مقعدًا مدمجًا.",
+        ar: "عند إنزال الشاتر يُغلق الدور الأرضي بالكامل، وعند رفعه تفتح الأبواب الجرار الزجاجية العريضة الغرف على الحديقة. ومن الداخل يعلو شباك جرار عريض مقعدًا مدمجًا.",
       },
     ],
     systems: ["windows-doors", "roller-shutters"],
@@ -91,12 +91,12 @@ export const projects: Project[] = [
     location: null,
     summary: {
       en: "Floor-to-ceiling sliding doors open the living room onto the river, with matching sliding windows through the apartment.",
-      ar: "أبواب سحاب من الأرض حتى السقف تفتح غرفة المعيشة على النيل، مع شبابيك سحاب متناسقة في أرجاء الشقة.",
+      ar: "أبواب جرار من الأرض حتى السقف تفتح غرفة المعيشة على النيل، مع شبابيك جرار متناسقة في أرجاء الشقة.",
     },
     body: [
       {
         en: "A four-panel sliding system spans the full width of the living room, so the river reads as one uninterrupted picture — with the street's noise and dust kept outside.",
-        ar: "نظام سحاب من أربع ضلف يمتد بعرض غرفة المعيشة بالكامل، فتظهر الإطلالة على النيل كلوحة واحدة متصلة، بينما تبقى ضوضاء الشارع وأتربته في الخارج.",
+        ar: "نظام جرار من أربع ضلف يمتد بعرض غرفة المعيشة بالكامل، فتظهر الإطلالة على النيل كلوحة واحدة متصلة، بينما تبقى ضوضاء الشارع وأتربته في الخارج.",
       },
       {
         en: "Bedrooms and the kitchen use the same white profile, so every opening in the apartment shares one line and one finish.",
@@ -115,12 +115,12 @@ export const projects: Project[] = [
     location: null,
     summary: {
       en: "Cream sliding windows and doors that frame the sea, set into a stone-clad facade.",
-      ar: "شبابيك وأبواب سحاب بلون كريمي تؤطر البحر، في واجهة مكسوة بالحجر.",
+      ar: "شبابيك وأبواب جرار بلون كريمي تؤطر البحر، في واجهة مكسوة بالحجر.",
     },
     body: [
       {
         en: "Wide sliding windows look straight out to the beach, and their cream frames sit quietly against the stone cladding.",
-        ar: "تطل الشبابيك السحاب العريضة مباشرة على الشاطئ، وينسجم اللون الكريمي لإطاراتها مع الكسوة الحجرية.",
+        ar: "تطل الشبابيك الجرار العريضة مباشرة على الشاطئ، وينسجم اللون الكريمي لإطاراتها مع الكسوة الحجرية.",
       },
     ],
     systems: ["windows-doors"],
@@ -155,12 +155,12 @@ export const projects: Project[] = [
     location: null,
     summary: {
       en: "Sliding doors along the ground floor and a tall window set into a round tower.",
-      ar: "أبواب سحاب على امتداد الدور الأرضي، وشباك طويل في برج دائري.",
+      ar: "أبواب جرار على امتداد الدور الأرضي، وشباك طويل في برج دائري.",
     },
     body: [
       {
         en: "White frames stand out crisply against the render, from the wide sliding doors on the ground floor to the tall window in the tower.",
-        ar: "تبرز الإطارات البيضاء بوضوح على الواجهة، من أبواب السحاب العريضة في الدور الأرضي إلى الشباك الطويل في البرج.",
+        ar: "تبرز الإطارات البيضاء بوضوح على الواجهة، من الأبواب الجرار العريضة في الدور الأرضي إلى الشباك الطويل في البرج.",
       },
     ],
     systems: ["windows-doors"],
@@ -392,7 +392,7 @@ export const projects: Project[] = [
 
 /** Site photos that are not tied to one project, shown as "From the site". */
 export const sitePhotos: { photo: PhotoKey; label: L }[] = [
-  { photo: "slidingDoor2020", label: { en: "Sliding door", ar: "باب سحاب" } },
+  { photo: "slidingDoor2020", label: { en: "Sliding door", ar: "باب جرار" } },
   { photo: "tiltTurn", label: { en: "Tilt & turn", ar: "قلاب ومفصلي" } },
   { photo: "buildingProgress", label: { en: "Residential building", ar: "عمارة سكنية" } },
   { photo: "entranceDoor", label: { en: "Entrance door", ar: "باب مدخل" } },
@@ -404,9 +404,9 @@ export const getProject = (slug: string) => projects.find((p) => p.slug === slug
 
 /** The installation behind the home page's sliding panels; its caption links to the project. */
 export const homeHero: { project: string; photo: PhotoKey; caption: L } = {
-  project: "garden-villa",
-  photo: "gardenVillaWindow",
-  caption: { en: "Window with glazing bars — Garden villa", ar: "شباك بتقسيمات — فيلا بحديقة" },
+  project: "nile-view-apartment",
+  photo: "heroRiverSliding",
+  caption: { en: "Floor-to-ceiling sliding doors — Nile-view apartment", ar: "أبواب جرار من الأرض حتى السقف — شقة بإطلالة على النيل" },
 };
 
 /** The projects stacked on the home page, in order (the hero's project is left out). */

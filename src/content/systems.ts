@@ -161,8 +161,8 @@ export const systems: SystemCategory[] = [
       en: "A range of glass to suit different needs, adding thermal and acoustic insulation with a high degree of clarity and privacy.",
       ar: "مجموعة متنوعة من أنظمة الزجاج لتناسب مختلف الاحتياجات، وتوفر العزل الحراري والصوتي مع درجات عالية من الوضوح والخصوصية.",
     },
-    cover: "heroRiverSliding",
-    gallery: ["apartmentBedroom", "homeWindow2"],
+    cover: "homeWindow2",
+    gallery: ["apartmentBedroom"],
     items: [
       {
         id: "clear",
@@ -228,6 +228,7 @@ export const systems: SystemCategory[] = [
     items: [
       {
         id: "tera",
+        image: "slatTera",
         slatHeight: 58,
         name: { en: "TERA", ar: "شيش TERA" },
         text: {
@@ -241,6 +242,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "bk",
+        image: "slatBk",
         slatHeight: 50,
         name: { en: "BK", ar: "شيش BK" },
         text: {
@@ -254,6 +256,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "zinc",
+        image: "slatZinc",
         slatHeight: 55,
         name: { en: "ZINC protection", ar: "شيش حماية ZINC" },
         text: {
@@ -267,6 +270,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "safe",
+        image: "slatSafe",
         slatHeight: 55,
         name: { en: "SAFE", ar: "شيش SAFE" },
         text: {
@@ -280,6 +284,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "ngss",
+        image: "slatNgss",
         slatHeight: 50,
         name: { en: "NGSS", ar: "شيش NGSS" },
         text: {
@@ -293,6 +298,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "ngs",
+        image: "slatNgs",
         slatHeight: 50,
         name: { en: "NGS", ar: "شيش NGS" },
         text: {
@@ -363,12 +369,12 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "sliding",
-        name: { en: "Sliding screen", ar: "السلك الجرار (سلايد)" },
+        name: { en: "Sliding screen", ar: "السلك الجرار" },
         text: {
           en: "Runs on its own track and moves easily left and right.",
           ar: "يعمل على مسار مستقل ويتحرك بسهولة يمينًا ويسارًا.",
         },
-        points: [tag("For 2- and 4-sash sliding windows", "يناسب الشبابيك السحاب ذات الضلفتين والأربع ضلف")],
+        points: [tag("For 2- and 4-sash sliding windows", "يناسب الشبابيك الجرار ذات الضلفتين والأربع ضلف")],
       },
       {
         id: "pleated",
@@ -383,7 +389,7 @@ export const systems: SystemCategory[] = [
           tag("Folds away completely when open", "يُجمع بالكامل عند الفتح"),
           tag(
             "For hinged and sliding windows and doors, especially 3-sash sliding",
-            "مناسب للشبابيك والأبواب المفصلية والسلايد، خصوصًا 3 ضلف سلايد",
+            "مناسب للشبابيك والأبواب المفصلية والجرار، خصوصًا الجرار 3 ضلف",
           ),
           tag("Single or double opening", "متوفر بفتحة واحدة أو ضلفتين"),
         ],
@@ -438,12 +444,21 @@ export const systems: SystemCategory[] = [
         },
       },
       {
-        id: "rollers",
-        image: "accRollers",
-        name: { en: "Sliding rollers", ar: "عجل الجرار" },
+        id: "roller-concealed",
+        image: "accRollerConcealed",
+        name: { en: "Concealed sliding roller", ar: "عجل دفن للجرار" },
         text: {
-          en: "Flat track rollers and concealed rollers for sliding sashes, for smooth, quiet movement.",
-          ar: "عجل مسطرة وعجل دفن للضلف الجرار، لحركة سلسة وهادئة.",
+          en: "A twin-wheel roller hidden inside the sliding sash, for smooth, quiet movement.",
+          ar: "عجل بعجلتين يُركّب مدفونًا داخل الضلفة الجرار، لحركة سلسة وهادئة.",
+        },
+      },
+      {
+        id: "roller-flat",
+        image: "accRollerFlat",
+        name: { en: "Flat track roller", ar: "عجل مسطرة للجرار" },
+        text: {
+          en: "A slim roller on a flat bar, for sliding sashes.",
+          ar: "عجل على مسطرة رفيعة للضلف الجرار.",
         },
       },
       {
@@ -466,6 +481,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "strikers",
+        image: "accStrikerSet",
         name: { en: "Strikers", ar: "السكاكات" },
         text: {
           en: "uPVC strikers for sliding sashes, single hinged sashes and double hinged sashes, for a tight close.",

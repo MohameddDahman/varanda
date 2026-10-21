@@ -1207,8 +1207,9 @@ svg {
 }
 
 .rail-card {
+  --card-w: clamp(15rem, 31vh, 24rem);
   flex: none;
-  width: clamp(15rem, 31vh, 24rem);
+  width: var(--card-w);
 }
 
 /* Captions hang below the drawing so every window lines up, whatever the
@@ -1223,8 +1224,10 @@ svg {
   inset-inline: 0;
 }
 
+/* Room after the last card, so it can travel to the middle of the screen and play its
+   animation like the others before the rail lets go. */
 .rail-card:last-child {
-  margin-inline-end: 10vw;
+  margin-inline-end: calc(50vw - var(--card-w) / 2 - var(--gutter));
 }
 
 .rail-tag {
@@ -1277,7 +1280,7 @@ svg {
   }
 
   .rail-card {
-    width: min(78vw, 19rem);
+    --card-w: min(78vw, 19rem);
   }
 
   .rail-card > .od {
@@ -3214,12 +3217,12 @@ div.ps-layer {
 /* The frame sits inset: sashes open inward, toward the viewer, and grow into this margin. */
 .od-view {
   position: absolute;
-  inset: 8%;
+  inset: 12%;
 }
 
 .od-frame {
   position: absolute;
-  inset: 8%;
+  inset: 12%;
   border: 3.4cqi solid var(--od-frame);
   box-shadow:
     inset 0 0 0 1px rgb(0 0 0 / 0.1),

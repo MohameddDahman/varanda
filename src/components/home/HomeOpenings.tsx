@@ -48,7 +48,7 @@ export function HomeOpenings() {
             trigger: card,
             containerAnimation: rail,
             start: rtl ? "right 12%" : "left 88%",
-            end: rtl ? "center 55%" : "center 45%",
+            end: rtl ? "center 48%" : "center 52%",
             scrub: 0.6,
             animation: tl,
           });

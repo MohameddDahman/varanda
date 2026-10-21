@@ -149,7 +149,7 @@ export const projects: Project[] = [
   },
   {
     slug: "red-villa",
-    title: { en: "Red villa", ar: "الفيلا الحمراء" },
+    title: { en: "Villa", ar: "فيلا" },
     type: "residential",
     year: 2018,
     location: null,
@@ -159,8 +159,8 @@ export const projects: Project[] = [
     },
     body: [
       {
-        en: "White frames stand out crisply against the red render, from the wide sliding doors on the ground floor to the tall window in the tower.",
-        ar: "تبرز الإطارات البيضاء بوضوح على الواجهة الحمراء، من أبواب السحاب العريضة في الدور الأرضي إلى الشباك الطويل في البرج.",
+        en: "White frames stand out crisply against the render, from the wide sliding doors on the ground floor to the tall window in the tower.",
+        ar: "تبرز الإطارات البيضاء بوضوح على الواجهة، من أبواب السحاب العريضة في الدور الأرضي إلى الشباك الطويل في البرج.",
       },
     ],
     systems: ["windows-doors"],

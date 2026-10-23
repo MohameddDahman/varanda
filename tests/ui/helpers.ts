@@ -21,7 +21,6 @@ export const routes: { path: string; status?: number }[] = [
   { path: "/projects/red-villa" },
   { path: "/projects/round-windows-villa" },
   { path: "/projects/american-university" },
-  { path: "/projects/office-building" },
   { path: "/projects/french-doors-apartment" },
   { path: "/projects/arched-doors-apartment" },
   { path: "/projects/stone-villa" },

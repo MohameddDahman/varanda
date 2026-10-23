@@ -102,7 +102,8 @@ export function Header() {
           <div className="flex items-center gap-2.5">
             <LangSwitch className="header-lang" />
             <TLink href={href("/contact")} className="btn btn-header hidden sm:inline-flex">
-              {t(ui.bookVisit)}
+              <span className="cta-dot" aria-hidden="true" />
+              <span>{t(ui.bookVisit)}</span>
             </TLink>
             <button
               ref={menuButton}

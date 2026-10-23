@@ -324,20 +324,16 @@ export const systems: SystemCategory[] = [
     details: {
       title: { en: "Operation & details", ar: "التشغيل والتفاصيل" },
       items: [
-        tag("Wall switch — Somfy or Schneider", "مفتاح جداري (Somfy / Schneider)"),
-        tag("Somfy remote control", "ريموت كنترول Somfy"),
-        tag("Phone control (optional)", "تحكم عبر الهاتف (اختياري)"),
+        tag("Wall switch: on, off and stop — Somfy or Schneider", "مفتاح جداري (سويتش) تشغيل وإيقاف — Somfy / Schneider"),
+        tag("Remote control", "ريموت كنترول"),
+        tag("Smart control from your phone", "نظام سمارت بالتحكم من الموبايل"),
+        tag("Manual, by strap or crank", "يدوي بشريط أو منفلة"),
         tag("Concealed or exposed box", "صندوق مخفي أو ظاهر"),
-        tag("Sealed side guide rails", "مجرى جانبي محكم"),
         tag("Rubber bottom seal for a tight close", "جلب مطاطي سفلي لإحكام الغلق"),
       ],
     },
     warranty: [
       { value: { en: "3 years", ar: "3 سنوات" }, label: { en: "Warranty on the shutter", ar: "ضمان على الشاتر (شيش الحصيرة)" } },
-      {
-        value: { en: "3–5 years", ar: "3–5 سنوات" },
-        label: { en: "Warranty on the motor, by type", ar: "ضمان على الموتور حسب النوع" },
-      },
     ],
   },
   {

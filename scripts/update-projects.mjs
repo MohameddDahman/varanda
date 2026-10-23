@@ -3,13 +3,16 @@
 //
 //   --text slug,slug          copy title, summary, body and location from the code
 //   --alts slug,slug          copy the photos' alt texts from the code (by position: cover first)
+//   --reseed slug,slug        rebuild those projects from the code, photos included, in place
+//   --remove slug,slug        delete those projects (and photos no other project uses)
 //   --drop-photo slug:key     remove that photo (a key from src/content/photos.ts) from the project
 //   --site <origin>           the site using this database, refreshed afterwards (/api/revalidate)
 //   --env <file>              another deployment than the one in .env.local
 //
 //   node scripts/update-projects.mjs --site http://localhost:3000 --text stone-villa --drop-photo garden-fencing:fence3
 import { ConvexHttpClient } from "convex/browser";
-import { convexEnv } from "./lib/photos.mjs";
+import { readFileSync } from "node:fs";
+import { convexEnv, encodePhoto } from "./lib/photos.mjs";
 import { loadContent } from "./lib/content.mjs";
 
 const arg = (name) => (process.argv.includes(name) ? process.argv[process.argv.indexOf(name) + 1] : null);
@@ -18,9 +21,11 @@ const site = arg("--site");
 if (!site) throw new Error("Pass --site <origin> so the site is refreshed after the change.");
 const textSlugs = (arg("--text") ?? "").split(",").filter(Boolean);
 const altSlugs = (arg("--alts") ?? "").split(",").filter(Boolean);
+const reseeds = (arg("--reseed") ?? "").split(",").filter(Boolean);
+const removes = (arg("--remove") ?? "").split(",").filter(Boolean);
 const drops = (arg("--drop-photo") ?? "").split(",").filter(Boolean).map((d) => d.split(":"));
 
-const { projects, photos } = await loadContent();
+const { projects, photos, featuredProjects } = await loadContent();
 const client = new ConvexHttpClient(url);
 const list = await client.query("admin/projects:list", { token });
 const bySlug = (slug) => {
@@ -59,6 +64,37 @@ for (const slug of altSlugs) {
     if (keys[i]) await client.mutation("admin/photos:update", { token, id: photo._id, alt: photos[keys[i]].alt });
   }
   console.log(`  alts   ${slug}`);
+}
+
+for (const slug of removes) {
+  const row = list.find((p) => p.slug === slug);
+  if (!row) { console.log(`  (${slug} isn't there)`); continue; }
+  await client.mutation("admin/projects:remove", { token, id: row._id });
+  console.log(`  removed ${slug}`);
+}
+
+for (const slug of reseeds) {
+  const code = projects.find((p) => p.slug === slug);
+  if (!code) throw new Error(`${slug} isn't in src/content/projects.ts`);
+  const now = await client.query("admin/projects:list", { token });
+  const old = now.find((p) => p.slug === slug);
+  const ids = [];
+  for (const key of [code.cover, ...code.gallery]) {
+    const photo = photos[key];
+    const file = await encodePhoto(readFileSync(photo.src.file));
+    const res = await fetch(await client.mutation("admin/photos:generateUploadUrl", { token }), { method: "POST", headers: { "Content-Type": file.type }, body: file.data });
+    if (!res.ok) throw new Error(`upload failed for ${key}`);
+    const { storageId } = await res.json();
+    ids.push(await client.mutation("admin/photos:create", { token, storageId, width: file.width, height: file.height, blurDataURL: photo.src.blurDataURL, alt: photo.alt, ...(photo.focus ? { focus: photo.focus } : {}) }));
+  }
+  if (old) {
+    const p = await client.query("admin/projects:get", { token, id: old._id });
+    await client.mutation("admin/projects:update", { token, id: old._id, slug, title: code.title, type: code.type, year: code.year, ...(code.location ? { location: code.location } : {}), summary: code.summary, body: code.body, systems: code.systems, photos: ids, published: p.published, featured: p.featured });
+    for (const ph of p.photos) await client.mutation("admin/photos:remove", { token, id: ph._id });
+  } else {
+    await client.mutation("admin/projects:create", { token, slug, title: code.title, type: code.type, year: code.year, ...(code.location ? { location: code.location } : {}), summary: code.summary, body: code.body, systems: code.systems, photos: ids, published: true, featured: featuredProjects.includes(slug) });
+  }
+  console.log(`  reseed ${slug} (${ids.length} photos)`);
 }
 
 for (const [slug, key] of drops) {

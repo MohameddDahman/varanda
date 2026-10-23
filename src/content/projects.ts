@@ -195,38 +195,18 @@ export const projects: Project[] = [
     year: 2025,
     location: null,
     summary: {
-      en: "Dark-frame windows fitted along the floors of an existing building.",
-      ar: "شبابيك بإطار داكن رُكّبت على امتداد أدوار مبنى قائم.",
+      en: "Dark and wood-finish windows fitted along every floor of the university's administrative building.",
+      ar: "شبابيك بإطار داكن وبلون الخشب رُكّبت على امتداد أدوار المبنى الإداري للجامعة.",
     },
     body: [
       {
-        en: "The dark-frame windows run along every floor of the facade; inside, they line the corridors.",
-        ar: "تمتد الشبابيك ذات الإطار الداكن على كل أدوار الواجهة، ومن الداخل تصطف على امتداد الممرات.",
+        en: "The windows run along every floor of the facade, lit up at night; inside, wood-finish sashes with diamond glazing bars line the offices and corridors.",
+        ar: "تمتد الشبابيك على كل أدوار الواجهة وتضيء ليلًا، ومن الداخل تصطف ضلف بلون الخشب بتقسيمات معينات على امتداد المكاتب والممرات.",
       },
     ],
     systems: ["windows-doors"],
-    cover: "universityWindows",
-    gallery: ["universityCorridor", "universityFacade"],
-  },
-  {
-    slug: "office-building",
-    title: { en: "Office building", ar: "مبنى إداري" },
-    type: "commercial",
-    year: 2026,
-    location: null,
-    summary: {
-      en: "A full façade of dark-framed uPVC windows for an administrative building — one consistent line across every floor.",
-      ar: "واجهة كاملة من شبابيك uPVC بإطارات داكنة لمبنى إداري، بخطوط متناسقة في جميع الأدوار.",
-    },
-    body: [
-      {
-        en: "Dozens of identical openings, each one measured on site. Dark frames keep the rhythm of the façade calm and even, day and night.",
-        ar: "عشرات الفتحات المتطابقة، رُفعت مقاسات كل منها في الموقع. الإطارات الداكنة تحافظ على إيقاع الواجهة هادئًا ومتناسقًا ليلًا ونهارًا.",
-      },
-    ],
-    systems: ["windows-doors"],
-    cover: "officeNight1",
-    gallery: ["officeNight2", "officeNight3"],
+    cover: "universityWoodgrain",
+    gallery: ["universityStreet", "universityBuilding", "officeNight3", "universityCorridor"],
   },
   {
     slug: "french-doors-apartment",

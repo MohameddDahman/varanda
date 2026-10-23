@@ -88,6 +88,9 @@ import pergolaNight from "@/assets/photos/pergola-night.jpg";
 import pergolaDeck from "@/assets/photos/pergola-deck.jpg";
 import gardenGate from "@/assets/photos/garden-gate.jpg";
 import universityWindows from "@/assets/photos/university-windows.jpg";
+import universityWoodgrain from "@/assets/photos/university-woodgrain.jpg";
+import universityStreet from "@/assets/photos/university-street.jpg";
+import universityBuilding from "@/assets/photos/university-building.jpg";
 import universityCorridor from "@/assets/photos/university-corridor.jpg";
 import universityFacade from "@/assets/photos/university-facade.jpg";
 import roundWindows from "@/assets/photos/round-windows.jpg";
@@ -252,6 +255,9 @@ export const photos = {
   pergolaNight: p(pergolaNight, "Pergola lit at dusk beside the pool", "برجولة مضاءة عند الغروب بجوار حمام السباحة"),
   pergolaDeck: p(pergolaDeck, "Pergola on a raised deck with wood-effect slats", "برجولة على منصة مرتفعة بشرائح بمظهر الخشب"),
   gardenGate: p(gardenGate, "Wood-effect fence and gate along a garden path", "سور وبوابة بمظهر الخشب على امتداد ممر الحديقة"),
+  universityWoodgrain: p(universityWoodgrain, "Wood-finish hinged window with diamond glazing bars", "شباك مفصلي بلون الخشب بتقسيمات معينات"),
+  universityStreet: p(universityStreet, "Dark-frame windows over a downtown street", "شبابيك بإطار داكن تطل على شارع بوسط البلد"),
+  universityBuilding: p(universityBuilding, "The administrative building's facade, a window on every bay", "واجهة المبنى الإداري بشباك في كل فتحة"),
   universityWindows: p(universityWindows, "Dark-frame windows overlooking a busy street", "شبابيك بإطار داكن تطل على شارع مزدحم"),
   universityCorridor: p(universityCorridor, "A row of dark-frame windows along a corridor", "صف من الشبابيك بإطار داكن على امتداد ممر"),
   universityFacade: p(universityFacade, "Building facade with dark-frame windows on every floor", "واجهة مبنى بشبابيك ذات إطار داكن في كل الأدوار"),

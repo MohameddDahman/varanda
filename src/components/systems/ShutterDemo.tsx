@@ -116,7 +116,7 @@ export function ScreenDiagram({ kind }: { kind: "fixed" | "sliding" | "pleated" 
       const loop = { duration: 2.2, ease: "power2.inOut", repeat: -1, yoyo: true, repeatDelay: 0.8, paused: true };
       const tween =
         kind === "sliding"
-          ? gsap.fromTo(q("[data-mesh]"), { xPercent: 0 }, { xPercent: 96, ...loop })
+          ? gsap.fromTo(q("[data-mesh]"), { xPercent: 0 }, { xPercent: 105, ...loop })
           : gsap.fromTo(q("[data-pleats]"), { scaleX: 1 }, { scaleX: 0.08, ...loop });
       // Loops only while on screen.
       ScrollTrigger.create({
@@ -134,8 +134,13 @@ export function ScreenDiagram({ kind }: { kind: "fixed" | "sliding" | "pleated" 
       {kind === "fixed" && <div className="screen-mesh absolute inset-[6%]" />}
       {kind === "sliding" && (
         <>
-          <span className="absolute inset-y-[6%] start-[6%] w-[44%] border-[3px] border-[#eef0f3]" />
-          <div data-mesh className="screen-mesh absolute inset-y-[6%] start-[6%] w-[44%] border-[3px] border-[#d9dee5]" />
+          {/* The whole screen sash slides on its track, frame and mesh together. */}
+          <span className="absolute inset-x-[6%] top-[6%] h-[2px] bg-[#d9dee5]" />
+          <span className="absolute inset-x-[6%] bottom-[6%] h-[2px] bg-[#d9dee5]" />
+          <div data-mesh className="absolute inset-y-[6%] start-[6%] w-[44%] border-[5px] border-[#eef0f3] shadow-[0_2px_8px_rgb(4_12_23/0.25)]">
+            <span className="screen-mesh absolute inset-0" />
+            <span className="absolute end-[6%] top-1/2 h-[18%] w-[5px] -translate-y-1/2 rounded-sm bg-[#cfd5dc]" />
+          </div>
         </>
       )}
       {kind === "pleated" && (

@@ -261,7 +261,7 @@ export const photos = {
   universityWindows: p(universityWindows, "Dark-frame windows overlooking a busy street", "شبابيك بإطار داكن تطل على شارع مزدحم"),
   universityCorridor: p(universityCorridor, "A row of dark-frame windows along a corridor", "صف من الشبابيك بإطار داكن على امتداد ممر"),
   universityFacade: p(universityFacade, "Building facade with dark-frame windows on every floor", "واجهة مبنى بشبابيك ذات إطار داكن في كل الأدوار"),
-  roundWindows: p(roundWindows, "Reception room with two round windows and an inlaid marble floor", "غرفة استقبال بشباكين دائريين وأرضية رخام مطعّمة"),
+  roundWindows: p(roundWindows, "Reception room with two round windows and an inlaid marble floor", "غرفة استقبال بشباكين دائريين وأرضية رخام مطعّمة", "68% 50%"),
   roundWindow: p(roundWindow, "Round window with glazing bars beneath a chandelier", "شباك دائري بتقسيمات أسفل نجفة"),
   roundWindow2: p(roundWindow2, "Round window casting sunlight across the floor", "شباك دائري يرسم ضوء الشمس على الأرضية"),
   archedDoors: p(archedDoors, "Arched doors with a fanlight, closed", "أبواب مقوسة بشباك علوي مروحي، مغلقة"),

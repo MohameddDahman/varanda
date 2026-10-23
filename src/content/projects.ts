@@ -384,9 +384,9 @@ export const getProject = (slug: string) => projects.find((p) => p.slug === slug
 
 /** The installation behind the home page's sliding panels; its caption links to the project. */
 export const homeHero: { project: string; photo: PhotoKey; caption: L } = {
-  project: "nile-view-apartment",
-  photo: "heroRiverSliding",
-  caption: { en: "Floor-to-ceiling sliding doors — Nile-view apartment", ar: "أبواب جرار من الأرض حتى السقف — شقة بإطلالة على النيل" },
+  project: "round-windows-villa",
+  photo: "roundWindows",
+  caption: { en: "Round windows over an inlaid marble floor — Villa with round windows", ar: "شبابيك دائرية فوق أرضية رخام مطعّمة — فيلا بشبابيك دائرية" },
 };
 
 /** The projects stacked on the home page, in order (the hero's project is left out). */

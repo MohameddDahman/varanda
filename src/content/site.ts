@@ -15,10 +15,10 @@ export const site = {
     (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"),
   tagline: { en: "Made for life.", ar: "صُنعت لتدوم." } satisfies L,
   descriptor: { en: "Window & door systems", ar: "أنظمة الأبواب والشبابيك" } satisfies L,
-  descriptorFull: { en: "uPVC window & door systems", ar: "أنظمة الأبواب والشبابيك uPVC" } satisfies L,
+  descriptorFull: { en: "uPVC window & door systems", ar: "أنظمة أبواب وشبابيك uPVC" } satisfies L,
   description: {
     en: "Varanda designs, manufactures and installs uPVC windows, doors, roller shutters and fly screens — built for comfort, quiet rooms and a long life.",
-    ar: "فاراندا تصمم وتصنّع وتركّب أنظمة الأبواب والشبابيك uPVC والشاتر (شيش الحصيرة) وسلك الحشرات — لراحة أكبر وهدوء أكثر وعمر أطول.",
+    ar: "فاراندا تصمم وتصنّع وتركّب أنظمة أبواب وشبابيك uPVC والشاتر (شيش الحصيرة) وسلك الحشرات — لراحة أكبر وهدوء أكثر وعمر أطول.",
   } satisfies L,
   contact: {
     // Real details from the client (2026-10-16; branch address and map 2026-10-24). Opening

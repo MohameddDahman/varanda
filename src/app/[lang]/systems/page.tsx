@@ -16,7 +16,7 @@ const copy = {
   title: { en: "Systems", ar: "أنظمتنا" },
   intro: {
     en: "A complete range of uPVC door and window systems, combining high performance and modern design with the flexibility to suit homes and commercial projects.",
-    ar: "تقدم VARANDA مجموعة متكاملة من أنظمة الأبواب والشبابيك uPVC، تجمع بين الأداء العالي والتصميم العصري والمرونة لتناسب مختلف الاحتياجات السكنية والتجارية.",
+    ar: "تقدم VARANDA مجموعة متكاملة من أنظمة أبواب وشبابيك uPVC، تجمع بين الأداء العالي والتصميم العصري والمرونة لتناسب مختلف الاحتياجات السكنية والتجارية.",
   },
 };
 
@@ -62,7 +62,7 @@ export default async function SystemsPage({ params }: PageProps<"/[lang]/systems
   return (
     <>
       <PageHero
-        eyebrow={lang === "ar" ? "أنظمة الأبواب والشبابيك uPVC" : "uPVC window & door systems"}
+        eyebrow={lang === "ar" ? "أنظمة أبواب وشبابيك uPVC" : "uPVC window & door systems"}
         title={copy.title[lang]}
         intro={copy.intro[lang]}
       />

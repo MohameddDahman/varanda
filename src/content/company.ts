@@ -8,7 +8,7 @@ export const about = {
   body: [
     t(
       "VARANDA is a specialised uPVC windows and doors company, built by a team with more than 20 years of hands-on experience in the trade.",
-      "VARANDA شركة متخصصة في أنظمة الأبواب والشبابيك uPVC، أسسها فريق يمتلك خبرة عملية تزيد على 20 عامًا في هذا المجال.",
+      "VARANDA شركة متخصصة في أنظمة أبواب وشبابيك uPVC، أسسها فريق يمتلك خبرة عملية تزيد على 20 عامًا في هذا المجال.",
     ),
     t(
       "That experience covers every stage of the work — from technical consultation and site measurement to manufacturing, installation and after-sales support.",

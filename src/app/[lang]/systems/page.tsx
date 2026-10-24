@@ -64,7 +64,6 @@ export default async function SystemsPage({ params }: PageProps<"/[lang]/systems
       <PageHero
         eyebrow={lang === "ar" ? "أنظمة الأبواب والشبابيك uPVC" : "uPVC window & door systems"}
         title={copy.title[lang]}
-        count={systems.length}
         intro={copy.intro[lang]}
       />
 

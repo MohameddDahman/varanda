@@ -161,7 +161,7 @@ export const systems: SystemCategory[] = [
       en: "A range of glass to suit different needs, adding thermal and acoustic insulation with a high degree of clarity and privacy.",
       ar: "مجموعة متنوعة من أنظمة الزجاج لتناسب مختلف الاحتياجات، وتوفر العزل الحراري والصوتي مع درجات عالية من الوضوح والخصوصية.",
     },
-    cover: "homeWindow2",
+    cover: "seaView",
     gallery: ["apartmentBedroom"],
     items: [
       {
@@ -412,7 +412,7 @@ export const systems: SystemCategory[] = [
       en: "A complete range of high-quality hardware for smooth operation, a tight seal, strength and long-term use.",
       ar: "مجموعة متكاملة من الإكسسوارات عالية الجودة لضمان سهولة التشغيل والإحكام والمتانة والاستخدام طويل الأمد.",
     },
-    cover: "accWindowHandles",
+    cover: "accHandles",
     gallery: ["tiltTurn"],
     items: [
       {

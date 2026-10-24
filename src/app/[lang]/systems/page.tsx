@@ -13,10 +13,10 @@ import { HomeCTA } from "@/components/home/HomeCTA";
 import { ensureContent } from "@/lib/site-content";
 
 const copy = {
-  title: { en: "Systems", ar: "أنظمتنا" },
+  title: { en: "uPVC window & door systems", ar: "أنظمة الأبواب والشبابيك uPVC" },
   intro: {
-    en: "A complete range of uPVC door and window systems, combining high performance and modern design with the flexibility to suit homes and commercial projects.",
-    ar: "تقدم VARANDA مجموعة متكاملة من أنظمة الأبواب والشبابيك uPVC، تجمع بين الأداء العالي والتصميم العصري والمرونة لتناسب مختلف الاحتياجات السكنية والتجارية.",
+    en: "A complete range from VARANDA, combining high performance and modern design with the flexibility to suit homes and commercial projects.",
+    ar: "مجموعة متكاملة من VARANDA تجمع بين الأداء العالي والتصميم العصري والمرونة، لتناسب مختلف الاحتياجات السكنية والتجارية.",
   },
 };
 
@@ -62,9 +62,10 @@ export default async function SystemsPage({ params }: PageProps<"/[lang]/systems
   return (
     <>
       <PageHero
-        eyebrow={lang === "ar" ? "أنظمة الأبواب والشبابيك uPVC" : "uPVC window & door systems"}
+        eyebrow={lang === "ar" ? "أنظمتنا" : "Our systems"}
         title={copy.title[lang]}
         intro={copy.intro[lang]}
+        size="display"
       />
 
       <section className="theme-light pb-[var(--section-y)]" data-header="light" aria-label={copy.title[lang]}>

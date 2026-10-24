@@ -50,7 +50,7 @@ export function FinishPicker() {
         </div>
         <p className="t-body mt-10 max-w-[46ch] text-[var(--fg-2)]">
           {lang === "ar"
-            ? "تشكيلة من الألوان والتشطيبات للإطارات والضلف، تُطابق مع ألوان المقابض والشاتر لتناسب مختلف الطرز المعمارية."
+            ? "تشكيلة من الألوان والتشطيبات للإطارات والضلف، تتناسق مع ألوان المقابض والشاتر لتناسب مختلف الطرز المعمارية."
             : "Frames and sashes come in a range of colours and finishes, matched by handles and shutters, to suit different architectural styles."}
         </p>
         {finish.texture === "wood" && (

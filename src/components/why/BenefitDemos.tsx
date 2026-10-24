@@ -47,7 +47,7 @@ export function ThermalDemo() {
             <span key={i} className="heat-line heat-leak" style={{ top: `${22 + i * 13}%`, animationDelay: `${0.9 + i * 0.45}s` }} />
           ))}
           <span className="demo-room-state t-label">
-            {upvc ? (ar ? "الغرفة تبقى مريحة" : "Room stays comfortable") : ar ? "الحرارة تتسرب للداخل" : "Heat gets in"}
+            {upvc ? (ar ? "الغرفة تبقى مريحة" : "Room stays comfortable") : ar ? "الحرارة تتسرب إلى الداخل" : "Heat gets in"}
           </span>
         </div>
       </div>

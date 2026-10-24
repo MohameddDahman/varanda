@@ -83,7 +83,7 @@ export default async function WhyPage({ params }: PageProps<"/[lang]/why-upvc">)
           <div className="lg:col-span-4 lg:col-start-9">
             <p className="t-lead text-ink-2">
               {lang === "ar"
-                ? "شفاف أو عاكس أو فوميه أو مزدوج — قارن بينها على إطلالة حقيقية."
+                ? "شفاف أو عاكس أو فاميه أو مزدوج — قارن بينها على إطلالة حقيقية."
                 : "Clear, reflective, fumé or double glazed — compare them on a real view."}
             </p>
             <div className="mt-8">

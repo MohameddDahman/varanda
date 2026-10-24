@@ -39,7 +39,7 @@ const messages: Record<FieldName, Record<FieldError, L>> = {
     required: { en: "Add a phone number so we can arrange the visit.", ar: "أضف رقم هاتف لنرتّب موعد المعاينة." },
     invalid: {
       en: "Use digits only, with the country code if outside Egypt.",
-      ar: "استخدم أرقامًا فقط، مع كود الدولة إن كنت خارج مصر.",
+      ar: "استخدم أرقامًا فقط، مع رمز الدولة إن كنت خارج مصر.",
     },
   },
   email: {

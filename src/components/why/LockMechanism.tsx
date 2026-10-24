@@ -38,7 +38,7 @@ const MODES: { id: Mode; label: L; text: L }[] = [
     label: { en: "Open", ar: "فتح" },
     text: {
       en: "Handle across: the locking points slide out of the strikers and the whole sash swings into the room on its side hinges, like a door.",
-      ar: "المقبض أفقي: تخرج نقاط الغلق من السكاكات وتُفتح الضلفة بالكامل للداخل على مفصلاتها الجانبية مثل الباب.",
+      ar: "المقبض أفقي: تخرج نقاط الغلق من السكاكات وتُفتح الضلفة بالكامل إلى الداخل على مفصلاتها الجانبية مثل الباب.",
     },
   },
   {
@@ -46,7 +46,7 @@ const MODES: { id: Mode; label: L; text: L }[] = [
     label: { en: "Tilt", ar: "قلاب" },
     text: {
       en: "Handle up: the sash leans in from the top on its bottom hinges, held by a stay arm, for secure ventilation.",
-      ar: "المقبض لأعلى: تميل الضلفة للداخل من أعلى على مفصلاتها السفلية ويثبتها ذراع، لتهوية آمنة.",
+      ar: "المقبض لأعلى: تميل الضلفة إلى الداخل من أعلى على مفصلاتها السفلية، وتثبّتها ذراع، لتهوية آمنة.",
     },
   },
 ];

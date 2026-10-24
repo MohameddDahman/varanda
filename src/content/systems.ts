@@ -88,7 +88,7 @@ export const systems: SystemCategory[] = [
       },
       {
         id: "hinged-double",
-        name: { en: "Double casement", ar: "المفصلي ضلفتين" },
+        name: { en: "Double casement", ar: "المفصلي بضلفتين" },
         text: {
           en: "Two hinged sashes that open from the middle for a full, wide opening — the most common choice in homes.",
           ar: "ضلفتان مفصليتان تُفتحان من المنتصف لفتحة كاملة وواسعة، وهو الاختيار الأكثر استخدامًا في المنازل.",
@@ -174,7 +174,7 @@ export const systems: SystemCategory[] = [
         id: "reflective",
         image: "glassReflective",
         name: { en: "Reflective", ar: "عاكس" },
-        text: { en: "Reduces heat gain and gives more privacy.", ar: "يقلل من الحرارة ويوفر خصوصية أعلى." },
+        text: { en: "Reduces heat gain and gives more privacy.", ar: "يقلل الحرارة ويوفر خصوصية أعلى." },
       },
       {
         id: "fume",
@@ -314,7 +314,7 @@ export const systems: SystemCategory[] = [
     features: {
       title: { en: "Why fit a shutter", ar: "مميزات الشاتر (شيش الحصيرة)" },
       items: [
-        tag("Thermal insulation that saves energy", "عزل حراري يوفر في استهلاك الطاقة"),
+        tag("Thermal insulation that saves energy", "عزل حراري يقلل استهلاك الطاقة"),
         tag("Less noise from outside", "تقليل الضوضاء من الخارج"),
         tag("Complete privacy at home", "خصوصية كاملة للمنزل"),
         tag("Protection from the weather", "حماية من العوامل الجوية"),
@@ -324,9 +324,9 @@ export const systems: SystemCategory[] = [
     details: {
       title: { en: "Operation & details", ar: "التشغيل والتفاصيل" },
       items: [
-        tag("Wall switch: on, off and stop — Somfy or Schneider", "مفتاح جداري (سويتش) تشغيل وإيقاف — Somfy / Schneider"),
+        tag("Wall switch: on, off and stop — Somfy or Schneider", "مفتاح جداري (سويتش) للتشغيل والإيقاف — Somfy / Schneider"),
         tag("Remote control", "ريموت كنترول"),
-        tag("Smart control from your phone", "نظام سمارت بالتحكم من الموبايل"),
+        tag("Smart control from your phone", "نظام ذكي (سمارت) للتحكم من الموبايل"),
         tag("Manual, by strap or crank", "يدوي بشريط أو منفلة"),
         tag("Concealed or exposed box", "صندوق مخفي أو ظاهر"),
         tag("Rubber bottom seal for a tight close", "جلب مطاطي سفلي لإحكام الغلق"),
@@ -343,7 +343,7 @@ export const systems: SystemCategory[] = [
       en: "Fresh air, kept clear of insects — fixed, sliding or pleated.",
       ar: "هواء نقي بلا حشرات — ثابت أو جرار أو بليسيه.",
     },
-    tagline: { en: "Fresh air. Better protection.", ar: "هواء نقي.. وحماية بدون تنازل." },
+    tagline: { en: "Fresh air. Better protection.", ar: "هواء نقي.. وحماية دون تنازل." },
     intro: {
       en: "Fly screen systems that fit all our window and door systems — practical, durable and easy to use.",
       ar: "مجموعة متنوعة من أنظمة سلك الحشرات لتناسب جميع أنظمة الشبابيك والأبواب بتصميم عملي ومتانة عالية وسهولة في الاستخدام.",
@@ -370,14 +370,14 @@ export const systems: SystemCategory[] = [
           en: "Runs on its own track and moves easily left and right.",
           ar: "يعمل على مسار مستقل ويتحرك بسهولة يمينًا ويسارًا.",
         },
-        points: [tag("For 2- and 4-sash sliding windows", "يناسب الشبابيك الجرار ذات الضلفتين والأربع ضلف")],
+        points: [tag("For 2- and 4-sash sliding windows", "يناسب الشبابيك الجرار ذات الضلفتين أو الأربع ضلف")],
       },
       {
         id: "pleated",
         name: { en: "Pleated screen", ar: "السلك البليسيه (أكورديون)" },
         text: {
           en: "A modern design that folds away like an accordion, protecting with an elegant look.",
-          ar: "تصميم عصري يُجمع بشكل أكورديون ويوفر حماية مع مظهر أنيق.",
+          ar: "تصميم عصري يُطوى على شكل أكورديون، ويوفر حماية مع مظهر أنيق.",
         },
         points: [
           tag("High-quality American fibre mesh", "خامة سلك Fiber عالية الجودة (أمريكية)"),
@@ -385,7 +385,7 @@ export const systems: SystemCategory[] = [
           tag("Folds away completely when open", "يُجمع بالكامل عند الفتح"),
           tag(
             "For hinged and sliding windows and doors, especially 3-sash sliding",
-            "مناسب للشبابيك والأبواب المفصلية والجرار، خصوصًا الجرار 3 ضلف",
+            "مناسب للشبابيك والأبواب المفصلية والجرار، ولا سيما الجرار بثلاث ضلف",
           ),
           tag("Single or double opening", "متوفر بفتحة واحدة أو ضلفتين"),
         ],
@@ -436,7 +436,7 @@ export const systems: SystemCategory[] = [
         name: { en: "Hinges", ar: "المفصلات" },
         text: {
           en: "uPVC door and window hinges, including the 3D adjustable door hinge rated to 130 kg.",
-          ar: "مفصلات PVC للأبواب والشبابيك، منها مفصلة الباب 3D القابلة للضبط وتتحمل حتى 130 كجم.",
+          ar: "مفصلات PVC للأبواب والشبابيك، منها مفصلة الباب 3D القابلة للضبط التي تتحمل حتى 130 كجم.",
         },
       },
       {
@@ -463,7 +463,7 @@ export const systems: SystemCategory[] = [
         name: { en: "Hinged-door espagnolette", ar: "سبليونة باب مفصلي" },
         text: {
           en: "Multi-point locking with a lock cylinder to open and lock the door.",
-          ar: "غلق متعدد النقاط بكالون فتح وقفل للباب.",
+          ar: "غلق متعدد النقاط مع كالون لفتح الباب وقفله.",
         },
       },
       {

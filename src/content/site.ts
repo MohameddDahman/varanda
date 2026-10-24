@@ -21,8 +21,8 @@ export const site = {
     ar: "فاراندا تصمم وتصنّع وتركّب أنظمة الأبواب والشبابيك uPVC والشاتر (شيش الحصيرة) وسلك الحشرات — لراحة أكبر وهدوء أكثر وعمر أطول.",
   } satisfies L,
   contact: {
-    // Real details from the client (2026-10-16). Address, opening hours and the map are
-    // still to come: anything null is hidden.
+    // Real details from the client (2026-10-16; branch address and map 2026-10-24). Opening
+    // hours are still to come: anything null is hidden.
     sample: false,
     /** People a visitor can call or message directly. */
     people: [
@@ -43,9 +43,14 @@ export const site = {
     phone: "+20 106 116 6677" as string | null,
     whatsapp: "201061166677" as string | null, // international format without +
     email: null as string | null, // the company address, once it exists
-    address: null as L | null,
-    mapsUrl: null as string | null, // Google Maps link to the branch
-    mapQuery: null as string | null, // what the embedded map shows: the branch address or its Google Maps name
+    address: {
+      en: "Shops 224 & 225, 2nd floor, Building 314, Hala Mall, South 90th Street, Fifth Settlement, New Cairo",
+      ar: "محل رقم 224 و225، الدور الثاني، مبنى 314، مول هلا، شارع التسعين الجنوبي، التجمع الخامس",
+    } as L | null,
+    // The pin the client shared (their Google Maps link is labelled with a neighbouring shop,
+    // so the site points at the coordinates rather than that shop).
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=30.0258429%2C31.4646865" as string | null,
+    mapQuery: "30.0258429,31.4646865" as string | null, // what the embedded map shows
     hours: null as L | null,
   },
   social: [] as { label: string; href: string }[],
@@ -88,5 +93,5 @@ export const ui = {
   location: { en: "Location", ar: "الموقع" },
   photos: { en: "Photos", ar: "الصور" },
   rights: { en: "All rights reserved.", ar: "جميع الحقوق محفوظة." },
-  backToTop: { en: "Back to top", ar: "العودة للأعلى" },
+  backToTop: { en: "Back to top", ar: "العودة إلى الأعلى" },
 } satisfies Record<string, L>;

@@ -169,7 +169,7 @@ export const a = {
     role: { en: "Job title", ar: "المسمى الوظيفي" },
     phone: { en: "Phone", ar: "الهاتف" },
     whatsapp: { en: "WhatsApp number", ar: "رقم واتساب" },
-    whatsappHint: { en: "With the country code, digits only: 201061166677.", ar: "مع كود الدولة وأرقام فقط: 201061166677." },
+    whatsappHint: { en: "With the country code, digits only: 201061166677.", ar: "مع رمز الدولة، أرقام فقط: 201061166677." },
     addPerson: { en: "Add a person", ar: "إضافة شخص" },
     removePerson: { en: "Remove", ar: "حذف" },
     moveUp: { en: "Move up", ar: "تحريك لأعلى" },

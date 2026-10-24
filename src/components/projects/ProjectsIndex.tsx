@@ -13,6 +13,7 @@ import { ShutterImage } from "@/components/motion/ShutterImage";
 import { Arrow } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import { coverSizes, DRIFT } from "@/lib/sizes";
+import { arCount } from "@/lib/ar";
 
 if (typeof window !== "undefined") gsap.registerPlugin(Flip);
 
@@ -154,7 +155,9 @@ export function ProjectsIndex({ items }: { items: IndexProject[] }) {
       </div>
 
       <p className="sr-only" aria-live="polite">
-        {lang === "ar" ? `${visible.length} مشروعات معروضة` : `${visible.length} projects shown`}
+        {lang === "ar"
+              ? arCount(visible.length, { one: "مشروع واحد معروض", two: "مشروعان معروضان", few: "مشروعات معروضة", many: "مشروعًا معروضًا", other: "مشروع معروض" })
+              : `${visible.length} ${visible.length === 1 ? "project" : "projects"} shown`}
       </p>
 
       {view === "grid" ? (

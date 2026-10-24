@@ -100,7 +100,7 @@ export const projects: Project[] = [
       },
       {
         en: "Bedrooms and the kitchen use the same white profile, so every opening in the apartment shares one line and one finish.",
-        ar: "واستُخدم نفس القطاع الأبيض في غرف النوم والمطبخ، لتتشارك كل فتحات الشقة الخطوط نفسها والتشطيب نفسه.",
+        ar: "واستُخدم القطاع الأبيض نفسه في غرف النوم والمطبخ، لتتشارك كل فتحات الشقة الخطوط نفسها والتشطيب نفسه.",
       },
     ],
     systems: ["windows-doors", "glass"],
@@ -221,7 +221,7 @@ export const projects: Project[] = [
     body: [
       {
         en: "Glazing bars carry the same pattern from the French doors to the dining-room window, so the rooms share one classic detail: clear double glazing with Georgian bars.",
-        ar: "تتكرر التقسيمات نفسها من الباب الفرنسي إلى شباك غرفة الطعام، فتتشارك الغرف تفصيلة كلاسيكية واحدة: زجاج دبل شفاف بحورجيا.",
+        ar: "تتكرر التقسيمات نفسها من الباب الفرنسي إلى شباك غرفة الطعام، فتتشارك الغرف تفصيلة كلاسيكية واحدة: زجاج دبل شفاف بجورجيا.",
       },
     ],
     systems: ["windows-doors"],
@@ -296,12 +296,12 @@ export const projects: Project[] = [
     location: null,
     summary: {
       en: "Wood-effect pergolas beside the pool and in the garden, with a matching fence and gate.",
-      ar: "برجولات بمظهر الخشب بجوار حمام السباحة وفي الحديقة، مع سور وبوابة بنفس الطابع.",
+      ar: "برجولات بمظهر الخشب بجوار حمام السباحة وفي الحديقة، مع سور وبوابة بالطابع نفسه.",
     },
     body: [
       {
         en: "Slatted roofs and screens give shade without closing the space in, and the same wood-effect finish carries on to the fence along the garden path.",
-        ar: "تمنح الأسقف والسواتر الشرائحية الظل دون أن تُغلق المساحة، ويمتد نفس التشطيب بمظهر الخشب إلى السور على امتداد ممر الحديقة.",
+        ar: "تمنح الأسقف والسواتر الشرائحية الظل دون أن تُغلق المساحة، ويمتد التشطيب نفسه بمظهر الخشب إلى السور على امتداد ممر الحديقة.",
       },
     ],
     systems: [],
@@ -356,12 +356,12 @@ export const projects: Project[] = [
     location: null,
     summary: {
       en: "Hinged uPVC windows throughout a finished family home — quiet rooms, tight seals and nothing to repaint.",
-      ar: "شبابيك uPVC مفصلية في أرجاء منزل عائلي — غرف هادئة وإحكام عالٍ دون حاجة لإعادة الدهان.",
+      ar: "شبابيك uPVC مفصلية في أرجاء منزل عائلي — غرف هادئة وإحكام عالٍ دون حاجة إلى إعادة الدهان.",
     },
     body: [
       {
         en: "White frames sit flush with the plaster and fine cornices of each room, so the windows feel built in rather than added.",
-        ar: "تستقر الإطارات البيضاء بانسجام مع الحوائط والكرانيش الدقيقة في كل غرفة، فتبدو الشبابيك جزءًا من البناء لا إضافة عليه.",
+        ar: "تستقر الإطارات البيضاء بانسجام مع الحوائط والكرانيش الدقيقة في كل غرفة، فتبدو الشبابيك جزءًا من البناء لا إضافةً إليه.",
       },
     ],
     systems: ["windows-doors"],
@@ -373,7 +373,7 @@ export const projects: Project[] = [
 /** Site photos that are not tied to one project, shown as "From the site". */
 export const sitePhotos: { photo: PhotoKey; label: L }[] = [
   { photo: "slidingDoor2020", label: { en: "Sliding door", ar: "باب جرار" } },
-  { photo: "tiltTurn", label: { en: "Tilt & turn", ar: "قلاب ومفصلي" } },
+  { photo: "tiltTurn", label: { en: "Tilt & turn", ar: "مفصلي قلاب" } },
   { photo: "buildingProgress", label: { en: "Residential building", ar: "عمارة سكنية" } },
   { photo: "entranceDoor", label: { en: "Entrance door", ar: "باب مدخل" } },
   { photo: "archedShutter", label: { en: "Arched shutter", ar: "شاتر مقوس" } },

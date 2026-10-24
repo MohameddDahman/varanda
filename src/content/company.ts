@@ -73,7 +73,7 @@ export const process = {
       title: t("Contract", "تعاقد"),
       text: t(
         "We sign once every term is reviewed and the dates and schedule are confirmed.",
-        "توقيع التعاقد بعد مراجعة كافة البنود وتأكيد المواعيد وجدول التنفيذ.",
+        "توقيع التعاقد بعد مراجعة جميع البنود وتأكيد المواعيد وجدول التنفيذ.",
       ),
     },
     {
@@ -87,7 +87,7 @@ export const process = {
       title: t("Installation", "تركيب"),
       text: t(
         "Professional installation by a specialised team, to our quality and finishing standards.",
-        "تركيب احترافي بواسطة فريق متخصص مع الالتزام بمعايير الجودة والتشطيب.",
+        "تركيب احترافي على يد فريق متخصص مع الالتزام بمعايير الجودة والتشطيب.",
       ),
     },
     {
@@ -137,7 +137,7 @@ export const benefits = {
       title: t("Thermal insulation", "عزل حراري ممتاز"),
       text: t(
         "Helps keep a comfortable indoor temperature and improves energy efficiency.",
-        "يساعد في الحفاظ على درجة حرارة داخلية مريحة ويحسّن كفاءة استهلاك الطاقة.",
+        "يساعد على الحفاظ على درجة حرارة داخلية مريحة ويحسّن كفاءة استهلاك الطاقة.",
       ),
     },
     {

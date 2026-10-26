@@ -13,7 +13,8 @@ const QUALITIES = new Set([60, 75, 85]);
 const convex = process.env.NEXT_PUBLIC_CONVEX_URL ? new URL(process.env.NEXT_PUBLIC_CONVEX_URL) : null;
 
 function allowed(src: string): boolean {
-  if (src.startsWith("/_next/static/media/")) return !src.includes("..");
+  // The build's own images (…/media/ locally, …/immutable/media/ on Vercel).
+  if (src.startsWith("/_next/static/")) return !src.includes("..") && //media/[^/]+.(jpe?g|png|webp|avif)$/i.test(src);
   try {
     const u = new URL(src);
     if (!u.pathname.startsWith("/api/storage/")) return false;

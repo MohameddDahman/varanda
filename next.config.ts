@@ -10,8 +10,10 @@ const localConvex = convex && ["127.0.0.1", "localhost"].includes(convex.hostnam
 // GSAP scroll scenes and the door page transition.
 const nextConfig: NextConfig = {
   images: {
+    // Resized by our own /api/img route (cached by the CDN), not Vercel's paid optimizer.
+    loader: "custom",
+    loaderFile: "./src/lib/image-loader.ts",
     qualities: [60, 75, 85],
-    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "*.convex.cloud", pathname: "/api/storage/**" },
       ...(localConvex ? [{ protocol: "http" as const, hostname: localConvex.hostname, port: localConvex.port, pathname: "/api/storage/**" }] : []),

@@ -16,9 +16,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/about",
     "/contact",
   ];
+  // When this build went out: tells crawlers the pages changed and are worth a visit.
+  const lastModified = new Date();
   return routes.flatMap((route) =>
     locales.map((lang) => ({
       url: `${site.url}/${lang}${route}`,
+      lastModified,
       changeFrequency: "monthly" as const,
       priority: route === "" ? 1 : route.split("/").length > 2 ? 0.6 : 0.8,
       alternates: { languages: Object.fromEntries(locales.map((l) => [l, `${site.url}/${l}${route}`])) },

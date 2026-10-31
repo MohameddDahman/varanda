@@ -13,6 +13,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ensureContent } from "@/lib/site-content";
 import { ContentSync } from "@/components/providers/ContentSync";
+import { seoBrand, seoTitle, structuredData } from "@/lib/seo";
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -24,14 +25,19 @@ export async function generateMetadata({
   await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) return {};
-  const title = `VARANDA — ${site.descriptorFull[lang]}`;
+  const title = seoTitle[lang];
   return {
     metadataBase: new URL(site.url),
-    title: { default: title, template: "%s — VARANDA" },
+    title: { default: title, template: `%s — ${seoBrand[lang]}` },
     description: site.description[lang],
     applicationName: "VARANDA",
     // Previews (no real domain yet) stay out of search results.
     robots: site.launched ? undefined : { index: false, follow: false },
+    // Search Console / Bing Webmaster verification codes, when set in the environment.
+    verification: {
+      ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+      ...(process.env.BING_SITE_VERIFICATION ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } } : {}),
+    },
     alternates: {
       canonical: `/${lang}`,
       languages: { en: "/en", ar: "/ar", "x-default": "/en" },
@@ -72,6 +78,11 @@ export default async function RootLayout({
       className={cn(montserrat.variable, tajawal.variable)}
     >
       <body>
+        {/* What search engines read about the business: name, address, map pin, phones. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData(lang)).replace(/</g, "\\u003c") }}
+        />
         <noscript>
           <style>{`[data-doors],[data-slat]{display:none!important}`}</style>
         </noscript>

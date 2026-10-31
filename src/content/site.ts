@@ -17,8 +17,8 @@ export const site = {
   descriptor: { en: "Window & door systems", ar: "أنظمة الأبواب والشبابيك" } satisfies L,
   descriptorFull: { en: "uPVC window & door systems", ar: "أنظمة أبواب وشبابيك uPVC" } satisfies L,
   description: {
-    en: "Varanda designs, manufactures and installs uPVC windows, doors, roller shutters and fly screens — built for comfort, quiet rooms and a long life.",
-    ar: "فاراندا تصمم وتصنّع وتركّب أنظمة أبواب وشبابيك uPVC والشاتر (شيش الحصيرة) وسلك الحشرات — لراحة أكبر وهدوء أكثر وعمر أطول.",
+    en: "VARANDA designs, manufactures and installs uPVC windows and doors, roller shutters and fly screens across Greater Cairo, from our branch at Hala Mall, Fifth Settlement, New Cairo.",
+    ar: "فاراندا تصمم وتصنّع وتركّب أبواب وشبابيك uPVC والشاتر (شيش الحصيرة) وسلك الحشرات في القاهرة الكبرى، من فرعنا في مول هلا بالتجمع الخامس.",
   } satisfies L,
   contact: {
     // Real details from the client (2026-10-16; branch address and map 2026-10-24). Opening

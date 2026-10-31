@@ -13,7 +13,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ensureContent } from "@/lib/site-content";
 import { ContentSync } from "@/components/providers/ContentSync";
-import { seoBrand, seoTitle, structuredData } from "@/lib/seo";
+import { googleSiteVerification, seoBrand, seoTitle, structuredData } from "@/lib/seo";
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -33,9 +33,9 @@ export async function generateMetadata({
     applicationName: "VARANDA",
     // Previews (no real domain yet) stay out of search results.
     robots: site.launched ? undefined : { index: false, follow: false },
-    // Search Console / Bing Webmaster verification codes, when set in the environment.
+    // Search Console's ownership code; Bing Webmaster's when set in the environment.
     verification: {
-      ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+      google: googleSiteVerification,
       ...(process.env.BING_SITE_VERIFICATION ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } } : {}),
     },
     alternates: {

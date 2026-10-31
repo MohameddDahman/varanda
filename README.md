@@ -97,7 +97,7 @@ Every page carries a title and description, canonical and hreflang links, the bu
 
 - `npm run seo:check` reads the live site the way a crawler does and lists anything search engines or link previews would trip on (`scripts/seo-check.mjs`; pass another address to check a different deployment).
 - `node scripts/indexnow.mjs` tells Bing, and through it DuckDuckGo and Yahoo, about every page. Run it after big content changes.
-- Google only lists a new site quickly once it's verified in Search Console: use the HTML-tag method, set `GOOGLE_SITE_VERIFICATION` in Vercel to its code and redeploy, then submit `sitemap.xml` and request indexing for `/en` and `/ar`. Bing Webmaster Tools works the same way with `BING_SITE_VERIFICATION`, or imports the site from Search Console.
+- Google Search Console (property `https://varandasystems.com/`) checks ownership with `public/googlef409ea677bfe5dc2.html` and the meta tag code in `src/lib/seo.ts`. Keep both: removing them un-verifies the site. Bing Webmaster Tools can import the site from Search Console, or be verified with `BING_SITE_VERIFICATION` in Vercel.
 
 ## Before launch — needed from the client
 

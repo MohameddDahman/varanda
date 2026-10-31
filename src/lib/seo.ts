@@ -8,6 +8,12 @@ export const seoTitle: Record<Lang, string> = {
 };
 export const seoBrand: Record<Lang, string> = { en: "VARANDA", ar: "فاراندا VARANDA" };
 
+/**
+ * Proves to Google Search Console that the site is ours, together with the google….html file
+ * in public/. Public on purpose: it only says which Search Console account added the site.
+ */
+export const googleSiteVerification = "a_3i1DORS-D69j-xNK2f4spEiaTdzVQofF_Bdx5BOAw";
+
 /** Where the company works (from the company profile). */
 const AREAS = ["New Cairo", "Fifth Settlement", "Sheikh Zayed", "6th of October City", "Cairo"];
 

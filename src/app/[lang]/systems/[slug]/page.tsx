@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/systems/[s
   const { lang, slug } = await params;
   const system = getSystem(slug);
   if (!isLang(lang) || !system) return {};
-  return pageMeta(lang, `/systems/${slug}`, system.name[lang], system.intro[lang]);
+  return pageMeta(lang, `/systems/${slug}`, system.name[lang], system.intro[lang], photos[system.cover]);
 }
 
 const T = (lang: Lang) => (s: { en: string; ar: string }) => s[lang];

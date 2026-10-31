@@ -87,9 +87,17 @@ Sign in at http://localhost:3000/admin, open Projects and press **Import the sit
 
 ## Deploying
 
-Deployed on Vercel as the `varanda` project, connected to this GitHub repo: every push to `main` deploys to production (currently https://varanda-kappa.vercel.app).
+Deployed on Vercel as the `varanda` project, connected to this GitHub repo: every push to `main` deploys to production, https://varandasystems.com (the old varanda-kappa.vercel.app address redirects there).
 
-At launch, set `NEXT_PUBLIC_SITE_URL` to the real domain (e.g. `https://your-domain.com`) so canonical links, the sitemap and share images use it. Until it is set the site tells search engines not to index it (a `noindex` tag and no sitemap in `robots.txt`), so the preview with sample details stays out of search results. Once Convex is connected, add `NEXT_PUBLIC_CONVEX_URL`, `ADMIN_PASSWORD` and `ADMIN_TOKEN` (see above).
+`NEXT_PUBLIC_SITE_URL` is set to https://varandasystems.com, so canonical links, the sitemap and share images use it. Without it the site tells search engines not to index it (a `noindex` tag and no sitemap in `robots.txt`), which keeps other deployments out of search results. Production also has `NEXT_PUBLIC_CONVEX_URL`, `ADMIN_PASSWORD` and `ADMIN_TOKEN` (see above).
+
+## Search engines
+
+Every page carries a title and description, canonical and hreflang links, the business's schema.org data (`src/lib/seo.ts`) and a share picture for link previews (`src/lib/meta.ts`); `sitemap.xml` lists every page in both languages.
+
+- `npm run seo:check` reads the live site the way a crawler does and lists anything search engines or link previews would trip on (`scripts/seo-check.mjs`; pass another address to check a different deployment).
+- `node scripts/indexnow.mjs` tells Bing, and through it DuckDuckGo and Yahoo, about every page. Run it after big content changes.
+- Google only lists a new site quickly once it's verified in Search Console: use the HTML-tag method, set `GOOGLE_SITE_VERIFICATION` in Vercel to its code and redeploy, then submit `sitemap.xml` and request indexing for `/en` and `/ar`. Bing Webmaster Tools works the same way with `BING_SITE_VERIFICATION`, or imports the site from Search Console.
 
 ## Before launch — needed from the client
 

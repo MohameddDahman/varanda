@@ -1,28 +1,33 @@
 import { ImageResponse } from "next/og";
+import sharp from "sharp";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { locales } from "@/i18n/config";
 import { MARK, TAGLINE, WORDMARK } from "@/components/brand/logo-paths";
 import { ensureContent } from "@/lib/site-content";
+import { BRAND_CARD_ALT, SHARE_SIZE } from "@/lib/meta";
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export const alt = "VARANDA — uPVC window & door systems. Made for life.";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+export const alt = BRAND_CARD_ALT;
+export const size = SHARE_SIZE;
+export const contentType = "image/jpeg";
 
 // The tagline glyphs sit on the artboard below the wordmark; this box frames just them.
 const TAGLINE_VIEWBOX = "688 764 1134 62";
 
 export default async function OpengraphImage() {
   await ensureContent();
-  // The home hero's photo.
-  const photo = await readFile(join(process.cwd(), "src/assets/photos/garden-villa-window.jpg"));
+  // The home hero's photo, cut to the frame on the right so both round windows show.
+  const photo = await sharp(await readFile(join(process.cwd(), "src/assets/photos/round-windows.jpg")))
+    .resize(592, 554, { fit: "cover", position: "left" })
+    .jpeg({ quality: 90 })
+    .toBuffer();
   const src = `data:image/jpeg;base64,${photo.toString("base64")}`;
 
-  return new ImageResponse(
+  const card = new ImageResponse(
     (
       <div style={{ width: "100%", height: "100%", display: "flex", background: "#040c17" }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: 560, padding: "72px 64px" }}>
@@ -59,4 +64,9 @@ export default async function OpengraphImage() {
     ),
     size,
   );
+  // ImageResponse draws a PNG of about 600 KB; as a JPEG it's small enough for WhatsApp's previews.
+  const jpeg = await sharp(Buffer.from(await card.arrayBuffer())).jpeg({ quality: 85, mozjpeg: true }).toBuffer();
+  return new Response(new Uint8Array(jpeg), {
+    headers: { "Content-Type": contentType, "Cache-Control": "public, immutable, no-transform, max-age=31536000" },
+  });
 }

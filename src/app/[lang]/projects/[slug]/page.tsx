@@ -27,7 +27,11 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/projects/[
   const { lang, slug } = await params;
   const project = await getSiteProject(slug);
   if (!isLang(lang) || !project) return {};
-  return pageMeta(lang, `/projects/${slug}`, project.title[lang], project.summary[lang]);
+  // A summary too short for a search result is followed by the first paragraph.
+  const summary = project.summary[lang];
+  const more = project.body[0]?.[lang] ?? "";
+  const description = summary.length < 70 && more && summary.length + more.length < 160 ? `${summary} ${more}` : summary;
+  return pageMeta(lang, `/projects/${slug}`, project.title[lang], description, project.cover);
 }
 
 export default async function ProjectPage({ params }: PageProps<"/[lang]/projects/[slug]">) {

@@ -44,6 +44,18 @@ for (const lang of langs) {
       // One page title.
       await expect(page.locator("h1")).toHaveCount(1);
 
+      // What search engines and link previews read: a canonical link to the page itself and a
+      // share picture that loads (a page's own openGraph once dropped the layout's).
+      if (!route.status) {
+        const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
+        expect(canonical && new URL(canonical).pathname, "canonical link").toBe(url);
+        const image = await page.locator('meta[property="og:image"]').getAttribute("content");
+        expect(image, "share image (og:image)").toBeTruthy();
+        const { pathname, search } = new URL(image!);
+        const shared = await page.request.get(pathname + search);
+        expect(shared.headers()["content-type"], "share image type").toMatch(/^image\//);
+      }
+
       // Accessibility: WCAG 2.2 AA plus best practices, no violations.
       const axe = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])

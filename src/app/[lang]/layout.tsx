@@ -49,11 +49,8 @@ export async function generateMetadata({
       description: site.description[lang],
       locale: lang === "ar" ? "ar_EG" : "en_US",
     },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description: site.description[lang],
-    },
+    // Title, description and picture come from each page's openGraph (Next copies them over).
+    twitter: { card: "summary_large_image" },
   };
 }
 

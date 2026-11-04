@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import type { L } from "@/i18n/config";
 import type { Photo } from "@/content/photos";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP, whenNear } from "@/lib/gsap";
 import { DRIFT, screenSizes } from "@/lib/sizes";
 import { useLang } from "@/components/providers/LangProvider";
 import { ui } from "@/content/site";
@@ -26,21 +26,29 @@ export function HomeProjects({ items }: { items: FeaturedProject[] }) {
 
   useGSAP(
     () => {
+      const el = root.current;
+      if (!el) return;
       const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const cards = gsap.utils.toArray<HTMLElement>("[data-stack-card]", root.current);
-        cards.forEach((card, i) => {
-          const next = cards[i + 1];
-          if (!next) return;
-          gsap.to(card.querySelector("[data-stack-inner]"), {
-            scale: 0.9,
-            filter: "brightness(0.55)",
-            ease: "none",
-            scrollTrigger: { trigger: next, start: "top bottom", end: "top 12%", scrub: true },
+      // Set up only once the stack nears the viewport (see whenNear).
+      const stop = whenNear(el, () =>
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+          const cards = gsap.utils.toArray<HTMLElement>("[data-stack-card]", el);
+          cards.forEach((card, i) => {
+            const next = cards[i + 1];
+            if (!next) return;
+            gsap.to(card.querySelector("[data-stack-inner]"), {
+              scale: 0.9,
+              filter: "brightness(0.55)",
+              ease: "none",
+              scrollTrigger: { trigger: next, start: "top bottom", end: "top 12%", scrub: true },
+            });
           });
-        });
-      });
-      return () => mm.revert();
+        }),
+      );
+      return () => {
+        stop();
+        mm.revert();
+      };
     },
     { scope: root },
   );

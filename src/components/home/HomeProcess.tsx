@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP, whenNear } from "@/lib/gsap";
 import { useLang } from "@/components/providers/LangProvider";
 import { process } from "@/content/company";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -20,12 +20,15 @@ export function HomeProcess({ id = "process" }: { id?: string }) {
 
   useGSAP(
     () => {
-      const items = gsap.utils.toArray<HTMLElement>("[data-step]", root.current);
-      const roll = root.current?.querySelector<HTMLElement>("[data-roll]");
-      const fill = root.current?.querySelector<HTMLElement>("[data-fill]");
+      const el = root.current;
+      if (!el) return;
+      const items = gsap.utils.toArray<HTMLElement>("[data-step]", el);
+      const roll = el.querySelector<HTMLElement>("[data-roll]");
+      const fill = el.querySelector<HTMLElement>("[data-fill]");
       const mm = gsap.matchMedia();
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // The steps are dimmed and tracked only once the list nears the viewport (see whenNear).
+      const stop = whenNear(el, () => mm.add("(prefers-reduced-motion: no-preference)", () => {
         gsap.set(items, { opacity: 0.32 });
         items.forEach((item, i) => {
           ScrollTrigger.create({
@@ -53,8 +56,11 @@ export function HomeProcess({ id = "process" }: { id?: string }) {
             },
           );
         }
-      });
-      return () => mm.revert();
+      }));
+      return () => {
+        stop();
+        mm.revert();
+      };
     },
     { scope: root },
   );

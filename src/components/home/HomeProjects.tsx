@@ -68,6 +68,7 @@ export function HomeProjects({ items }: { items: FeaturedProject[] }) {
                   <ShutterImage
                     photo={p.photo}
                     sizes={`(min-width: 1680px) 1600px, ${screenSizes(p.photo.src, 78, DRIFT)}`}
+                    screen={78}
                     className="absolute inset-0"
                     slats={9}
                   />

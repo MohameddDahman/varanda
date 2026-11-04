@@ -167,3 +167,41 @@ test("the thermal demo compares an ordinary window with uPVC", async ({ page }) 
   await demo.getByRole("button", { name: "uPVC window" }).click();
   await expect(demo).toHaveClass(/is-upvc/);
 });
+
+test("the WhatsApp button opens a chat with the greeting typed", async ({ page }) => {
+  await open(page, "/ar/projects");
+  const button = page.getByRole("link", { name: "تواصل معنا عبر واتساب" });
+  await expect(button).toBeVisible();
+  const href = (await button.getAttribute("href")) ?? "";
+  expect(href).toMatch(/^https:\/\/wa\.me\/\d{10,15}\?text=/);
+  expect(decodeURIComponent(href.split("text=")[1])).toContain("أود الاستفسار");
+  // Bottom right, in Arabic too, as the client asked.
+  const box = await button.boundingBox();
+  const view = page.viewportSize();
+  expect(box && view && box.x > view.width / 2 && box.y > view.height / 2).toBe(true);
+});
+
+test("the hero's words are the home page's largest content, drawn in the first frame", async ({ page }) => {
+  // PageSpeed's LCP: Chrome skips the full-screen photo as a background, so the hero's words must
+  // be the largest thing drawn, in the very first frame. A bigger image winning instead, or the
+  // hero being moved after it was drawn (ScrollTrigger's own pin spacer), cost seconds of LCP.
+  type Paints = { fcp?: number; lcp: { t: number; word: boolean }[] };
+  await page.addInitScript(() => {
+    const paints: Paints = { lcp: [] };
+    (window as unknown as { paints: Paints }).paints = paints;
+    new PerformanceObserver((list) => {
+      for (const e of list.getEntries()) if (e.name === "first-contentful-paint") paints.fcp = e.startTime;
+    }).observe({ type: "paint", buffered: true });
+    new PerformanceObserver((list) => {
+      for (const e of list.getEntries() as (PerformanceEntry & { element?: Element })[])
+        paints.lcp.push({ t: e.startTime, word: !!e.element?.closest(".hero-word") });
+    }).observe({ type: "largest-contentful-paint", buffered: true });
+  });
+  // A first visit, logo intro and all.
+  await page.goto("/en", { waitUntil: "load" });
+  await expect(page.locator("[data-doors]")).toBeHidden({ timeout: 15_000 });
+  const paints = await page.evaluate(() => (window as unknown as { paints: Paints }).paints);
+  const largest = paints.lcp.at(-1);
+  expect(largest?.word, "largest content is a hero word").toBe(true);
+  expect(largest?.t, "drawn in the first contentful frame").toBe(paints.fcp);
+});

@@ -9,7 +9,19 @@
   --section-y: clamp(6rem, 13vw, 13.5rem);
   --line-dark: rgb(255 255 255 / 0.13);
   --line-light: rgb(8 26 47 / 0.13);
+  /* The floating WhatsApp button, and the room it needs under anything pinned to the bottom
+     of the screen. */
+  --fab-size: 3.5rem;
+  --fab-inset: 1rem;
+  --fab-room: calc(var(--fab-size) + var(--fab-inset) + 1rem);
   color-scheme: light;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --fab-size: 3.75rem;
+    --fab-inset: 1.5rem;
+  }
 }
 
 @property --amp {
@@ -1052,7 +1064,8 @@ svg {
 .hero-caption {
   position: absolute;
   inset-inline: 0;
-  bottom: clamp(1.25rem, 4.5vh, 2.75rem);
+  /* Pinned while the doors open, so clear of the WhatsApp button below it. */
+  bottom: max(clamp(1.25rem, 4.5vh, 2.75rem), var(--fab-room));
 }
 
 .hero-meta {
@@ -3466,6 +3479,44 @@ div.ps-layer {
   z-index: 2;
 }
 
+/* ───────────────────────── WhatsApp button ─────────────────────────
+   Bottom right in both languages, as the client asked: under the menu, the photo viewer and
+   the doors, over everything else. */
+
+.whatsapp-fab {
+  position: fixed;
+  right: calc(var(--fab-inset) + env(safe-area-inset-right, 0px));
+  bottom: calc(var(--fab-inset) + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  width: var(--fab-size);
+  height: var(--fab-size);
+  border-radius: 50%;
+  background: #25d366;
+  color: var(--color-white);
+  box-shadow:
+    0 10px 26px rgb(4 12 23 / 0.3),
+    0 2px 6px rgb(4 12 23 / 0.22);
+  transition:
+    transform 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
+}
+
+.whatsapp-fab svg {
+  width: 54%;
+  height: 54%;
+}
+
+@media (hover: hover) {
+  .whatsapp-fab:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow:
+      0 14px 32px rgb(4 12 23 / 0.34),
+      0 3px 8px rgb(4 12 23 / 0.24);
+  }
+}
+
 /* ───────────────────────── Doors (page transition) ─────────────────────────
    Two navy glass panels with uPVC-style stiles and pull handles. Rendered
    closed on the server; the transition provider opens them. */
@@ -3614,6 +3665,70 @@ div.ps-layer {
 .door-brand-logo {
   width: min(74vw, 34rem);
   height: auto;
+}
+
+/* First visit: the logo draws itself on the closed doors from the very first frame, while the
+   page loads behind them, and the transition provider opens the doors once both are done. The
+   layout's inline script sets data-intro before anything paints. */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-intro] .door-brand {
+    visibility: visible;
+  }
+
+  :root[data-intro] .door-handle {
+    opacity: 0;
+  }
+
+  :root[data-intro] .door-brand [data-vm="red"] {
+    animation: intro-wipe-down 0.5s var(--ease-in-out) 0.05s both;
+  }
+
+  :root[data-intro] .door-brand [data-vm="white"] {
+    animation: intro-wipe-up 0.45s var(--ease-in-out) 0.3s both;
+  }
+
+  :root[data-intro] .door-brand [data-wm] {
+    transform-box: fill-box;
+    animation: intro-rise 0.62s cubic-bezier(0.25, 0.9, 0.25, 1) both;
+    animation-delay: calc(0.38s + var(--i, 0) * 0.04s);
+  }
+
+  :root[data-intro] .door-brand [data-c] {
+    transform-box: fill-box;
+    animation: intro-fade-up 0.4s var(--ease-out) both;
+    animation-delay: calc(0.66s + var(--i, 0) * 0.015s);
+  }
+}
+
+@keyframes intro-wipe-down {
+  from {
+    clip-path: inset(0% 0% 100% 0%);
+  }
+  to {
+    clip-path: inset(0%);
+  }
+}
+
+@keyframes intro-wipe-up {
+  from {
+    clip-path: inset(100% 0% 0% 0%);
+  }
+  to {
+    clip-path: inset(0%);
+  }
+}
+
+@keyframes intro-rise {
+  from {
+    transform: translateY(120%);
+  }
+}
+
+@keyframes intro-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(40%);
+  }
 }
 }.glass-photo {
   position: absolute;

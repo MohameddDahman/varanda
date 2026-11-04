@@ -50,6 +50,7 @@ export default async function ProjectPage({ params }: PageProps<"/[lang]/project
         <ShutterImage
           photo={project.cover}
           sizes={screenSizes(project.cover.src, 100, DRIFT)}
+          screen={100}
           trigger="enter"
           preload
           slats={10}
@@ -59,7 +60,7 @@ export default async function ProjectPage({ params }: PageProps<"/[lang]/project
           className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(4_12_23/0.55),transparent_35%,transparent_50%,rgb(4_12_23/0.85))]"
           aria-hidden="true"
         />
-        <div className="wrap relative flex h-full flex-col justify-end pb-[clamp(2.5rem,7vh,5rem)]">
+        <div className="wrap relative flex h-full flex-col justify-end pb-[max(clamp(2.5rem,7vh,5rem),var(--fab-room))]">
           <Reveal trigger="enter" delay={0.4}>
             <TLink href={path(lang, "/projects")} className="t-label inline-flex items-center gap-2 text-white/80 hover:text-white">
               <span aria-hidden="true" className="inline-block rtl:-scale-x-100">

@@ -23,6 +23,7 @@ const TransitionContext = createContext<TransitionApi>({
 
 export const useTransitionNav = () => useContext(TransitionContext);
 
+// Also read by the layout's inline script, which marks a first visit before the first paint.
 const INTRO_KEY = "varanda:intro";
 
 export function TransitionProvider({ children }: { children: React.ReactNode }) {
@@ -34,11 +35,14 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
 
   const focusMain = () => document.getElementById("main")?.focus({ preventScroll: true });
 
-  const reveal = useCallback(async () => {
+  const reveal = useCallback(async (firstLoad = false) => {
     window.clearTimeout(failsafe.current);
     scrollToTop();
     scroller.lenis?.start();
-    ScrollTrigger.refresh();
+    // A new page's scroll scenes are measured before it's shown. On the first load ScrollTrigger
+    // already did that when the page finished loading (fonts included), so measuring the whole
+    // page again is only needed if it's still loading.
+    if (!firstLoad || document.readyState !== "complete") ScrollTrigger.refresh();
     phase.current = "opening";
     const opening = doors.current?.open();
     // Let the panels start parting before the page plays its entrance.
@@ -113,21 +117,24 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
   // First load: the doors arrive closed from the server.
   useEffect(() => {
     let cancelled = false;
+    const root = document.documentElement;
     (async () => {
       await document.fonts?.ready;
       if (cancelled || !doors.current) return;
       if (reducedMotion()) {
         doors.current.hide();
+        root.removeAttribute("data-intro");
         phase.current = "idle";
         pageEnter.emit();
         return;
       }
-      if (!sessionStorage.getItem(INTRO_KEY)) {
+      if (root.hasAttribute("data-intro")) {
         sessionStorage.setItem(INTRO_KEY, "1");
         await doors.current.intro();
         if (cancelled) return;
       }
-      await reveal();
+      await reveal(true);
+      root.removeAttribute("data-intro");
     })();
     return () => {
       cancelled = true;

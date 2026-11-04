@@ -94,4 +94,10 @@ export const ui = {
   photos: { en: "Photos", ar: "الصور" },
   rights: { en: "All rights reserved.", ar: "جميع الحقوق محفوظة." },
   backToTop: { en: "Back to top", ar: "العودة إلى الأعلى" },
+  whatsappChat: { en: "Chat with us on WhatsApp", ar: "تواصل معنا عبر واتساب" },
+  /** Typed into WhatsApp for the visitor when they open a chat from the site. */
+  whatsappGreeting: {
+    en: "Hello VARANDA, I'd like to ask about windows and doors.",
+    ar: "مرحبًا VARANDA، أود الاستفسار عن الأبواب والشبابيك.",
+  },
 } satisfies Record<string, L>;

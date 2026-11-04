@@ -40,7 +40,7 @@ Test the live site instead with `BASE_URL=https://varanda-kappa.vercel.app npm r
 | `/[lang]/contact` | Direct lines (call, WhatsApp, email), site-visit request form (Convex), service-area map |
 | `/admin` | The team's dashboard (password): site-visit requests, and the projects and photos shown on the site |
 
-Signature motion: every navigation closes and reopens a pair of sliding glass doors (`src/components/transition`), with the destination printed on the glass in both languages. The first visit in a session plays the logo intro on the doors.
+Signature motion: every navigation closes and reopens a pair of sliding glass doors (`src/components/transition`), with the destination printed on the glass in both languages. The first visit in a session plays the logo intro on the doors. A WhatsApp button (bottom right, every page) opens a chat with the sales line, with a greeting already typed.
 
 ## Editing content
 
@@ -130,5 +130,9 @@ Every page carries a title and description, canonical and hreflang links, the bu
   - Read content inside components, not into module-level constants: a copy taken when the module loads won't see later changes.
 - Projects reach pages only through `src/lib/site-projects.ts` (`getSiteProjects` and friends): published projects from the database, cached under the `projects` tag, which every admin save expires (`updateTag`), or the built-in list. Project pages are pre-rendered and new slugs render on their first visit (`dynamicParams`).
 - Admin code: pages in `src/app/admin/` (their own root layout, outside `[lang]`), server actions in `src/app/admin/actions.ts`, session and Convex helpers in `src/lib/admin/`, Convex functions in `convex/admin/`.
+- PageSpeed (mobile) scores the home page by its hero, so keep these when changing it:
+  - The largest thing in the first frame must be the hero's words. Chrome skips a full-screen photo as a background, so the frosted panels load a thumbnail (a large image there becomes the LCP), the words' entrance is built only when the doors open, and the hero pins inside its own wrapper (`pinSpacer`; ScrollTrigger's own spacer moves the section after load, which counts its text as drawn late). `tests/ui/interactions.spec.ts` checks this.
+  - The first-visit logo intro is CSS (`:root[data-intro]` in `globals.css`, set by the layout's inline script), so it plays while the page loads instead of after it.
+  - Full-screen photos on portrait screens load a portrait crop cut by `/api/img` (`crop=x,y`, `src/lib/crop.ts`, `ScreenPhoto`), preloaded per screen shape; next/image's own `preload` would fetch the landscape file as well.
 - Image `sizes`: the browser picks a file by width alone, but `object-fit: cover` scales a photo to its frame's height when the photo is wider than the frame. Use `coverSizes` (fixed-shape frames) or `screenSizes` (full-screen frames) from `src/lib/sizes.ts` for cropped photos, or phones get a file half the size they need.
 - The Arabic font's files are preloaded on every page (about 35KB). Without that, Arabic text first renders in the narrower fallback and the page jumps when Tajawal arrives.

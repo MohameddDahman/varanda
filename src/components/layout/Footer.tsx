@@ -15,7 +15,7 @@ export function Footer({ lang }: { lang: Lang }) {
 
   return (
     <footer className="site-footer theme-deep" data-header="dark">
-      <div className="wrap pt-[clamp(5rem,10vw,9rem)] pb-8">
+      <div className="wrap pt-[clamp(5rem,10vw,9rem)] pb-[var(--fab-room)]">
         <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <VMark className="h-10 w-auto" />

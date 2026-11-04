@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { cn } from "@/lib/cn";
 import { LOCKUP_VIEWBOX, MARK, TAGLINE, WORDMARK } from "./logo-paths";
 
@@ -21,9 +22,12 @@ function MarkParts() {
   );
 }
 
+/** A path's place in its row, which staggers the intro's CSS animation (globals.css). */
+const order = (i: number) => ({ "--i": i }) as CSSProperties;
+
 /** "VARANDA" letters: the V in brand red, the rest in the surrounding text colour. */
 function WordmarkLetters() {
-  return WORDMARK.letters.map((d, i) => <path key={i} data-wm={i} d={d} fill={i === 0 ? RED : "currentColor"} />);
+  return WORDMARK.letters.map((d, i) => <path key={i} data-wm={i} d={d} fill={i === 0 ? RED : "currentColor"} style={order(i)} />);
 }
 
 /** The V mark from the client's logo. */
@@ -66,7 +70,7 @@ export function LogoLockup({ className, title = "VARANDA — Window & door syste
         <WordmarkLetters />
       </g>
       {TAGLINE.map((d, i) => (
-        <path key={i} data-c d={d} fill={RED} />
+        <path key={i} data-c d={d} fill={RED} style={order(i)} />
       ))}
     </svg>
   );

@@ -7,10 +7,14 @@ import { onPageEnter } from "@/components/transition/store";
 import { useLang } from "@/components/providers/LangProvider";
 import type { Photo } from "@/content/photos";
 import { cn } from "@/lib/cn";
+import { DRIFT } from "@/lib/sizes";
+import { ScreenPhoto } from "@/components/ui/ScreenPhoto";
 
 type Props = {
   photo: Photo;
   sizes: string;
+  /** For a full-screen frame: its height in vh, so portrait screens get a portrait crop. */
+  screen?: number;
   className?: string;
   imgClassName?: string;
   /** Number of shutter slats that roll up to reveal the photo. */
@@ -32,6 +36,7 @@ type Props = {
 export function ShutterImage({
   photo,
   sizes,
+  screen,
   className,
   imgClassName,
   slats = 8,
@@ -84,16 +89,29 @@ export function ShutterImage({
     <div ref={ref} className={cn("shutter relative overflow-hidden", className)} data-cursor={cursor}>
       <div data-drift className="absolute inset-x-0 -inset-y-[7%]">
         <div data-img className="absolute inset-0">
-          <Image
-            src={photo.src}
-            alt={decorative ? "" : t(photo.alt)}
-            fill
-            sizes={sizes}
-            preload={preload}
-            placeholder="blur"
-            className={cn("object-cover", imgClassName)}
-            style={photo.focus ? { objectPosition: photo.focus } : undefined}
-          />
+          {screen ? (
+            <ScreenPhoto
+              photo={photo}
+              alt={decorative ? "" : t(photo.alt)}
+              sizes={sizes}
+              height={screen}
+              zoom={DRIFT}
+              position={photo.focus}
+              preload={preload}
+              className={cn("object-cover", imgClassName)}
+            />
+          ) : (
+            <Image
+              src={photo.src}
+              alt={decorative ? "" : t(photo.alt)}
+              fill
+              sizes={sizes}
+              preload={preload}
+              placeholder="blur"
+              className={cn("object-cover", imgClassName)}
+              style={photo.focus ? { objectPosition: photo.focus } : undefined}
+            />
+          )}
         </div>
       </div>
       <div className="shutter-slats" aria-hidden="true" style={{ gridTemplateRows: `repeat(${slats}, 1fr)` }}>

@@ -11,6 +11,7 @@ import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { TransitionProvider } from "@/components/transition/TransitionProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { ensureContent } from "@/lib/site-content";
 import { ContentSync } from "@/components/providers/ContentSync";
 import { googleSiteVerification, seoBrand, seoTitle, structuredData } from "@/lib/seo";
@@ -69,12 +70,21 @@ export default async function RootLayout({
   if (!isLang(lang)) notFound();
 
   return (
+    // suppressHydrationWarning: the inline script below may add data-intro before React hydrates.
     <html
       lang={lang}
       dir={dirOf(lang)}
       className={cn(montserrat.variable, tajawal.variable)}
+      suppressHydrationWarning
     >
       <body>
+        {/* A first visit in this tab plays the logo intro on the closed doors (globals.css) from the
+            first frame; the key is the transition provider's. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{sessionStorage.getItem("varanda:intro")||document.documentElement.setAttribute("data-intro","")}catch(e){}`,
+          }}
+        />
         {/* What search engines read about the business: name, address, map pin, phones. */}
         <script
           type="application/ld+json"
@@ -95,6 +105,7 @@ export default async function RootLayout({
                 {children}
               </main>
               <Footer lang={lang} />
+              <WhatsAppButton lang={lang} />
             </TransitionProvider>
           </LangProvider>
         </ContentSync>

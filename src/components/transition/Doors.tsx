@@ -10,7 +10,7 @@ export type DoorsHandle = {
   close: (label: L) => Promise<void>;
   /** Slide the panels apart and hide the overlay. */
   open: () => Promise<void>;
-  /** First-visit brand intro played on the closed doors. */
+  /** First-visit brand intro on the closed doors: resolves once the logo has drawn itself. */
   intro: () => Promise<void>;
   /** Remove the overlay without motion (reduced motion). */
   hide: () => void;
@@ -19,6 +19,9 @@ export type DoorsHandle = {
 
 /** Resolve once a timeline has finished. */
 const finished = (tl: gsap.core.Timeline) => new Promise<void>((resolve) => void tl.then(() => resolve()));
+
+/** A moment to read the finished logo before the doors part. */
+const LOGO_HOLD = 150;
 
 /**
  * Full-screen bi-parting sliding door. Server-rendered CLOSED so the first
@@ -75,34 +78,12 @@ export const Doors = forwardRef<DoorsHandle>(function Doors(_, ref) {
 
       intro() {
         show();
-        const q = gsap.utils.selector(brand.current);
-        const handles = gsap.utils.toArray<HTMLElement>(".door-handle", root.current);
-        gsap.set(brand.current, { autoAlpha: 1 });
-        gsap.set([labelEn.current, labelAr.current, mark.current, ...handles], { autoAlpha: 0 });
-        gsap.set(seam.current, { scaleY: 0 });
-        // Handles stay hidden through the reveal; close() brings them back.
-        const tl = gsap.timeline();
-        tl.fromTo(
-          q("[data-vm=red]"),
-          { clipPath: "inset(0% 0% 100% 0%)" },
-          { clipPath: "inset(0% 0% 0% 0%)", duration: 0.75, ease: "power3.inOut" },
-          0.1,
-        )
-          .fromTo(
-            q("[data-vm=white]"),
-            { clipPath: "inset(100% 0% 0% 0%)" },
-            { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power3.inOut" },
-            0.6,
-          )
-          .fromTo(q("[data-wm]"), { yPercent: 120 }, { yPercent: 0, duration: 0.85, stagger: 0.055, ease: "lift" }, 0.75)
-          .fromTo(
-            q("[data-c]"),
-            { autoAlpha: 0, y: 24 },
-            { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.025, ease: "soft" },
-            1.15,
-          )
-          .to({}, { duration: 0.6 });
-        return finished(tl);
+        // The logo is drawn by CSS from the first frame (.door-brand in globals.css), so it plays
+        // while the page loads rather than after; often it's done by the time this runs.
+        const drawing = brand.current?.getAnimations?.({ subtree: true }) ?? [];
+        return Promise.all(drawing.map((a) => a.finished.catch(() => {}))).then(
+          () => new Promise<void>((resolve) => window.setTimeout(resolve, LOGO_HOLD)),
+        );
       },
 
       hide() {

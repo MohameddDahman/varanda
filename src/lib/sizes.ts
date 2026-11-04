@@ -8,7 +8,8 @@ import type { StaticImageData } from "next/image";
 /** Scale applied by ShutterImage's parallax drift (the photo sits 7% past the frame top and bottom). */
 export const DRIFT = 1.14;
 
-const aspect = (src: StaticImageData) => src.width / src.height;
+/** A photo's shape (width / height), or a crop's shape given as a number. */
+const aspect = (src: StaticImageData | number) => (typeof src === "number" ? src : src.width / src.height);
 
 /** For a frame of fixed shape (`frame` = width / height): widens every size in `sizes` by the crop. */
 export function coverSizes(src: StaticImageData, sizes: string, frame: number, zoom = 1) {
@@ -21,7 +22,7 @@ export function coverSizes(src: StaticImageData, sizes: string, frame: number, z
 }
 
 /** For a frame as wide as the screen and `height` vh tall (full-bleed heroes). */
-export function screenSizes(src: StaticImageData, height = 100, zoom = 1) {
+export function screenSizes(src: StaticImageData | number, height = 100, zoom = 1) {
   // On screens narrower than this shape the photo is sized by the frame's height.
   const width = (height / 100) * zoom * aspect(src);
   return `(max-aspect-ratio: ${Math.round(width * 1000)}/1000) ${Math.ceil(width * 100)}vh, 100vw`;

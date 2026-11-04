@@ -1,14 +1,9 @@
 import type { L, Lang } from "@/i18n/config";
-import { site } from "@/content/site";
+import { site, ui } from "@/content/site";
 import { mailHref, telHref, whatsappHref } from "@/lib/contact";
 import { Icon } from "@/components/ui/Icon";
 import { Arrow } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
-
-const greeting: L = {
-  en: "Hello VARANDA, I'd like to ask about windows and doors.",
-  ar: "مرحبًا VARANDA، أود الاستفسار عن الأبواب والشبابيك.",
-};
 
 /**
  * The direct ways to reach the team: a card for each person (call or WhatsApp) and one for
@@ -24,7 +19,7 @@ export function ContactLines({ lang, className }: { lang: Lang; className?: stri
     <ul className={cn("contact-lines", className)}>
       {contact.people.map((person) => {
         const call = telHref(person.phone);
-        const chat = person.whatsapp ? whatsappHref(person.whatsapp, t(greeting)) : undefined;
+        const chat = person.whatsapp ? whatsappHref(person.whatsapp, t(ui.whatsappGreeting)) : undefined;
         return (
           <li key={person.phone}>
             <div className="contact-line">

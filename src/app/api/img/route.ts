@@ -8,7 +8,7 @@ import { CROP_ASPECT, CROP_WIDTHS } from "@/lib/crop";
  * never larger than the original, cached by the CDN and browsers for a year.
  * With `share`, it makes a page's link preview instead (og:image, see src/lib/meta.ts): a
  * 1200×630 crop as a JPEG, the one format WhatsApp, Facebook and X all read. With
- * `crop=x,y` it first cuts the portrait crop full-screen frames use on phones (src/lib/crop.ts),
+ * `crop=x-y` it first cuts the portrait crop full-screen frames use on phones (src/lib/crop.ts),
  * keeping the point at x%, y% where object-position would.
  */
 
@@ -38,7 +38,7 @@ export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const src = params.get("src") ?? "";
   const share = params.has("share");
-  const crop = params.get("crop")?.match(/^(\d{1,3}),(\d{1,3})$/);
+  const crop = params.get("crop")?.match(/^(\d{1,3})-(\d{1,3})$/);
   const width = Number(params.get("w"));
   const quality = Number(params.get("q") ?? 75);
   if (!allowed(src)) return fail(400, "src not allowed");

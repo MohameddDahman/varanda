@@ -39,6 +39,7 @@ export function cropSrcSet(src: StaticImageData, position?: string, quality = 75
   const widths = CROP_WIDTHS.filter((w, i) => w <= widest || CROP_WIDTHS[i - 1] < widest);
   if (!widths.length) return null;
   return widths
-    .map((w) => `/api/img?src=${encodeURIComponent(src.src)}&w=${w}&q=${quality}&crop=${fx},${fy} ${w}w`)
+    // No comma in the value: a srcset separates its candidates with commas.
+    .map((w) => `/api/img?src=${encodeURIComponent(src.src)}&w=${w}&q=${quality}&crop=${fx}-${fy} ${w}w`)
     .join(", ");
 }

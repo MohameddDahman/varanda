@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, useGSAP, reducedMotion } from "@/lib/gsap";
+import { gsap, useGSAP, reducedMotion, whenNear } from "@/lib/gsap";
 import { onPageEnter } from "@/components/transition/store";
 
 type Props = {
@@ -30,22 +30,21 @@ export function Reveal({
   const ref = useRef<HTMLElement>(null);
 
   useGSAP(
-    () => {
-      if (!ref.current || reducedMotion()) return;
-      const targets = items ? gsap.utils.toArray<HTMLElement>(items, ref.current) : [ref.current];
+    (_, contextSafe) => {
+      const el = ref.current;
+      if (!el || reducedMotion()) return;
+      const targets = items ? gsap.utils.toArray<HTMLElement>(items, el) : [el];
       if (!targets.length) return;
-      const tween = gsap.from(targets, {
-        y,
-        autoAlpha: 0,
-        duration: 1.2,
-        ease: "soft",
-        stagger,
-        delay,
-        paused: trigger === "enter",
-        scrollTrigger:
-          trigger === "scroll" ? { trigger: ref.current, start: "top 88%", toggleActions: "play none none none" } : undefined,
-      });
-      if (trigger === "enter") return onPageEnter(() => tween.play());
+      const vars = { y, autoAlpha: 0, duration: 1.2, ease: "soft", stagger, delay };
+      if (trigger === "enter") {
+        const tween = gsap.from(targets, { ...vars, paused: true });
+        return onPageEnter(() => tween.play());
+      }
+      // Set up only as it nears the viewport (see whenNear).
+      const setup = () => {
+        gsap.from(targets, { ...vars, scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" } });
+      };
+      return whenNear(el, contextSafe ? contextSafe(setup) : setup);
     },
     { scope: ref },
   );

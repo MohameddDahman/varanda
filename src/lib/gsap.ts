@@ -34,6 +34,25 @@ export const reducedMotion = () =>
 export const isRTL = () => typeof document !== "undefined" && document.documentElement.dir === "rtl";
 
 /**
+ * Runs `setup` once `el` is within a screen of the viewport instead of while the page hydrates.
+ * Setting up every scroll reveal at load (splitting text into lines, measuring each trigger) was
+ * one long task that kept the page from responding; this way those further down cost nothing
+ * until they're about to be seen. Returns a function that stops waiting.
+ */
+export function whenNear(el: Element, setup: () => void) {
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      setup();
+    },
+    { rootMargin: "100% 0px" },
+  );
+  io.observe(el);
+  return () => io.disconnect();
+}
+
+/**
  * SplitText's default aria mode moves the text into an aria-label and hides the pieces,
  * which only works on elements that may carry a label (headings). On a paragraph the
  * label is ignored, so leave the split words themselves readable instead.

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef } from "react";
-import { gsap, ScrollTrigger, useGSAP, reducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP, reducedMotion, whenNear } from "@/lib/gsap";
 import { onPageEnter } from "@/components/transition/store";
 import { useLang } from "@/components/providers/LangProvider";
 import type { Photo } from "@/content/photos";
@@ -50,7 +50,7 @@ export function ShutterImage({
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
-    () => {
+    (_, contextSafe) => {
       const el = ref.current;
       if (!el) return;
       const q = gsap.utils.selector(el);
@@ -59,28 +59,39 @@ export function ShutterImage({
         return;
       }
 
-      const tl = gsap.timeline({ paused: true });
-      tl.to(q("[data-slat]"), {
-        scaleY: 0,
-        duration: 0.9,
-        ease: "power3.inOut",
-        stagger: { each: 0.06, from: "end" },
-      }).fromTo(q("[data-img]"), { scale: 1.18 }, { scale: 1, duration: 1.8, ease: "soft" }, 0);
+      const setup = () => {
+        const tl = gsap.timeline({ paused: true });
+        tl.to(q("[data-slat]"), {
+          scaleY: 0,
+          duration: 0.9,
+          ease: "power3.inOut",
+          stagger: { each: 0.06, from: "end" },
+        }).fromTo(q("[data-img]"), { scale: 1.18 }, { scale: 1, duration: 1.8, ease: "soft" }, 0);
 
-      if (parallax) {
-        gsap.fromTo(
-          q("[data-drift]"),
-          { yPercent: -6 },
-          {
-            yPercent: 6,
-            ease: "none",
-            scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
-          },
-        );
+        if (parallax) {
+          gsap.fromTo(
+            q("[data-drift]"),
+            { yPercent: -6 },
+            {
+              yPercent: 6,
+              ease: "none",
+              scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
+            },
+          );
+        }
+        return tl;
+      };
+
+      if (trigger === "enter") {
+        const tl = setup();
+        return onPageEnter(() => tl.play());
       }
-
-      if (trigger === "enter") return onPageEnter(() => tl.play());
-      ScrollTrigger.create({ trigger: el, start: "top 85%", once: true, onEnter: () => tl.play() });
+      // Photos revealed on scroll are set up only as they near the viewport (see whenNear).
+      const onNear = () => {
+        const tl = setup();
+        ScrollTrigger.create({ trigger: el, start: "top 85%", once: true, onEnter: () => tl.play() });
+      };
+      return whenNear(el, contextSafe ? contextSafe(onNear) : onNear);
     },
     { scope: ref },
   );

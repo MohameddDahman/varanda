@@ -1493,6 +1493,51 @@ svg {
   padding-top: 0;
 }
 
+/* Short desktop screens (a laptop at 125% scaling shows about 740px). The pinned rail and the
+   sticky process column have to fit the screen, so their display headings and the step counter
+   follow its height, and the rail's drawings give up height for the captions hanging below
+   them. Taller screens keep the layout above. */
+@media (min-width: 48rem) and (max-height: 58rem) {
+  .fit-display {
+    font-size: max(2.6rem, min(7.6vw, 11vh));
+  }
+
+  :lang(ar) .fit-display {
+    font-size: max(2.4rem, min(6.8vw, 9.5vh));
+  }
+
+  .process-roll {
+    height: min(clamp(5rem, 8vw, 8rem), 11vh);
+    font-size: min(clamp(5rem, 8vw, 8rem), 11vh);
+  }
+}
+
+@media (min-width: 48rem) and (max-height: 58rem) and (prefers-reduced-motion: no-preference) {
+  .rail {
+    /* Room under the drawings for the tallest caption, its tags and the progress line. */
+    --rail-caption: 24rem;
+  }
+
+  .rail-track {
+    padding-top: var(--header-h);
+    padding-bottom: var(--rail-caption);
+  }
+
+  .rail-intro {
+    align-self: flex-start;
+    margin-top: 1rem;
+  }
+
+  /* Wider captions wrap to fewer lines; the drawing is sized by the height that's left. */
+  .rail-card {
+    --card-w: 18rem;
+  }
+
+  .rail-card > .od {
+    width: min(100%, calc((100svh - var(--header-h) - var(--rail-caption)) * 0.8));
+  }
+}
+
 .process-commitments {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));

@@ -71,7 +71,7 @@ export function HomeProcess({ id = "process" }: { id?: string }) {
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-[calc(var(--header-h)+3rem)]">
             <Eyebrow>{lang === "ar" ? "خطوات العمل" : "How we work"}</Eyebrow>
-            <SplitReveal as="h2" id="process-title" className="t-display mt-6 max-w-[11ch]">
+            <SplitReveal as="h2" id="process-title" className="t-display fit-display mt-6 max-w-[11ch]">
               {t(process.title)}
               <span className="dot">.</span>
             </SplitReveal>

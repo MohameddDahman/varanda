@@ -36,12 +36,19 @@ export function HomeProjects({ items }: { items: FeaturedProject[] }) {
           cards.forEach((card, i) => {
             const next = cards[i + 1];
             if (!next) return;
-            gsap.to(card.querySelector("[data-stack-inner]"), {
-              scale: 0.9,
-              filter: "brightness(0.55)",
-              ease: "none",
-              scrollTrigger: { trigger: next, start: "top bottom", end: "top 12%", scrub: true },
-            });
+            // Explicit start values: tweened from "none", the filter started at brightness(0),
+            // so a card went black the moment the next one appeared below it.
+            gsap.fromTo(
+              card.querySelector("[data-stack-inner]"),
+              { scale: 1, filter: "brightness(1)" },
+              {
+                scale: 0.9,
+                filter: "brightness(0.55)",
+                ease: "none",
+                immediateRender: false,
+                scrollTrigger: { trigger: next, start: "top bottom", end: "top 12%", scrub: true },
+              },
+            );
           });
         }),
       );

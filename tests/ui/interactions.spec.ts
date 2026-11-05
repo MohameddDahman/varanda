@@ -205,3 +205,54 @@ test("the hero's words are the home page's largest content, drawn in the first f
   expect(largest?.word, "largest content is a hero word").toBe(true);
   expect(largest?.t, "drawn in the first contentful frame").toBe(paints.fcp);
 });
+
+test("a project card dims gently as the next one slides over it", async ({ page }) => {
+  // The filter was tweened from "none", which starts at brightness(0): a card went black as
+  // soon as the next one appeared below it.
+  await open(page, "/en");
+  const card = page.locator("[data-stack-card]").nth(1);
+  for (let i = 0; i < 200; i++) {
+    const top = await card.evaluate((el) => el.getBoundingClientRect().top / window.innerHeight);
+    if (top < 0.8) break;
+    await page.evaluate(() => window.scrollBy(0, Math.round(window.innerHeight * 0.15)));
+    await page.waitForTimeout(60);
+  }
+  await page.waitForTimeout(600);
+  const brightness = await page
+    .locator("[data-stack-inner]")
+    .first()
+    .evaluate((el) => Number(/brightness\(([\d.]+)\)/.exec(getComputedStyle(el).filter)?.[1] ?? 1));
+  expect(brightness, "first card's brightness as the second arrives").toBeGreaterThan(0.6);
+});
+
+test.describe("on a short laptop screen (125% scaling)", () => {
+  test.use({ viewport: { width: 1536, height: 746 } });
+
+  test("the pinned rail and the sticky process column fit the screen", async ({ page, isMobile }) => {
+    test.skip(isMobile, "the desktop layout");
+    for (const lang of ["en", "ar"]) {
+      await open(page, `/${lang}`);
+      const fit = await page.evaluate(() => {
+        const rail = document.querySelector(".rail")!.getBoundingClientRect();
+        const below = (el: Element) => el.getBoundingClientRect().bottom - rail.top;
+        const line = document.querySelector(".rail-progress")!.getBoundingClientRect().top - rail.top;
+        const captions = Math.max(...[...document.querySelectorAll(".rail-card")].map((c) => below(c.lastElementChild!)));
+        const intro = document.querySelector(".rail-intro")!.getBoundingClientRect();
+        const col = document.querySelector<HTMLElement>("#process [class*=sticky]")!;
+        return {
+          captions,
+          line,
+          introTop: intro.top - rail.top,
+          introBottom: below(document.querySelector(".rail-intro")!),
+          railHeight: rail.height,
+          columnBottom: parseFloat(getComputedStyle(col).top) + col.getBoundingClientRect().height,
+          screen: window.innerHeight,
+        };
+      });
+      expect(fit.captions, `${lang}: captions stay above the progress line`).toBeLessThan(fit.line);
+      expect(fit.introTop, `${lang}: rail heading not cut at the top`).toBeGreaterThanOrEqual(0);
+      expect(fit.introBottom, `${lang}: rail intro inside the section`).toBeLessThanOrEqual(fit.railHeight);
+      expect(fit.columnBottom, `${lang}: process column fits the screen`).toBeLessThanOrEqual(fit.screen);
+    }
+  });
+});

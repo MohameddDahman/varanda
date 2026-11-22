@@ -22,7 +22,7 @@ const WORDS = {
  * Varanda installation. The headline straddles the meeting stile; scrolling
  * slides the panels apart and the clear view takes over.
  */
-export function HomeHero({ photo, project, caption }: { photo: Photo; project: string | null; caption: L }) {
+export function HomeHero({ photo, project, link = "/projects", caption }: { photo: Photo; project: string | null; link?: string; caption: L }) {
   const { lang, t, href, rtl } = useLang();
   const root = useRef<HTMLElement>(null);
   const spacer = useRef<HTMLDivElement>(null);
@@ -122,7 +122,7 @@ export function HomeHero({ photo, project, caption }: { photo: Photo; project: s
         <div className="hero-view" aria-hidden="true">
           <div data-photo-enter className="absolute inset-0">
             <div data-photo className="absolute inset-0" style={{ transform: "scale(1.12)" }}>
-              <ScreenPhoto photo={photo} alt="" sizes={screenSizes(photo.src, 100, 1.12)} preload className="object-cover" />
+              <ScreenPhoto photo={photo} alt="" sizes={screenSizes(photo.src, 100, 1.12)} position={photo.focus} preload className="object-cover" />
             </div>
           </div>
           <div className="hero-view-shade" />
@@ -179,7 +179,7 @@ export function HomeHero({ photo, project, caption }: { photo: Photo; project: s
         </div>
 
         <div data-caption className="hero-caption wrap">
-          <TLink href={href(project ? `/projects/${project}` : "/projects")} className="hero-caption-link" data-cursor={lang === "ar" ? "عرض" : "View"}>
+          <TLink href={href(project ? `/projects/${project}` : link)} className="hero-caption-link" data-cursor={lang === "ar" ? "عرض" : "View"}>
             <span className="t-label text-red">/</span>
             <span className="t-label">{t(caption)}</span>
           </TLink>

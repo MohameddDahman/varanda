@@ -28,11 +28,11 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
     photo: p.cover,
   }));
   // The hero links to its project while that project is on the site.
-  const heroProject = (await getSiteProject(homeHero.project)) ? homeHero.project : null;
+  const heroProject = homeHero.project && (await getSiteProject(homeHero.project)) ? homeHero.project : null;
 
   return (
     <>
-      <HomeHero photo={photos[homeHero.photo]} project={heroProject} caption={homeHero.caption} />
+      <HomeHero photo={photos[homeHero.photo]} project={heroProject} link={homeHero.link} caption={homeHero.caption} />
       <HomeIntro lang={lang} />
       <HomeCounters lang={lang} />
       <HomeOpenings />

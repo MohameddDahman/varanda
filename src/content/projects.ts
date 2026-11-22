@@ -382,11 +382,15 @@ export const sitePhotos: { photo: PhotoKey; label: L }[] = [
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
 
-/** The installation behind the home page's sliding panels; its caption links to the project. */
-export const homeHero: { project: string; photo: PhotoKey; caption: L } = {
-  project: "round-windows-villa",
-  photo: "roundWindows",
-  caption: { en: "Round windows over an inlaid marble floor — Villa with round windows", ar: "شبابيك دائرية فوق أرضية رخام مطعّمة — فيلا بشبابيك دائرية" },
+/**
+ * The photo behind the home page's sliding panels. Its caption links to the photo's project, or
+ * to `link` when it isn't one (the portfolio's cover picture).
+ */
+export const homeHero: { project: string | null; link?: string; photo: PhotoKey; caption: L } = {
+  project: null,
+  link: "/systems/windows-doors",
+  photo: "terraceSunset",
+  caption: { en: "Wood-finish sliding doors onto a sunset terrace", ar: "أبواب جرار بلون الخشب تطل على تراس وقت الغروب" },
 };
 
 /** The projects stacked on the home page, in order (the hero's project is left out). */

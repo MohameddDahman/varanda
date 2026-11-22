@@ -20,9 +20,9 @@ const TAGLINE_VIEWBOX = "688 764 1134 62";
 
 export default async function OpengraphImage() {
   await ensureContent();
-  // The home hero's photo, cut to the frame on the right so both round windows show.
-  const photo = await sharp(await readFile(join(process.cwd(), "src/assets/photos/round-windows.jpg")))
-    .resize(592, 554, { fit: "cover", position: "left" })
+  // The home hero's photo, cut to the frame on the right.
+  const photo = await sharp(await readFile(join(process.cwd(), "src/assets/photos/terrace-sunset.jpg")))
+    .resize(592, 554, { fit: "cover" })
     .jpeg({ quality: 90 })
     .toBuffer();
   const src = `data:image/jpeg;base64,${photo.toString("base64")}`;

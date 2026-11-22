@@ -94,6 +94,7 @@ import universityBuilding from "@/assets/photos/university-building.jpg";
 import universityCorridor from "@/assets/photos/university-corridor.jpg";
 import universityFacade from "@/assets/photos/university-facade.jpg";
 import roundWindows from "@/assets/photos/round-windows.jpg";
+import terraceSunset from "@/assets/photos/terrace-sunset.jpg";
 import roundWindow from "@/assets/photos/round-window.jpg";
 import roundWindow2 from "@/assets/photos/round-window-2.jpg";
 import archedDoors from "@/assets/photos/arched-doors.jpg";
@@ -262,6 +263,8 @@ export const photos = {
   universityCorridor: p(universityCorridor, "A row of dark-frame windows along a corridor", "صف من الشبابيك بإطار داكن على امتداد ممر"),
   universityFacade: p(universityFacade, "Building facade with dark-frame windows on every floor", "واجهة مبنى بشبابيك ذات إطار داكن في كل الأدوار"),
   roundWindows: p(roundWindows, "Reception room with two round windows and an inlaid marble floor", "غرفة استقبال بشباكين دائريين وأرضية رخام مطعّمة", "68% 50%"),
+  // The cover of the client's portfolio (2026), enlarged from the PDF: the original isn't on the Drive.
+  terraceSunset: p(terraceSunset, "Wood-finish sliding doors opening onto a terrace at sunset", "أبواب جرار بلون الخشب تطل على تراس وقت الغروب", "50% 64%"),
   roundWindow: p(roundWindow, "Round window with glazing bars beneath a chandelier", "شباك دائري بتقسيمات أسفل نجفة"),
   roundWindow2: p(roundWindow2, "Round window casting sunlight across the floor", "شباك دائري يرسم ضوء الشمس على الأرضية"),
   archedDoors: p(archedDoors, "Arched doors with a fanlight, closed", "أبواب مقوسة بشباك علوي مروحي، مغلقة"),

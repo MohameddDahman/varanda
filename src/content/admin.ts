@@ -184,6 +184,12 @@ export const a = {
     mapsUrlHint: { en: "From Google Maps: Share, then Copy link.", ar: "من خرائط جوجل: مشاركة ثم نسخ الرابط." },
     mapQuery: { en: "What the map shows", ar: "ما تعرضه الخريطة" },
     mapQueryHint: { en: "The branch address or its name on Google Maps.", ar: "عنوان الفرع أو اسمه على خرائط جوجل." },
+    social: { en: "Social media", ar: "وسائل التواصل الاجتماعي" },
+    socialCheck: { en: "Check the address. It should look like", ar: "راجع العنوان. يجب أن يكون مثل" },
+    socialHint: {
+      en: "Paste the full address of each page, starting with https://. Shown on the links page the QR code opens and given to Google.",
+      ar: "الصق العنوان الكامل لكل صفحة بدءًا بـ https://. تظهر في صفحة الروابط التي يفتحها رمز QR وتُرسل إلى جوجل.",
+    },
   },
 
   texts: {

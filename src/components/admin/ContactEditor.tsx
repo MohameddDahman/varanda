@@ -4,7 +4,8 @@ import { useEffect, useId, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { L } from "@/i18n/config";
 import { a } from "@/content/admin";
-import type { ContactPerson } from "@/content/editable";
+import { validSocialUrl, type ContactPerson } from "@/content/editable";
+import { socialNetworks, type SocialNetwork } from "@/content/site";
 import { saveContent } from "@/app/admin/actions";
 import { internationalDigits } from "@/lib/admin/phone";
 import { cn } from "@/lib/cn";
@@ -22,11 +23,13 @@ export type ContactValues = {
   "site.contact.hours": L | null;
   "site.contact.mapsUrl": string | null;
   "site.contact.mapQuery": string | null;
+  "site.social": Record<SocialNetwork, string | null>;
 };
 
 // In the form every field is plain text; empty means "not shown".
 type Person = { name: L; role: L; phone: string; whatsapp: string };
-type Form = { people: Person[]; phone: string; whatsapp: string; email: string; address: L; hours: L; mapsUrl: string; mapQuery: string };
+type Form = { people: Person[]; phone: string; whatsapp: string; email: string; address: L; hours: L; mapsUrl: string; mapQuery: string; social: Record<SocialNetwork, string> };
+const networks = Object.keys(socialNetworks) as SocialNetwork[];
 
 const emptyL: L = { en: "", ar: "" };
 const toForm = (v: ContactValues): Form => ({
@@ -38,6 +41,7 @@ const toForm = (v: ContactValues): Form => ({
   hours: v["site.contact.hours"] ?? emptyL,
   mapsUrl: v["site.contact.mapsUrl"] ?? "",
   mapQuery: v["site.contact.mapQuery"] ?? "",
+  social: Object.fromEntries(networks.map((n) => [n, v["site.social"]?.[n] ?? ""])) as Record<SocialNetwork, string>,
 });
 
 const text = (s: string) => s.trim() || null;
@@ -58,6 +62,7 @@ const toValues = (f: Form): ContactValues => ({
   "site.contact.hours": bilingual(f.hours),
   "site.contact.mapsUrl": text(f.mapsUrl),
   "site.contact.mapQuery": text(f.mapQuery),
+  "site.social": Object.fromEntries(networks.map((n) => [n, text(f.social[n])])) as Record<SocialNetwork, string | null>,
 });
 
 function TextField({
@@ -196,6 +201,25 @@ export function ContactEditor({ initial }: { initial: ContactValues }) {
         <BilingualField label={t(a.contact.hours)} value={form.hours} optional maxLength={300} onChange={(v) => set("hours", v)} />
         <TextField label={t(a.contact.mapsUrl)} type="url" value={form.mapsUrl} hint={t(a.contact.mapsUrlHint)} onChange={(v) => set("mapsUrl", v)} />
         <TextField label={t(a.contact.mapQuery)} dir="auto" value={form.mapQuery} hint={t(a.contact.mapQueryHint)} onChange={(v) => set("mapQuery", v)} />
+      </Section>
+
+      <Section id="social" title={t(a.contact.social)} hint={t(a.contact.socialHint)}>
+        <div className="grid gap-4 md:grid-cols-2">
+          {networks.map((n) => {
+            const value = form.social[n];
+            const wrong = value.trim() !== "" && !validSocialUrl(n, value.trim());
+            return (
+              <TextField
+                key={n}
+                label={socialNetworks[n].label}
+                type="url"
+                value={value}
+                hint={wrong ? `${t(a.contact.socialCheck)} https://www.${socialNetworks[n].hosts[0]}/…` : undefined}
+                onChange={(v) => set("social", { ...form.social, [n]: v })}
+              />
+            );
+          })}
+        </div>
       </Section>
 
       <div className="sticky bottom-[calc(var(--tabbar-h)+env(safe-area-inset-bottom)+0.75rem)] z-10 lg:bottom-6">

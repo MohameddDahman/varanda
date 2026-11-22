@@ -1,5 +1,5 @@
 import type { L } from "@/i18n/config";
-import { nav, site, ui } from "./site";
+import { nav, site, socialNetworks, ui, type SocialNetwork } from "./site";
 import { about, anatomy, benefits, counters, process, warranty } from "./company";
 import { finishes, systems } from "./systems";
 
@@ -35,6 +35,7 @@ export const CONTACT_PATHS = [
   "site.contact.hours",
   "site.contact.mapsUrl",
   "site.contact.mapQuery",
+  "site.social",
 ] as const;
 
 const isL = (v: unknown): v is L =>
@@ -123,6 +124,17 @@ const str = (v: unknown, max: number) => typeof v === "string" && v.length <= ma
 const lOk = (v: unknown, max = 4000) => isL(v) && v.en.length <= max && v.ar.length <= max;
 const optStr = (v: unknown, max: number) => v === null || str(v, max);
 const digits = (v: unknown) => v === null || (typeof v === "string" && /^\d{8,15}$/.test(v));
+/** An https address on the network's own site, e.g. https://www.instagram.com/varanda. */
+export const validSocialUrl = (network: SocialNetwork, v: unknown) => {
+  if (!str(v, 300)) return false;
+  try {
+    const u = new URL(v as string);
+    const host = u.hostname.replace(/^(www|m)\./, "");
+    return u.protocol === "https:" && socialNetworks[network].hosts.some((h) => host === h || host.endsWith(`.${h}`));
+  } catch {
+    return false;
+  }
+};
 
 /** Whether a value fits the path; anything else is refused. */
 export function validContent(path: string, value: unknown): boolean {
@@ -153,6 +165,13 @@ export function validContent(path: string, value: unknown): boolean {
       return value === null || (str(value, 500) && /^https:\/\/(www\.)?(google\.[a-z.]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps|maps\.google\.[a-z.]+)/.test(value as string));
     case "site.contact.mapQuery":
       return optStr(value, 200);
+    case "site.social":
+      return (
+        !!value &&
+        typeof value === "object" &&
+        !Array.isArray(value) &&
+        Object.entries(value).every(([k, v]) => k in socialNetworks && (v === null || validSocialUrl(k as SocialNetwork, v)))
+      );
   }
   return false;
 }

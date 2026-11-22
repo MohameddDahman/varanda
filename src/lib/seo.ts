@@ -60,7 +60,7 @@ export function structuredData(lang: Lang) {
       areaServed: "EG",
       availableLanguage: ["Arabic", "English"],
     })),
-    ...(site.social.length ? { sameAs: site.social.map((s) => s.href) } : {}),
+    ...(Object.values(site.social).some(Boolean) ? { sameAs: Object.values(site.social).filter(Boolean) } : {}),
   };
   const website = {
     "@type": "WebSite",

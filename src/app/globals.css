@@ -3562,6 +3562,116 @@ div.ps-layer {
   }
 }
 
+/* ───────────────────────── Links page (the printed QR code) ─────────────────────────
+   One phone-width column: every way to reach the company. */
+
+.links {
+  min-height: 100svh;
+  padding: calc(var(--header-h) + clamp(2rem, 6vh, 4rem)) var(--gutter) var(--fab-room);
+}
+
+.links-inner {
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
+/* The page is all contact buttons already; the floating one would only cover them. */
+body:has(.links) .whatsapp-fab {
+  display: none;
+}
+
+.links-logo {
+  display: block;
+  width: min(15rem, 70%);
+  height: auto;
+  color: var(--color-white);
+}
+
+.links-person {
+  padding: 1.25rem;
+  border: 1px solid rgb(255 255 255 / 0.13);
+}
+
+.links-btn,
+.links-row,
+.links-social {
+  transition:
+    background-color 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
+}
+
+.links-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  color: var(--color-white);
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
+.links-btn-whatsapp {
+  border-color: #25d366;
+  background: #25d366;
+  color: #04220f;
+  font-weight: 600;
+}
+
+.links-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.75rem;
+  padding: 0.9rem 1.25rem;
+  border: 1px solid rgb(255 255 255 / 0.13);
+  color: var(--color-white);
+}
+
+.links-row-primary {
+  border-color: var(--color-red);
+  background: var(--color-red);
+  font-weight: 600;
+}
+
+.links-row-sub {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.8125rem;
+  color: rgb(255 255 255 / 0.62);
+}
+
+.links-social {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  color: var(--color-white);
+}
+
+@media (hover: hover) {
+  .links-btn:hover,
+  .links-row:hover,
+  .links-social:hover {
+    border-color: rgb(255 255 255 / 0.5);
+    background-color: rgb(255 255 255 / 0.06);
+  }
+
+  .links-btn-whatsapp:hover {
+    border-color: #2fe373;
+    background-color: #2fe373;
+  }
+
+  .links-row-primary:hover {
+    border-color: var(--color-red-bright);
+    background-color: var(--color-red-bright);
+  }
+}
+
 /* ───────────────────────── Doors (page transition) ─────────────────────────
    Two navy glass panels with uPVC-style stiles and pull handles. Rendered
    closed on the server; the transition provider opens them. */

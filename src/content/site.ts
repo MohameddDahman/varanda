@@ -53,8 +53,19 @@ export const site = {
     mapQuery: "30.0258429,31.4646865" as string | null, // what the embedded map shows
     hours: null as L | null,
   },
-  social: [] as { label: string; href: string }[],
+  // The company's pages, edited on the dashboard's Contact screen; empty ones aren't shown.
+  social: { facebook: null, instagram: null, tiktok: null, youtube: null, linkedin: null } as Record<SocialNetwork, string | null>,
 };
+
+/** The social networks the site links to, with the addresses their pages live at. */
+export const socialNetworks = {
+  facebook: { label: "Facebook", hosts: ["facebook.com", "fb.com"] },
+  instagram: { label: "Instagram", hosts: ["instagram.com"] },
+  tiktok: { label: "TikTok", hosts: ["tiktok.com"] },
+  youtube: { label: "YouTube", hosts: ["youtube.com", "youtu.be"] },
+  linkedin: { label: "LinkedIn", hosts: ["linkedin.com"] },
+} as const;
+export type SocialNetwork = keyof typeof socialNetworks;
 
 export type NavKey = "systems" | "projects" | "why" | "about" | "contact";
 

@@ -10,7 +10,7 @@ export const BRAND_CARD_ALT = "VARANDA — uPVC window & door systems. Made for 
  * The picture a shared link shows: the page's own photo, cropped by /api/img, or else the
  * language's brand card (src/app/[lang]/opengraph-image.tsx).
  */
-function shareImage(lang: Lang, photo?: Photo) {
+export function shareImage(lang: Lang, photo?: Photo) {
   if (!photo) return { url: `/${lang}/opengraph-image`, ...SHARE_SIZE, alt: BRAND_CARD_ALT };
   return { url: `/api/img?src=${encodeURIComponent(photo.src.src)}&share`, ...SHARE_SIZE, alt: photo.alt[lang] };
 }

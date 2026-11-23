@@ -54,7 +54,14 @@ export const site = {
     hours: null as L | null,
   },
   // The company's pages, edited on the dashboard's Contact screen; empty ones aren't shown.
-  social: { facebook: null, instagram: null, tiktok: null, youtube: null, linkedin: null } as Record<SocialNetwork, string | null>,
+  // Instagram and TikTok from the client (2026-11-23), share-tracking parameters removed.
+  social: {
+    facebook: null,
+    instagram: "https://www.instagram.com/varanda.systems",
+    tiktok: "https://www.tiktok.com/@varanda452",
+    youtube: null,
+    linkedin: null,
+  } as Record<SocialNetwork, string | null>,
 };
 
 /** The social networks the site links to, with the addresses their pages live at. */

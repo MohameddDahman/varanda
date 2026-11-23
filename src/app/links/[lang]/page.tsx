@@ -38,11 +38,15 @@ const copy = {
 
 const other = (lang: Lang): Lang => (lang === "en" ? "ar" : "en");
 
-/** "https://www.tiktok.com/@varanda452" → "@varanda452"; the site's address when there's no name. */
+/**
+ * The account's name from its address: "tiktok.com/@varanda452" → "@varanda452",
+ * "facebook.com/people/Varanda/615…" → "Varanda"; the site's address when there's no name.
+ */
 function handle(url: string) {
   const u = new URL(url);
-  const name = u.pathname.split("/").filter(Boolean)[0];
-  return name && !name.includes(".php") ? `@${name.replace(/^@/, "")}` : u.host.replace(/^www\./, "");
+  const [first, second] = u.pathname.split("/").filter(Boolean);
+  if (first === "people" && second) return decodeURIComponent(second).replace(/-/g, " ");
+  return first && !first.includes(".php") ? `@${first.replace(/^@/, "")}` : u.host.replace(/^www\./, "");
 }
 
 export async function generateMetadata({ params }: PageProps<"/links/[lang]">): Promise<Metadata> {

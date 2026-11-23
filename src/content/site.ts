@@ -54,9 +54,9 @@ export const site = {
     hours: null as L | null,
   },
   // The company's pages, edited on the dashboard's Contact screen; empty ones aren't shown.
-  // Instagram and TikTok from the client (2026-11-23), share-tracking parameters removed.
+  // From the client (2026-11-23): the pages their share links lead to, tracking parameters removed.
   social: {
-    facebook: null,
+    facebook: "https://www.facebook.com/people/Varanda/61596068709530/",
     instagram: "https://www.instagram.com/varanda.systems",
     tiktok: "https://www.tiktok.com/@varanda452",
     youtube: null,

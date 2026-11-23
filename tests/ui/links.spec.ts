@@ -24,6 +24,7 @@ for (const lang of ["en", "ar"] as const) {
     // None of the site's header, footer, door transition or floating WhatsApp button.
     await expect(page.locator(".site-header, .site-main, [data-doors], .whatsapp-fab")).toHaveCount(0);
 
+    await expect(page.locator('a[href^="https://www.facebook.com/"]')).toHaveCount(1);
     await expect(page.locator('a[href^="https://www.instagram.com/"]')).toHaveCount(1);
     await expect(page.locator('a[href^="https://www.tiktok.com/"]')).toHaveCount(1);
     expect(await page.locator('a[href^="https://wa.me/"]').count()).toBeGreaterThan(0);
@@ -31,8 +32,10 @@ for (const lang of ["en", "ar"] as const) {
     await expect(page.locator(`a[href="/${lang}"]`).first()).toBeVisible();
     await expect(page.locator(`a[href="/links/${lang === "en" ? "ar" : "en"}"]`)).toBeVisible();
 
+    // The sash and the fade-in settle first; half-faded text would fail the contrast check.
+    await page.waitForFunction(() => document.getAnimations().every((a) => a.playState === "finished"));
     const a11y = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
-    expect(a11y.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
+    expect(a11y.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`)).toEqual([]);
     expect(problems).toEqual([]);
   });
 }

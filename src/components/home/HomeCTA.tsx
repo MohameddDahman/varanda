@@ -32,7 +32,7 @@ export function HomeCTA({ lang }: { lang: Lang }) {
           </p>
         </div>
         <div className="lg:col-span-5 lg:flex lg:justify-end">
-          <Button href={path(lang, "/contact")} size="lg">
+          <Button href={path(lang, "/book-a-visit")} size="lg">
             {ui.bookVisit[lang]}
           </Button>
         </div>

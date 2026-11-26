@@ -83,25 +83,23 @@ export function Header() {
           {/* Kept to the end so it never sits on the hero's centre stile. */}
           <nav aria-label={lang === "ar" ? "القائمة الرئيسية" : "Main"} className="ms-auto me-[calc(clamp(1.5rem,2.6vw,2.75rem)-1.5rem)] hidden lg:block">
             <ul className="flex items-center gap-[clamp(1.5rem,2.6vw,2.75rem)]">
-              {nav
-                .filter((n) => n.key !== "contact")
-                .map((n) => (
-                  <li key={n.key}>
-                    <TLink
-                      href={href(n.href)}
-                      className={cn("header-link", isActive(n.href) && "is-active")}
-                      aria-current={isActive(n.href) ? "page" : undefined}
-                    >
-                      {t(n.label)}
-                    </TLink>
-                  </li>
-                ))}
+              {nav.map((n) => (
+                <li key={n.key}>
+                  <TLink
+                    href={href(n.href)}
+                    className={cn("header-link", isActive(n.href) && "is-active")}
+                    aria-current={isActive(n.href) ? "page" : undefined}
+                  >
+                    {t(n.label)}
+                  </TLink>
+                </li>
+              ))}
             </ul>
           </nav>
 
           <div className="flex items-center gap-2.5">
             <LangSwitch className="header-lang" />
-            <TLink href={href("/contact")} className="btn btn-header hidden sm:inline-flex">
+            <TLink href={href("/book-a-visit")} className="btn btn-header hidden sm:inline-flex">
               <span className="cta-dot" aria-hidden="true" />
               <span>{t(ui.bookVisit)}</span>
             </TLink>

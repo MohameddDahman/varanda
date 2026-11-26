@@ -27,8 +27,8 @@ export function ContactLines({ lang, className }: { lang: Lang; className?: stri
                 <span className="t-label">{t(person.role)}</span>
                 <Icon name="phone" className="h-5 w-5" />
               </span>
-              <span className="contact-line-name t-h3">{t(person.name)}</span>
-              {/* The number reads left to right; the block still aligns with the page direction. */}
+              {/* By job title only: the names stay on the dashboard. The number reads left to
+                  right; the block still aligns with the page direction. */}
               <span className="contact-line-value t-num">
                 <span dir="ltr" className="whitespace-nowrap">
                   {person.phone}

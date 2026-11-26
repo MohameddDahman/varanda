@@ -31,6 +31,12 @@ for (const lang of langs) {
 
       await scrollThrough(page);
 
+      // The sales team appears by job title only: no names on screen or in what Google reads.
+      const shown = await page.evaluate(
+        () => document.body.innerText + [...document.querySelectorAll('script[type="application/ld+json"]')].map((s) => s.textContent).join(""),
+      );
+      for (const name of ["Mahrous", "Halawany", "محروس", "الحلواني"]) expect(shown, `name "${name}" on the page`).not.toContain(name);
+
       // Nothing pushes the page sideways (a common phone bug with long words and wide type).
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflow, "horizontal overflow in px").toBeLessThanOrEqual(1);

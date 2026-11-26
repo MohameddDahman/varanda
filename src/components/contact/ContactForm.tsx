@@ -1,17 +1,17 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { useLang } from "@/components/providers/LangProvider";
 import { systems } from "@/content/systems";
 import type { L } from "@/i18n/config";
-import { submitInquiry, type FieldError, type InquiryState } from "@/app/[lang]/contact/actions";
+import { submitInquiry, type InquiryState } from "@/app/[lang]/book-a-visit/actions";
+import { isBot, readInquiry, type FieldError, type InquiryField, type InquiryValues } from "@/lib/inquiry";
 import { site } from "@/content/site";
 import { contactIsLive, whatsappHref } from "@/lib/contact";
-import { Arrow, Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
+import { SocialIcon } from "@/components/ui/SocialIcon";
 
-// Fallback channel while online requests are off — never a sample number.
-/** The main WhatsApp line, read at render time (the dashboard can change it). */
+/** The main WhatsApp line, where requests go; read at render time (the dashboard can change it). */
 const mainWhatsapp = () => (contactIsLive ? site.contact.whatsapp : null);
 
 const projectTypes: { id: string; label: L }[] = [
@@ -28,9 +28,7 @@ const contactOptions: { id: string; label: L }[] = [
   { id: "email", label: { en: "Email", ar: "بريد إلكتروني" } },
 ];
 
-type FieldName = "name" | "phone" | "email" | "projectType";
-
-const messages: Record<FieldName, Record<FieldError, L>> = {
+const messages: Record<InquiryField, Record<FieldError, L>> = {
   name: {
     required: { en: "Tell us your name.", ar: "اكتب اسمك من فضلك." },
     invalid: { en: "Check your name.", ar: "راجع الاسم." },
@@ -52,45 +50,105 @@ const messages: Record<FieldName, Record<FieldError, L>> = {
   },
 };
 
+/** The server's answer, or (with a WhatsApp line) the request handed over to WhatsApp. */
+type FormState = InquiryState | { status: "whatsapp"; values: InquiryValues; href: string; opened: boolean };
+
 const initial: InquiryState = { status: "idle" };
 
 export function ContactForm() {
   const { lang, t } = useLang();
-  const [state, action, pending] = useActionState(submitInquiry, initial);
+  const ar = lang === "ar";
+  const whatsapp = mainWhatsapp();
+  const [serverState, action, pending] = useActionState(submitInquiry, initial);
+  const [ownState, setOwnState] = useState<FormState>(initial);
+  // With a WhatsApp line the browser sends the request there; without one the server keeps it.
+  const state: FormState = whatsapp ? ownState : serverState;
   const form = useRef<HTMLFormElement>(null);
   const done = useRef<HTMLDivElement>(null);
-  const v = (key: string) => (state.values?.[key] as string | undefined) ?? "";
-  const vs = (key: string) => (state.values?.[key] as string[] | undefined) ?? [];
-  const err = (name: FieldName) => state.errors?.[name];
-  const optional = <span className="field-optional">{lang === "ar" ? "(اختياري)" : "(optional)"}</span>;
+  const v = (key: Exclude<keyof InquiryValues, "systems">) => state.values?.[key] ?? "";
+  const vs = () => state.values?.systems ?? [];
+  const err = (name: InquiryField) => (state.status === "whatsapp" ? undefined : state.errors?.[name]);
+  const optional = <span className="field-optional">{ar ? "(اختياري)" : "(optional)"}</span>;
 
-  // The filled-in request as a WhatsApp message.
-  const summary = () => {
-    const ar = lang === "ar";
-    const type = projectTypes.find((p) => p.id === v("projectType"));
-    const needs = systems.filter((s) => vs("systems").includes(s.slug)).map((s) => t(s.name));
-    return [
+  // The filled-in request as a WhatsApp message, in the visitor's language.
+  const summary = (values: InquiryValues) => {
+    const type = projectTypes.find((p) => p.id === values.projectType);
+    const needs = systems.filter((s) => values.systems.includes(s.slug)).map((s) => t(s.name));
+    const by = contactOptions.find((c) => c.id === values.contactBy);
+    const lines: (string | null)[] = [
       ar ? "مرحبًا VARANDA، أود حجز معاينة." : "Hello VARANDA, I'd like to book a site visit.",
-      `${ar ? "الاسم" : "Name"}: ${v("name")}`,
-      `${ar ? "الهاتف" : "Phone"}: ${v("phone")}`,
-      v("area") && `${ar ? "المنطقة" : "Area"}: ${v("area")}`,
-      type && `${ar ? "نوع المشروع" : "Project"}: ${t(type.label)}`,
-      needs.length > 0 && `${ar ? "المطلوب" : "Needs"}: ${needs.join(ar ? "، " : ", ")}`,
-      v("message"),
-    ]
-      .filter(Boolean)
-      .join("\n");
+      "",
+      `${ar ? "الاسم" : "Name"}: ${values.name}`,
+      // A left-to-right mark keeps the + in front of the number inside Arabic text.
+      `${ar ? "الهاتف" : "Phone"}: ${ar ? "\u200E" : ""}${values.phone}`,
+      values.email ? `${ar ? "البريد الإلكتروني" : "Email"}: ${values.email}` : null,
+      values.area ? `${ar ? "المنطقة" : "Area"}: ${values.area}` : null,
+      type ? `${ar ? "نوع المشروع" : "Project"}: ${t(type.label)}` : null,
+      needs.length > 0 ? `${ar ? "المطلوب" : "Needs"}: ${needs.join(ar ? "، " : ", ")}` : null,
+      by ? `${ar ? "التواصل المفضل" : "Reach me by"}: ${t(by.label)}` : null,
+      values.message ? `\n${values.message}` : null,
+    ];
+    return lines.filter((line) => line !== null).join("\n");
+  };
+
+  // With a WhatsApp line: check the fields here, then open WhatsApp with the request written out.
+  // It runs straight from the click, so the browser lets the new tab (or the app) open.
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (!whatsapp) return; // the server action takes it
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    if (isBot(data)) return setOwnState({ status: "success" });
+    const { values, errors } = readInquiry(data);
+    if (Object.keys(errors).length) return setOwnState({ status: "invalid", errors, values });
+    const href = whatsappHref(whatsapp, summary(values));
+    if (!href) return;
+    const tab = window.open(href, "_blank");
+    if (tab) tab.opener = null;
+    setOwnState({ status: "whatsapp", values, href, opened: Boolean(tab) });
+    // A copy on the dashboard too, in case the visitor never presses Send; nobody waits for it.
+    submitInquiry(initial, data).catch(() => {});
   };
 
   useEffect(() => {
     if (state.status === "invalid" && form.current) {
       form.current.querySelector<HTMLElement>("[aria-invalid=true]")?.focus();
     }
-    if (state.status === "success" && done.current) {
-      gsap.from(done.current.children, { y: 24, autoAlpha: 0, duration: 0.9, stagger: 0.08, ease: "soft" });
+    // The message rises in by CSS (.contact-done in globals.css): it settles even while the tab
+    // sits behind WhatsApp, and with reduced motion it simply shows.
+    if ((state.status === "success" || state.status === "whatsapp") && done.current) {
       done.current.focus();
     }
   }, [state]);
+
+  if (state.status === "whatsapp") {
+    return (
+      <div ref={done} tabIndex={-1} className="contact-done" role="status">
+        <p className="t-label text-red">{ar ? "خطوة أخيرة" : "One last step"}</p>
+        <p className="t-h1 mt-6 max-w-[16ch]">{ar ? "اضغط «إرسال» في واتساب ليصلنا طلبك." : "Press Send in WhatsApp to get your request to us."}</p>
+        <p className="t-lead mt-6 max-w-[40ch] text-ink-2">
+          {state.opened
+            ? ar
+              ? "فتحنا واتساب وفيه تفاصيل طلبك جاهزة. بعد الإرسال يتواصل معك فريقنا لتحديد موعد المعاينة."
+              : "WhatsApp is open with your request written out. Once you send it, our team will contact you to arrange the visit."
+            : ar
+              ? "تفاصيل طلبك جاهزة. افتح واتساب لإرسالها، ثم يتواصل معك فريقنا لتحديد موعد المعاينة."
+              : "Your request is written out. Open WhatsApp to send it, and our team will contact you to arrange the visit."}
+        </p>
+        <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
+          <Button href={state.href} external size="lg">
+            {ar ? "افتح واتساب" : "Open WhatsApp"}
+          </Button>
+          <button
+            type="button"
+            className="t-label underline-offset-4 hover:underline"
+            onClick={() => setOwnState({ status: "idle", values: state.values })}
+          >
+            {ar ? "تعديل الطلب" : "Change the request"}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (state.status === "success") {
     return (
@@ -108,12 +166,12 @@ export function ContactForm() {
     );
   }
 
-  const invalid = (name: FieldName) => ({
+  const invalid = (name: InquiryField) => ({
     "aria-invalid": err(name) ? true : undefined,
     "aria-describedby": err(name) ? `${name}-error` : undefined,
   });
 
-  const errorFor = (name: FieldName) => {
+  const errorFor = (name: InquiryField) => {
     const e = err(name);
     return e ? (
       <p id={`${name}-error`} className="field-error" role="alert">
@@ -123,7 +181,7 @@ export function ContactForm() {
   };
 
   return (
-    <form ref={form} action={action} noValidate className="contact-form">
+    <form ref={form} action={whatsapp ? undefined : action} onSubmit={onSubmit} noValidate className="contact-form">
       <input type="hidden" name="locale" value={lang} />
       <div className="sr-only" aria-hidden="true">
         <label htmlFor="company">Company</label>
@@ -216,7 +274,7 @@ export function ContactForm() {
         <div className="mt-3 flex flex-wrap gap-2">
           {systems.map((s) => (
             <label key={s.slug} className="choice">
-              <input type="checkbox" name="systems" value={s.slug} defaultChecked={vs("systems").includes(s.slug)} />
+              <input type="checkbox" name="systems" value={s.slug} defaultChecked={vs().includes(s.slug)} />
               <span>{t(s.name)}</span>
             </label>
           ))}
@@ -249,25 +307,7 @@ export function ContactForm() {
         </div>
       </fieldset>
 
-      {state.status === "unavailable" && mainWhatsapp() ? (
-        // Until the inquiry store is connected, hand the same details over to WhatsApp.
-        <div className="form-notice mt-10" role="alert">
-          <p>
-            {lang === "ar"
-              ? "الطلبات الإلكترونية لم تُفعَّل بعد. أرسل التفاصيل نفسها عبر واتساب."
-              : "Online requests aren't switched on yet. Send the same details on WhatsApp instead."}
-          </p>
-          <a
-            href={whatsappHref(mainWhatsapp()!, summary())}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="t-label mt-4 inline-flex items-center gap-3 underline-offset-4 hover:underline"
-          >
-            {lang === "ar" ? "أرسل عبر واتساب" : "Send on WhatsApp"}
-            <Arrow />
-          </a>
-        </div>
-      ) : (state.status === "unavailable" || state.status === "failed") && (
+      {(state.status === "unavailable" || state.status === "failed") && (
         <p className="form-notice mt-10" role="alert">
           {state.status === "unavailable"
             ? lang === "ar"
@@ -281,9 +321,28 @@ export function ContactForm() {
 
       <div className="mt-12 flex flex-wrap items-center gap-6">
         <Button type="submit" size="lg" disabled={pending}>
-          {pending ? (lang === "ar" ? "جارٍ الإرسال…" : "Sending…") : lang === "ar" ? "اطلب المعاينة" : "Request a site visit"}
+          {pending ? (
+            ar ? "جارٍ الإرسال…" : "Sending…"
+          ) : whatsapp ? (
+            <span className="inline-flex items-center gap-3">
+              <SocialIcon name="whatsapp" />
+              {ar ? "أرسل عبر واتساب" : "Send on WhatsApp"}
+            </span>
+          ) : ar ? (
+            "اطلب المعاينة"
+          ) : (
+            "Request a site visit"
+          )}
         </Button>
-        <p className="t-small text-ink-2">{lang === "ar" ? "الحقول المعلّمة بـ * مطلوبة." : "Fields marked * are required."}</p>
+        <p className="t-small max-w-[34ch] text-ink-2">
+          {whatsapp
+            ? ar
+              ? "يفتح واتساب وتفاصيلك مكتوبة وجاهزة للإرسال. الحقول المعلّمة بـ * مطلوبة."
+              : "Opens WhatsApp with your details written out, ready to send. Fields marked * are required."
+            : ar
+              ? "الحقول المعلّمة بـ * مطلوبة."
+              : "Fields marked * are required."}
+        </p>
       </div>
     </form>
   );

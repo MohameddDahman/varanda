@@ -15,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/why-upvc",
     "/about",
     "/contact",
+    "/book-a-visit",
   ];
   // When this build went out: tells crawlers the pages changed and are worth a visit.
   const lastModified = new Date();

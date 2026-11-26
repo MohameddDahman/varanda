@@ -52,13 +52,16 @@ export const a = {
     drafts: { en: "Drafts", ar: "مسودات" },
     latest: { en: "Latest requests", ar: "أحدث الطلبات" },
     allRequests: { en: "All requests", ar: "كل الطلبات" },
-    noRequests: { en: "No requests yet. They arrive here from the contact form.", ar: "لا توجد طلبات بعد. تصل الطلبات هنا من نموذج التواصل." },
+    noRequests: { en: "No requests yet. They arrive here from the site visit form.", ar: "لا توجد طلبات بعد. تصل الطلبات هنا من نموذج حجز المعاينة." },
     addProject: { en: "Add a project", ar: "إضافة مشروع" },
   },
 
   requests: {
     heading: { en: "Requests", ar: "الطلبات" },
-    intro: { en: "Site-visit requests from the contact form.", ar: "طلبات المعاينة الواردة من نموذج التواصل." },
+    intro: {
+      en: "Requests from the site visit form. The form also opens WhatsApp with each request, for the visitor to send to the main line.",
+      ar: "طلبات نموذج حجز المعاينة. يفتح النموذج واتساب أيضًا وفيه الطلب ليرسله الزائر إلى الخط الرئيسي.",
+    },
     search: { en: "Search name, phone or area", ar: "ابحث بالاسم أو الهاتف أو المنطقة" },
     all: { en: "All", ar: "الكل" },
     empty: { en: "No requests here.", ar: "لا توجد طلبات هنا." },
@@ -164,7 +167,10 @@ export const a = {
       ar: "تظهر في صفحة التواصل وأسفل الموقع وفي نموذج الطلب. أي خانة فارغة لا تظهر على الموقع.",
     },
     people: { en: "People to call", ar: "أشخاص للتواصل" },
-    peopleHint: { en: "Each gets a call button and, with a WhatsApp number, a WhatsApp button.", ar: "لكل شخص زر اتصال، وزر واتساب إذا أضفت رقم واتساب." },
+    peopleHint: {
+      en: "Each gets a call button and, with a WhatsApp number, a WhatsApp button. The site shows the job title; the name stays here on the dashboard.",
+      ar: "لكل شخص زر اتصال، وزر واتساب إذا أضفت رقم واتساب. يظهر على الموقع المسمى الوظيفي فقط، ويبقى الاسم هنا في لوحة التحكم.",
+    },
     name: { en: "Name", ar: "الاسم" },
     role: { en: "Job title", ar: "المسمى الوظيفي" },
     phone: { en: "Phone", ar: "الهاتف" },
@@ -174,10 +180,16 @@ export const a = {
     removePerson: { en: "Remove", ar: "حذف" },
     moveUp: { en: "Move up", ar: "تحريك لأعلى" },
     main: { en: "Main line", ar: "الخط الرئيسي" },
-    mainHint: { en: "Used in the footer and when online requests can't be sent.", ar: "يُستخدم أسفل الموقع وعند تعذّر إرسال الطلب أونلاين." },
+    mainHint: {
+      en: "Used in the footer and the WhatsApp button. Site visit requests are sent to this WhatsApp number.",
+      ar: "يُستخدم أسفل الموقع وفي زر واتساب. طلبات المعاينة تُرسل إلى رقم الواتساب هذا.",
+    },
     email: { en: "Email", ar: "البريد الإلكتروني" },
     branch: { en: "Branch", ar: "الفرع" },
-    branchHint: { en: "Fill in the address to show the branch and its map on the contact page.", ar: "أضف العنوان لإظهار الفرع والخريطة في صفحة التواصل." },
+    branchHint: {
+      en: "Fill in the address to show the branch on the contact page, and its map on the site visit page.",
+      ar: "أضف العنوان لإظهار الفرع في صفحة التواصل، وخريطته في صفحة حجز المعاينة.",
+    },
     address: { en: "Address", ar: "العنوان" },
     hours: { en: "Opening hours", ar: "مواعيد العمل" },
     mapsUrl: { en: "Google Maps link", ar: "رابط خرائط جوجل" },
@@ -187,8 +199,8 @@ export const a = {
     social: { en: "Social media", ar: "وسائل التواصل الاجتماعي" },
     socialCheck: { en: "Check the address. It should look like", ar: "راجع العنوان. يجب أن يكون مثل" },
     socialHint: {
-      en: "Paste the full address of each page, starting with https://. Shown on the links page the QR code opens and given to Google.",
-      ar: "الصق العنوان الكامل لكل صفحة بدءًا بـ https://. تظهر في صفحة الروابط التي يفتحها رمز QR وتُرسل إلى جوجل.",
+      en: "Paste the full address of each page, starting with https://. Shown on the contact page (the one the printed QR code opens) and given to Google.",
+      ar: "الصق العنوان الكامل لكل صفحة بدءًا بـ https://. تظهر في صفحة التواصل (التي يفتحها رمز QR المطبوع) وتُرسل إلى جوجل.",
     },
   },
 

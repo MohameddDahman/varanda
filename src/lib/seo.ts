@@ -56,7 +56,8 @@ export function structuredData(lang: Lang) {
       "@type": "ContactPoint",
       telephone: p.phone,
       contactType: "sales",
-      name: p.name[lang],
+      // The job title, not the person: the site shows no names.
+      name: p.role[lang],
       areaServed: "EG",
       availableLanguage: ["Arabic", "English"],
     })),

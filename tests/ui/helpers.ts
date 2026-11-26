@@ -32,6 +32,7 @@ export const routes: { path: string; status?: number }[] = [
   { path: "/why-upvc" },
   { path: "/about" },
   { path: "/contact" },
+  { path: "/book-a-visit" },
   { path: "/missing-page", status: 404 },
 ];
 

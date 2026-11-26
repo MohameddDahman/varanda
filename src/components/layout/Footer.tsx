@@ -26,7 +26,7 @@ export function Footer({ lang }: { lang: Lang }) {
               })}
             </p>
             <div className="mt-10">
-              <Button href={path(lang, "/contact")} variant="light">
+              <Button href={path(lang, "/book-a-visit")} variant="light">
                 {t(ui.bookVisit)}
               </Button>
             </div>

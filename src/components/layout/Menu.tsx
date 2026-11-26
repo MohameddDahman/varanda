@@ -111,12 +111,25 @@ export function Menu({ open, onClose }: { open: boolean; onClose: () => void }) 
             ))}
           </ul>
         </nav>
-        <div data-menu-foot className="mt-12 flex flex-wrap items-end justify-between gap-6 border-t border-[var(--line)] pt-6">
-          <p className="t-label text-mist">
-            {t(site.tagline).replace(".", "")}
-            <span className="dot">.</span>
-          </p>
-          <LangSwitch className="t-label text-white underline-offset-4 hover:underline" />
+        <div data-menu-foot className="mt-12">
+          {/* "Contact" above is the contact page; the request form is one tap away here too. */}
+          <TLink
+            href={href("/book-a-visit")}
+            className="btn btn-solid w-full sm:w-auto"
+            onClick={() => pathname === href("/book-a-visit") && onClose()}
+          >
+            <span className="btn-inner w-full justify-between sm:w-auto">
+              <span>{t(ui.bookVisit)}</span>
+              <Arrow className="btn-arrow" />
+            </span>
+          </TLink>
+          <div className="mt-8 flex flex-wrap items-end justify-between gap-6 border-t border-[var(--line)] pt-6">
+            <p className="t-label text-mist">
+              {t(site.tagline).replace(".", "")}
+              <span className="dot">.</span>
+            </p>
+            <LangSwitch className="t-label text-white underline-offset-4 hover:underline" />
+          </div>
         </div>
       </div>
     </div>

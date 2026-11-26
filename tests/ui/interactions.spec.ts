@@ -92,10 +92,11 @@ test("the wind sound plays, follows the window, and stops when you scroll away",
   await expect.poll(contexts, { timeout: 5_000 }).toEqual(["closed"]);
 });
 
-test("the request form explains what's missing and what happens next", async ({ page }) => {
-  await open(page, "/en/contact", { reduced: true });
+test("the request form explains what's missing, then hands the request to WhatsApp", async ({ page, context }) => {
+  await open(page, "/en/book-a-visit", { reduced: true });
   const form = page.locator("form.contact-form");
-  await form.getByRole("button", { name: /Request a site visit/ }).click();
+  const send = form.getByRole("button", { name: /Send on WhatsApp/ });
+  await send.click();
   await expect(form.locator("#name")).toHaveAttribute("aria-invalid", "true");
   await expect(form.locator("#name-error")).toBeVisible();
   await expect(form.locator("#phone-error")).toBeVisible();
@@ -103,9 +104,28 @@ test("the request form explains what's missing and what happens next", async ({ 
   await form.locator("#name").fill("Test Person");
   await form.locator("#phone").fill("+20 111 222 3333");
   await form.locator("label.choice", { hasText: "Villa" }).click();
-  await form.getByRole("button", { name: /Request a site visit/ }).click();
-  // Without the inquiry store connected the form says so plainly; once connected it thanks the visitor.
-  await expect(page.locator(".form-notice, .contact-done").first()).toBeVisible({ timeout: 15_000 });
+  await form.locator("label.choice", { hasText: "Roller shutters" }).click();
+  await form.locator("#message").fill("Three windows, second floor.");
+
+  // WhatsApp opens in a new tab with the request written out (stopped here, not really opened).
+  await context.route(/^https:\/\/(wa\.me|api\.whatsapp\.com)\//, (route) => route.fulfill({ body: "WhatsApp" }));
+  const [tab] = await Promise.all([page.waitForEvent("popup"), send.click()]);
+  await tab.waitForURL(/wa\.me/);
+  const sent = new URL(tab.url());
+  expect(sent.pathname).toMatch(/^\/\d{10,15}$/);
+  const text = sent.searchParams.get("text") ?? "";
+  for (const part of ["book a site visit", "Name: Test Person", "Phone: +20 111 222 3333", "Project: Villa", "Roller shutters", "Reach me by: Phone call", "Three windows, second floor."]) {
+    expect(text).toContain(part);
+  }
+
+  // The page says what's left to do, with a way back to the form.
+  const done = page.locator(".contact-done");
+  await expect(done).toContainText("Press Send in WhatsApp");
+  // "Open WhatsApp" carries the same message (compared decoded: the tab's address escapes the ').
+  const again = await done.getByRole("link", { name: /Open WhatsApp/ }).getAttribute("href");
+  expect(new URL(again ?? "").searchParams.get("text")).toBe(text);
+  await done.getByRole("button", { name: "Change the request" }).click();
+  await expect(form.locator("#name")).toHaveValue("Test Person");
 });
 
 test("the lock demo opens the sash on its side hinges, tilts it on its bottom ones, and locks", async ({ page }) => {

@@ -33,13 +33,12 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // The printed QR code's page (src/app/links) keeps its name first: /links/en, /links/ar. The
-  // code itself opens /links, which picks the visitor's language; /en/links was its first address.
-  if (pathname.startsWith("/links/")) return;
-  const oldLinks = pathname.match(/^\/(en|ar)\/links\/?$/);
-  if (pathname === "/links" || oldLinks) {
+  // The printed QR code opens /contact. Its earlier addresses (/links, /links/en, /en/links…) lead
+  // to the contact page too, in their language or else the visitor's.
+  const oldLinks = pathname.match(/^\/(?:(en|ar)\/)?links(?:\/(en|ar))?\/?$/);
+  if (oldLinks) {
     const url = request.nextUrl.clone();
-    url.pathname = `/links/${oldLinks ? oldLinks[1] : preferredLang(request)}`;
+    url.pathname = `/${oldLinks[1] ?? oldLinks[2] ?? preferredLang(request)}/contact`;
     return NextResponse.redirect(url);
   }
 

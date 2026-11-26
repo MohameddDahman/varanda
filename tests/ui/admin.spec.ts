@@ -38,16 +38,20 @@ test.describe("admin dashboard", () => {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   });
 
-  test("a request from the contact form reaches the inbox and can be worked through", async ({ page, isMobile }) => {
+  test("a request from the site visit form reaches the inbox and can be worked through", async ({ page, isMobile }) => {
     test.skip(isMobile, "one pass is enough for the data flow");
     const name = `Test visitor ${Date.now() % 100000}`;
-    await page.goto("/en/contact");
+    await page.goto("/en/book-a-visit");
     await page.fill("#name", name);
     await page.fill('input[name="phone"]', "+20 100 000 0000");
     // The radios are drawn by their labels.
     await page.locator('label:has(input[name="projectType"])').first().click();
+    // The form opens WhatsApp (stopped here) and keeps a copy on the dashboard in the background.
+    await page.context().route(/^https:\/\/(wa\.me|api\.whatsapp\.com)\//, (route) => route.fulfill({ body: "WhatsApp" }));
+    const saved = page.waitForResponse((r) => r.request().method() === "POST" && "next-action" in r.request().headers());
     await page.locator('form button[type="submit"]').click();
     await expect(page.locator(".contact-done")).toBeVisible({ timeout: 20_000 });
+    await saved;
 
     await signIn(page);
     await page.goto("/admin/requests");

@@ -1,150 +1,184 @@
 import { notFound } from "next/navigation";
-import { isLang } from "@/i18n/config";
-import { process } from "@/content/company";
-import { site } from "@/content/site";
-import { contactIsLive } from "@/lib/contact";
+import { isLang, path, type L } from "@/i18n/config";
+import { site, socialNetworks, ui, type SocialNetwork } from "@/content/site";
+import { contactIsLive, mailHref, telHref, whatsappHref } from "@/lib/contact";
 import { pageMeta } from "@/lib/meta";
-import { PageHero } from "@/components/ui/PageHero";
-import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Icon } from "@/components/ui/Icon";
-import { Button } from "@/components/ui/Button";
-import { Reveal } from "@/components/motion/Reveal";
-import { SplitReveal } from "@/components/motion/SplitReveal";
-import { ContactForm } from "@/components/contact/ContactForm";
-import { ContactLines, SampleTag } from "@/components/contact/ContactLines";
 import { ensureContent } from "@/lib/site-content";
+import { LogoLockup } from "@/components/brand/Logo";
+import { TLink } from "@/components/transition/TLink";
+import { Icon } from "@/components/ui/Icon";
+import { SocialIcon } from "@/components/ui/SocialIcon";
+import { Arrow } from "@/components/ui/Button";
+
+/*
+ * The contact page, in the menu and opened by the QR code on the company's printed portfolio
+ * (varandasystems.com/contact): every way to reach VARANDA on one phone screen. Everything comes
+ * from the contact details and social pages edited on the dashboard, so it never goes out of date.
+ * The site-visit request form has a page of its own (/book-a-visit).
+ */
 
 const copy = {
-  title: { en: "Book a site visit", ar: "احجز معاينة" },
+  meta: { en: "Contact", ar: "تواصل معنا" },
+  title: { en: "Contact VARANDA", ar: "تواصل مع VARANDA" },
   intro: {
-    en: "Tell us about your project. We'll visit, take precise measurements and prepare a detailed quotation.",
-    ar: "أخبرنا عن مشروعك. نزورك، ونرفع المقاسات بدقة، ونجهّز لك عرض سعر تفصيليًا.",
+    en: "Message or call our sales team, follow us, visit the branch, or explore the website.",
+    ar: "راسل فريق المبيعات أو اتصل به، تابعنا، زر الفرع، أو تصفح الموقع.",
   },
-};
+  sales: { en: "Sales team", ar: "فريق المبيعات" },
+  call: { en: "Call", ar: "اتصال" },
+  whatsapp: { en: "WhatsApp", ar: "واتساب" },
+  follow: { en: "Follow us", ar: "تابعنا" },
+  more: { en: "More", ar: "المزيد" },
+  website: { en: "Visit the website", ar: "زيارة الموقع" },
+  projects: { en: "See our projects", ar: "شاهد مشروعاتنا" },
+  email: { en: "Email us", ar: "راسلنا بالبريد" },
+  branch: { en: "Our branch on Google Maps", ar: "فرعنا على خرائط جوجل" },
+} satisfies Record<string, L>;
+
+/**
+ * The account's name from its address: "tiktok.com/@varanda452" → "@varanda452",
+ * "facebook.com/people/Varanda/615…" → "Varanda"; the site's address when there's no name.
+ */
+function handle(url: string) {
+  const u = new URL(url);
+  const [first, second] = u.pathname.split("/").filter(Boolean);
+  if (first === "people" && second) return decodeURIComponent(second).replace(/-/g, " ");
+  return first && !first.includes(".php") ? `@${first.replace(/^@/, "")}` : u.host.replace(/^www\./, "");
+}
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/contact">) {
   await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) return {};
-  return pageMeta(lang, "/contact", copy.title[lang], copy.intro[lang]);
+  return pageMeta(lang, "/contact", copy.meta[lang], copy.intro[lang]);
 }
 
 export default async function ContactPage({ params }: PageProps<"/[lang]/contact">) {
   await ensureContent();
   const { lang } = await params;
   if (!isLang(lang)) notFound();
-  const t = (s: { en: string; ar: string }) => s[lang];
+  const t = (s: L) => s[lang];
   const { contact } = site;
-  const next = process.steps.slice(0, 3);
-  // Directions only once the real address is in.
-  const mapsLink =
-    contactIsLive && contact.mapQuery
-      ? (contact.mapsUrl ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.mapQuery)}`)
-      : null;
+  const live = contactIsLive;
+  const social = (Object.keys(socialNetworks) as SocialNetwork[]).filter((n) => site.social[n]);
 
   return (
-    <>
-      <PageHero eyebrow={lang === "ar" ? "تواصل معنا" : "Contact"} title={copy.title[lang]} intro={copy.intro[lang]} size="display" />
+    <section className="links theme-deep" data-header="dark" aria-labelledby="links-title">
+      <div className="links-inner">
+        <LogoLockup className="links-logo" />
+        <h1 id="links-title" className="t-h2 mt-10 text-white">
+          {t(copy.title)}
+        </h1>
+        <p className="t-small mt-3 text-mist">{t(copy.intro)}</p>
 
-      {/* Direct lines — pulled up so the channels show on the first screen. */}
-      <section className="theme-white section pt-[clamp(3.5rem,6vw,6rem)]" data-header="light" aria-labelledby="lines-title">
-        <div className="wrap">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <Eyebrow as="h2" id="lines-title">
-              {lang === "ar" ? "تواصل مباشر" : "Direct lines"}
-            </Eyebrow>
-            {contact.sample && <SampleTag lang={lang} />}
-          </div>
-          <Reveal>
-            <ContactLines lang={lang} className="mt-8" />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Request form */}
-      <section className="theme-white section" data-header="light" aria-label={copy.title[lang]}>
-        <div className="wrap grid gap-y-16 lg:grid-cols-12 lg:gap-x-8">
-          <aside className="lg:col-span-4" aria-labelledby="next-title">
-            <Eyebrow as="h2" id="next-title">
-              {lang === "ar" ? "ماذا يحدث بعد ذلك" : "What happens next"}
-            </Eyebrow>
-            <Reveal as="ol" items="li" className="mt-8 border-t border-[var(--line)]">
-              {next.map((s, i) => (
-                <li key={s.title.en} className="grid grid-cols-[2.5rem_1fr] gap-2 border-b border-[var(--line)] py-6">
-                  <span className="t-label pt-1 text-red" dir="ltr">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <h3 className="t-h3">{t(s.title)}</h3>
-                    <p className="t-small mt-2 text-ink-2">{t(s.text)}</p>
+        {live && contact.people.length > 0 && (
+          <div className="mt-10">
+            <h2 className="t-label text-mist">{t(copy.sales)}</h2>
+            <ul className="mt-4 space-y-3">
+              {/* By job title: the names stay on the dashboard. */}
+              {contact.people.map((p) => (
+                <li key={p.phone} className="links-person">
+                  <p className="text-white">{t(p.role)}</p>
+                  <div className="mt-4 grid gap-2">
+                    {p.whatsapp && (
+                      <a className="links-btn links-btn-whatsapp" href={whatsappHref(p.whatsapp, t(ui.whatsappGreeting))} target="_blank" rel="noopener noreferrer">
+                        <SocialIcon name="whatsapp" />
+                        {t(copy.whatsapp)}
+                      </a>
+                    )}
+                    <a className="links-btn" href={telHref(p.phone)}>
+                      <Icon name="phone" className="h-5 w-5" />
+                      <span>
+                        {t(copy.call)}{" "}
+                        <span dir="ltr" className="t-num whitespace-nowrap">
+                          {p.phone}
+                        </span>
+                      </span>
+                    </a>
                   </div>
                 </li>
               ))}
-            </Reveal>
-          </aside>
-
-          <div className="lg:col-span-7 lg:col-start-6">
-            <ContactForm />
+            </ul>
           </div>
-        </div>
-      </section>
+        )}
 
-      {/* Shown once the branch address (or its map) is in. */}
-      {(contact.address || contact.mapQuery) && (
-        <>
-      {/* The branch: address, hours and the real location on Google Maps */}
-      <section className="theme-dark section" data-header="dark" aria-labelledby="branch-title">
-        <div className="wrap grid gap-y-12 lg:grid-cols-12 lg:gap-x-8">
-          <div className="lg:col-span-4">
-            <Eyebrow>{lang === "ar" ? "زورونا" : "Visit us"}</Eyebrow>
-            <SplitReveal as="h2" id="branch-title" className="t-h1 mt-6 max-w-[12ch]">
-              {lang === "ar" ? "فرعنا" : "Our branch"}
-              <span className="dot">.</span>
-            </SplitReveal>
-            <dl className="mt-10 grid gap-6">
-              {contact.address && (
-                <div>
-                  <dt className="t-label flex items-center gap-2 text-mist">
-                    <Icon name="pin" className="h-4 w-4" />
-                    {lang === "ar" ? "العنوان" : "Address"}
-                  </dt>
-                  <dd className="t-body mt-2">{t(contact.address)}</dd>
-                </div>
-              )}
-              {contact.hours && (
-                <div>
-                  <dt className="t-label flex items-center gap-2 text-mist">
-                    <Icon name="clock" className="h-4 w-4" />
-                    {lang === "ar" ? "مواعيد العمل" : "Opening hours"}
-                  </dt>
-                  <dd className="t-body mt-2">{t(contact.hours)}</dd>
-                </div>
-              )}
-            </dl>
-            {contact.sample && <SampleTag lang={lang} className="mt-8" />}
-            {mapsLink && (
-              <div className="mt-8">
-                <Button href={mapsLink} external variant="light">
-                  {lang === "ar" ? "افتح الموقع على خرائط جوجل" : "Open in Google Maps"}
-                </Button>
-              </div>
+        {social.length > 0 && (
+          <div className="mt-10">
+            <h2 className="t-label text-mist">{t(copy.follow)}</h2>
+            <ul className="mt-4 space-y-2">
+              {social.map((n) => (
+                <li key={n}>
+                  <a href={site.social[n]!} target="_blank" rel="noopener noreferrer" className="links-row">
+                    <span className="flex min-w-0 items-center gap-4">
+                      <SocialIcon name={n} className="h-6 w-6" />
+                      <span className="min-w-0">
+                        {socialNetworks[n].label}
+                        <span className="links-row-sub">
+                          <span dir="ltr">{handle(site.social[n]!)}</span>
+                        </span>
+                      </span>
+                    </span>
+                    <Arrow />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="mt-10">
+          <h2 className="t-label text-mist">{t(copy.more)}</h2>
+          <ul className="mt-4 space-y-2">
+            <li>
+              <TLink href={path(lang, "/book-a-visit")} className="links-row links-row-primary">
+                {t(ui.bookVisit)}
+                <Arrow />
+              </TLink>
+            </li>
+            <li>
+              <TLink href={path(lang)} className="links-row">
+                <span>
+                  {t(copy.website)}
+                  <span className="links-row-sub">
+                    <span dir="ltr">{new URL(site.url).host}</span>
+                  </span>
+                </span>
+                <Arrow />
+              </TLink>
+            </li>
+            <li>
+              <TLink href={path(lang, "/projects")} className="links-row">
+                {t(copy.projects)}
+                <Arrow />
+              </TLink>
+            </li>
+            {live && contact.email && (
+              <li>
+                <a href={mailHref(contact.email)} className="links-row">
+                  <span className="min-w-0">
+                    {t(copy.email)}
+                    <span className="links-row-sub">
+                      <span dir="ltr">{contact.email}</span>
+                    </span>
+                  </span>
+                  <Icon name="mail" className="h-5 w-5 shrink-0" />
+                </a>
+              </li>
             )}
-          </div>
-          {contact.mapQuery && (
-            <div className="lg:col-span-8">
-              <iframe
-                title={lang === "ar" ? "موقع الفرع على خرائط جوجل" : "Branch location on Google Maps"}
-                src={`https://www.google.com/maps?q=${encodeURIComponent(contact.mapQuery)}&hl=${lang}&z=15&output=embed`}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="branch-map"
-              />
-            </div>
-          )}
+            {live && contact.mapsUrl && (
+              <li>
+                <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="links-row">
+                  <span>
+                    {t(copy.branch)}
+                    {contact.address && <span className="links-row-sub">{t(contact.address)}</span>}
+                  </span>
+                  <Icon name="pin" className="h-5 w-5 shrink-0" />
+                </a>
+              </li>
+            )}
+          </ul>
         </div>
-      </section>
-        </>
-      )}
-    </>
+      </div>
+    </section>
   );
 }

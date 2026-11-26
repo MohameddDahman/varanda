@@ -78,7 +78,7 @@ test("sections on the same background don't stack two gaps", async ({ page }) =>
 });
 
 test("contact details link only when they're real", async ({ page }) => {
-  await open(page, "/en/contact", { reduced: true });
+  await open(page, "/en/book-a-visit", { reduced: true });
   const lines = page.locator(".contact-lines");
   const sample = (await page.locator(".sample-tag").count()) > 0;
   const links = lines.locator('a[href^="tel:"], a[href^="mailto:"], a[href*="wa.me"]');
@@ -192,7 +192,7 @@ test("phone numbers stay on one line inside their column", async ({ page, isMobi
   // At 1024px the footer's contact column was narrower than a number, which broke onto two lines.
   test.skip(isMobile, "the narrow footer column is a laptop layout");
   await page.setViewportSize({ width: 1024, height: 768 });
-  await open(page, "/en/contact");
+  await open(page, "/en/book-a-visit");
   const numbers = await page.evaluate(() =>
     [...document.querySelectorAll<HTMLElement>('footer a[href^="tel:"], .contact-line-value span')].map((el) => {
       const r = el.getBoundingClientRect();

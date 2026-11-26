@@ -2112,6 +2112,30 @@ button:hover > .finish-swatch {
   outline: none;
 }
 
+/* The form's answer settles in line by line (reduced motion: the global rule makes it instant). */
+.contact-done > * {
+  animation: contact-done-rise 0.9s var(--ease-out) backwards;
+}
+
+.contact-done > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.contact-done > :nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.contact-done > :nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+@keyframes contact-done-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
 /* Direct lines: one equal column per channel, dividers between columns only. */
 .contact-lines {
   display: grid;
@@ -2187,6 +2211,11 @@ button:hover > .finish-swatch {
   line-height: 1.15;
   letter-spacing: -0.01em;
   overflow-wrap: anywhere;
+}
+
+/* A person's card has no name line (job title above, number below), so the number takes its gap. */
+.contact-line-head + .contact-line-value {
+  margin-top: 2rem;
 }
 
 .contact-line-note {
@@ -3559,6 +3588,105 @@ div.ps-layer {
     box-shadow:
       0 14px 32px rgb(4 12 23 / 0.34),
       0 3px 8px rgb(4 12 23 / 0.24);
+  }
+}
+
+/* ───────────────────────── Contact page (/contact, also the printed QR code) ─────────────────────────
+   One phone-width column: every way to reach the company. */
+
+.links {
+  min-height: 100svh;
+  padding: calc(var(--header-h) + clamp(2rem, 6vh, 4rem)) var(--gutter) var(--fab-room);
+}
+
+.links-inner {
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
+/* The page is all contact buttons already; the floating one would only cover them. */
+body:has(.links) .whatsapp-fab {
+  display: none;
+}
+
+.links-logo {
+  display: block;
+  width: min(15rem, 70%);
+  height: auto;
+  color: var(--color-white);
+}
+
+.links-person {
+  padding: 1.25rem;
+  border: 1px solid rgb(255 255 255 / 0.13);
+}
+
+.links-btn,
+.links-row {
+  transition:
+    background-color 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
+}
+
+.links-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  color: var(--color-white);
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
+.links-btn-whatsapp {
+  border-color: #25d366;
+  background: #25d366;
+  color: #04220f;
+  font-weight: 600;
+}
+
+.links-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 3.75rem;
+  padding: 0.9rem 1.25rem;
+  border: 1px solid rgb(255 255 255 / 0.13);
+  color: var(--color-white);
+}
+
+.links-row-primary {
+  border-color: var(--color-red);
+  background: var(--color-red);
+  font-weight: 600;
+}
+
+.links-row-sub {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.8125rem;
+  color: rgb(255 255 255 / 0.62);
+}
+
+@media (hover: hover) {
+  .links-btn:hover,
+  .links-row:hover {
+    border-color: rgb(255 255 255 / 0.5);
+    background-color: rgb(255 255 255 / 0.06);
+  }
+
+  .links-btn-whatsapp:hover {
+    border-color: #2fe373;
+    background-color: #2fe373;
+  }
+
+  .links-row-primary:hover {
+    border-color: var(--color-red-bright);
+    background-color: var(--color-red-bright);
   }
 }
 

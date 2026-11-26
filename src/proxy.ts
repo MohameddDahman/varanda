@@ -51,6 +51,13 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Skip Next internals, API routes, generated icons and anything that looks like a file.
-  matcher: ["/((?!_next|api|icon|apple-icon|.*\\..*).*)"],
+  // The proxy runs as a server function on every path it matches, so it only
+  // matches paths it can act on. Skipped: Next internals, API routes,
+  // generated icons, anything that looks like a file, and paths that already
+  // start with a language (those return untouched above) - except the old QR
+  // addresses under them, /en/links and /en/links/ar and the like, which
+  // still redirect to the contact page.
+  matcher: [
+    "/((?!_next|api|icon|apple-icon|.*\\..*|(?:en|ar)(?:/(?!links(?:/(?:en|ar))?/?$)|$)).*)",
+  ],
 };

@@ -63,7 +63,9 @@ export async function GET(request: Request) {
   }
   const image = share
     ? await photo.resize({ ...SHARE_SIZE, fit: "cover", position: "attention" }).jpeg({ quality: 80, mozjpeg: true }).toBuffer()
-    : await photo.resize({ width, withoutEnlargement: true }).webp({ quality, effort: 4 }).toBuffer();
+    : // Effort 2, not sharp's default 4: half the CPU time per photo for files about 7% larger.
+      // Every deploy clears the CDN, so each size is made again, on the free plan's CPU allowance.
+      await photo.resize({ width, withoutEnlargement: true }).webp({ quality, effort: 2 }).toBuffer();
 
   return new Response(new Uint8Array(image), {
     headers: {
